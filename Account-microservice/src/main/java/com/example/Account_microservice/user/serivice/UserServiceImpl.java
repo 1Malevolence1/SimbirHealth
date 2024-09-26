@@ -1,8 +1,7 @@
 package com.example.Account_microservice.user.serivice;
 
 
-import com.example.Account_microservice.user.convert.UserMapper;
-import com.example.Account_microservice.user.dto.RequestSingUpUserDto;
+import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 import com.example.Account_microservice.user.model.Role;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.repository.UserRepository;
@@ -13,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -20,18 +20,21 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper userMapper;
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
-    public User save(RequestSingUpUserDto dto) {
-        User user = ConvertUser.toModel(dto);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User save(RequestSingUpAccountDto dto) {
+         User user = ConvertUser.toModel(dto);
+         user.setPassword(passwordEncoder.encode(user.getPassword()));
+         user.setRoles(Set.of(Role.builder().id(1L).roleName("ROLE_USER").build()));
          return userRepository.save(user);
 
     }
+
+
 
 
     @Override

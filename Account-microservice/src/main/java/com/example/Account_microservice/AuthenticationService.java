@@ -1,12 +1,12 @@
 package com.example.Account_microservice;
 
 import com.example.Account_microservice.jwt.dto.JwtAuthenticationResponse;
-import com.example.Account_microservice.user.dto.RequestSingInUserDto;
-import com.example.Account_microservice.user.dto.RequestSingUpUserDto;
+import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
+import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 
 public interface AuthenticationService {
 
-    JwtAuthenticationResponse signUp(RequestSingUpUserDto singUpDto);
+    JwtAuthenticationResponse signUp(RequestSingUpAccountDto singUpDto);
 
-    JwtAuthenticationResponse signIn(RequestSingInUserDto singInDto);
+    JwtAuthenticationResponse signIn(RequestSingInAccountDto singInDto);
 }

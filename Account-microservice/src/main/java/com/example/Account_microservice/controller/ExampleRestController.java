@@ -30,7 +30,6 @@ public class ExampleRestController {
     }
 
     @GetMapping("/user")
-
     public String getStringUser(){
         return "Строку мог запросить только авторизированный пользователь";
     }

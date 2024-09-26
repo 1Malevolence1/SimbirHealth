@@ -3,8 +3,8 @@ package com.example.Account_microservice;
 
 import com.example.Account_microservice.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.jwt.service.JwtService;
-import com.example.Account_microservice.user.dto.RequestSingInUserDto;
-import com.example.Account_microservice.user.dto.RequestSingUpUserDto;
+import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
+import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.serivice.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +25,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     // регестрация пользователя
     @Override
-    public JwtAuthenticationResponse signUp(RequestSingUpUserDto singUpDto) {
+    public JwtAuthenticationResponse signUp(RequestSingUpAccountDto singUpDto) {
 
         User user = userService.save(singUpDto);
         String jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);
     }
 
+    // @TODO обработать authenticationManager
     @Override
-    public JwtAuthenticationResponse signIn(RequestSingInUserDto singInDto) {
+    public JwtAuthenticationResponse signIn(RequestSingInAccountDto singInDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
                 (
                         singInDto.username(),

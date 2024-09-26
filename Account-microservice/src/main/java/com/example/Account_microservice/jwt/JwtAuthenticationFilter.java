@@ -29,8 +29,8 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
-    private final JwtServiceImpl jwtService;
-    private final UserService userService;
+    private final JwtService jwtService;
+
 
     private final CustomerUserDetailsService customerUserDetailsService;
 
@@ -53,8 +53,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         var username = jwtService.extractUserName(jwt);
 
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User user = userService.findUser(username);
-            log.info("->>>>>>>>>> {}", user);
+    ;
+
             UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);
 
 
