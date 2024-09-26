@@ -1,11 +1,8 @@
 package com.example.Account_microservice.jwt;
 
 import com.example.Account_microservice.CustomerUserDetailsService;
+import com.example.Account_microservice.jwt.service.BlackListTokenService;
 import com.example.Account_microservice.jwt.service.JwtService;
-import com.example.Account_microservice.jwt.service.JwtServiceImpl;
-import com.example.Account_microservice.user.model.User;
-import com.example.Account_microservice.user.serivice.UserService;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -30,37 +26,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
-
-
+    private final BlackListTokenService blackListTokenService;
     private final CustomerUserDetailsService customerUserDetailsService;
 
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-             FilterChain filterChain
+            FilterChain filterChain
     ) throws ServletException, IOException {
 
         // Получаем токен из заголовка
         var authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
+            return; // Если заголовок отсутствует или не начинается с "Bearer ", продолжаем обработку
+        }
+
+        // Обрезаем префикс и получаем токен
+        var jwt = authHeader.substring(BEARER_PREFIX.length());
+
+        // Проверяем наличие токена в черном списке
+        if (blackListTokenService.isTokenBlacklisted(jwt)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
+            return; // Прерываем выполнение, если токен недействителен
+        }
+
+        if (jwtService.isTokenExpired(jwt)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен истек.");
             return;
         }
 
-        // Обрезаем префикс и получаем имя пользователя из токена
-        var jwt = authHeader.substring(BEARER_PREFIX.length());
+        // Извлекаем имя пользователя из токена
         var username = jwtService.extractUserName(jwt);
 
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-    ;
-
             UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);
-
 
             // Если токен валиден, то аутентифицируем пользователя
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                SecurityContext context = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -68,10 +72,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                context.setAuthentication(authToken);
-                SecurityContextHolder.setContext(context);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
+
+        // Продолжаем обработку запроса
         filterChain.doFilter(request, response);
     }
 }

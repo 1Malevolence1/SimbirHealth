@@ -53,12 +53,19 @@ public class JwtServiceImpl implements JwtService {
         return claimsResolvers.apply(claims);
     }
 
-    private boolean isTokenExpired(String token) {
+    @Override
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    @Override
+    public Long getExpirationTime(String token) {
+        Date expirationDate = extractExpiration(token);
+        return expirationDate.getTime() - System.currentTimeMillis();
     }
 
     private Claims extractAllClaims(String token) {
