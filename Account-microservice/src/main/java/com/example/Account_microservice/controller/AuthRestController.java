@@ -6,8 +6,10 @@ import com.example.Account_microservice.config.ConstantResponseText;
 import com.example.Account_microservice.exeption.BadRequestExceptionCustomer;
 import com.example.Account_microservice.exeption.Validate;
 import com.example.Account_microservice.jwt.dto.JwtAuthenticationResponse;
+import com.example.Account_microservice.jwt.dto.JwtTokenIntrospectResponse;
 import com.example.Account_microservice.jwt.model.BlackListToken;
 import com.example.Account_microservice.jwt.service.BlackListTokenService;
+import com.example.Account_microservice.jwt.service.JwtExtractService;
 import com.example.Account_microservice.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
@@ -35,7 +37,10 @@ public class AuthRestController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
     private final JwtService jwtService;
+    private final JwtExtractService jwtExtractService;
     private final BlackListTokenService blackListService;
+
+
 
     @PostMapping("/SignUp")
     public ResponseEntity<?> singUp(@Valid @RequestBody RequestSingUpAccountDto singUpDto,
@@ -80,6 +85,21 @@ public class AuthRestController {
        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ConstantResponseText.SING_OUT_USER_UNAUTHORIZED);
     }
 
+
+    @GetMapping("/Validate")
+    public ResponseEntity<?> introspect(@RequestParam(name = "accessToken") String token){
+        log.info("->>>>>{}", token);
+        return ResponseEntity.ok().body(
+                new JwtTokenIntrospectResponse(
+                        jwtExtractService.extractUserId(token),
+                        jwtExtractService.extractUserName(token),
+                        jwtExtractService.extractSubject(token),
+                        jwtExtractService.extractIssuedAt(token),
+                        jwtExtractService.extractExpiration(token),
+                        jwtExtractService.extractRole(token)
+                )
+        );
+    }
 
 
     @ExceptionHandler(BindException.class)
