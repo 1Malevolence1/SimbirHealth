@@ -5,9 +5,10 @@ import com.example.Account_microservice.AuthenticationService;
 import com.example.Account_microservice.config.ConstantResponseText;
 import com.example.Account_microservice.exeption.BadRequestExceptionCustomer;
 import com.example.Account_microservice.exeption.Validate;
+import com.example.Account_microservice.jwt.component.JwtTokenIntrospector;
 import com.example.Account_microservice.jwt.dto.JwtAuthenticationResponse;
-import com.example.Account_microservice.jwt.model.BlackListToken;
-import com.example.Account_microservice.jwt.service.BlackListTokenService;
+import com.example.Account_microservice.jwt.black_list.model.BlackListToken;
+import com.example.Account_microservice.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
@@ -36,6 +37,10 @@ public class AuthRestController {
     private final UserService userService;
     private final JwtService jwtService;
     private final BlackListTokenService blackListService;
+    private final JwtTokenIntrospector jwtTokenIntrospector;
+
+
+
 
     @PostMapping("/SignUp")
     public ResponseEntity<?> singUp(@Valid @RequestBody RequestSingUpAccountDto singUpDto,
@@ -80,6 +85,14 @@ public class AuthRestController {
        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ConstantResponseText.SING_OUT_USER_UNAUTHORIZED);
     }
 
+
+    @GetMapping("/Validate")
+    public ResponseEntity<?> introspect(@RequestParam(name = "accessToken") String token){
+        log.info("->>>>>{}", token);
+        return ResponseEntity.ok().body(
+                jwtTokenIntrospector.build(token)
+        );
+    }
 
 
     @ExceptionHandler(BindException.class)

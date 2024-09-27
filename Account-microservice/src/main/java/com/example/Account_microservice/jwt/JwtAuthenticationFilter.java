@@ -1,7 +1,8 @@
 package com.example.Account_microservice.jwt;
 
 import com.example.Account_microservice.CustomerUserDetailsService;
-import com.example.Account_microservice.jwt.service.BlackListTokenService;
+import com.example.Account_microservice.jwt.black_list.service.BlackListTokenService;
+import com.example.Account_microservice.jwt.service.JwtExtractService;
 import com.example.Account_microservice.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
+    private final JwtExtractService jwtExtractService;
     private final BlackListTokenService blackListTokenService;
     private final CustomerUserDetailsService customerUserDetailsService;
 
@@ -52,13 +54,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return; // Прерываем выполнение, если токен недействителен
         }
 
-        if (jwtService.isTokenExpired(jwt)) {
+        if (jwtExtractService.isTokenExpired(jwt)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен истек.");
             return;
         }
 
         // Извлекаем имя пользователя из токена
-        var username = jwtService.extractUserName(jwt);
+        var username = jwtExtractService.extractUserName(jwt);
 
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);

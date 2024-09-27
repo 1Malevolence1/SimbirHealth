@@ -1,6 +1,6 @@
-package com.example.Account_microservice.jwt.repository;
+package com.example.Account_microservice.jwt.black_list.repository;
 
-import com.example.Account_microservice.jwt.model.BlackListToken;
+import com.example.Account_microservice.jwt.black_list.model.BlackListToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

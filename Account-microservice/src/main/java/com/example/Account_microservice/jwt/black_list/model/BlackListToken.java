@@ -1,4 +1,4 @@
-package com.example.Account_microservice.jwt.model;
+package com.example.Account_microservice.jwt.black_list.model;
 
 
 import jakarta.persistence.*;
