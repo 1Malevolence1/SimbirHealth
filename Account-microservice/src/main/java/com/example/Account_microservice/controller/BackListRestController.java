@@ -1,8 +1,8 @@
 package com.example.Account_microservice.controller;
 
 
-import com.example.Account_microservice.jwt.black_list.model.BlackListToken;
-import com.example.Account_microservice.jwt.black_list.repository.BlackListRepository;
+import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
+import com.example.Account_microservice.security.jwt.black_list.repository.BlackListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
