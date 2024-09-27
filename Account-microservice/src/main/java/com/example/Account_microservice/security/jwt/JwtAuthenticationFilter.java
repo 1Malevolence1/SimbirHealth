@@ -51,6 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Проверяем наличие токена в черном списке
         if (blackListTokenService.isTokenBlacklisted(jwt)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
+            log.info("токен нахоидтся в black list");
             return; // Прерываем выполнение, если токен недействителен
         }
 

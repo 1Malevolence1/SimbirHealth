@@ -1,10 +1,9 @@
 package com.example.Account_microservice.user.dto;
 
-public record ResponseUserDto (
+public record ResponseAccountDto (
         Long id,
         String lastname,
         String firsName,
-        String username,
-        String password
+        String username
 ) {
 }
