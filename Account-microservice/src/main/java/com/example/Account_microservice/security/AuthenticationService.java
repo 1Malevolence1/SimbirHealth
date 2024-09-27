@@ -9,4 +9,6 @@ public interface AuthenticationService {
     JwtAuthenticationResponse signUp(RequestSingUpAccountDto singUpDto);
 
     JwtAuthenticationResponse signIn(RequestSingInAccountDto singInDto);
+
+    JwtAuthenticationResponse refreshToken(String token);
 }

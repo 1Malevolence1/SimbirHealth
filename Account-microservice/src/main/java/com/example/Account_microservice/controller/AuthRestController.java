@@ -9,6 +9,7 @@ import com.example.Account_microservice.security.jwt.component.JwtTokenIntrospec
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
+import com.example.Account_microservice.security.jwt.dto.JwtRefreshTokeRequest;
 import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindException;
@@ -68,6 +70,7 @@ public class AuthRestController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/SignOut")
     public ResponseEntity<?> signOut(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -92,6 +95,13 @@ public class AuthRestController {
         return ResponseEntity.ok().body(
                 jwtTokenIntrospector.build(token)
         );
+    }
+
+
+
+    @PostMapping("/Refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody JwtRefreshTokeRequest jwtRefreshTokeRequest){
+        return ResponseEntity.ok(authenticationService.refreshToken(jwtRefreshTokeRequest.refreshToken()));
     }
 
 

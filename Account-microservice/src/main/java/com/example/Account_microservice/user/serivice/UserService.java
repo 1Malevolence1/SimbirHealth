@@ -9,7 +9,8 @@ public interface UserService {
 
     User save(RequestSingUpAccountDto singUpDto);
 
-    User findUser(String username);
+    User findUserByUsername(String username);
+    User findUserById(Long id);
     List<User> findAll();
 
 
