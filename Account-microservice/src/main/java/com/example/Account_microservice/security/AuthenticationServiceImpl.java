@@ -54,10 +54,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public JwtAuthenticationResponse refreshToken(String token) {
         Long userId = jwtExtractService.extractUserId(token);
-        User user = userService.findUserById(userId);
-        String refreshToken = jwtService.generateRefreshToken(user);
+        User user = userService.findUserById(userId); // exception not found
+        String refreshToken = jwtService.generateRefreshToken(user); // exception другая ошибка связанная с токеном
         log.info("---------------> {}", refreshToken.equals(token));
-        return new JwtAuthenticationResponse(token);
+        return new JwtAuthenticationResponse(refreshToken);
     }
 
 
