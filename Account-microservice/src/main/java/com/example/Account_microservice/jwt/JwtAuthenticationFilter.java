@@ -1,7 +1,7 @@
 package com.example.Account_microservice.jwt;
 
 import com.example.Account_microservice.CustomerUserDetailsService;
-import com.example.Account_microservice.jwt.service.BlackListTokenService;
+import com.example.Account_microservice.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.jwt.service.JwtExtractService;
 import com.example.Account_microservice.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return; // Прерываем выполнение, если токен недействителен
         }
 
-        if (jwtService.isTokenExpired(jwt)) {
+        if (jwtExtractService.isTokenExpired(jwt)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен истек.");
             return;
         }

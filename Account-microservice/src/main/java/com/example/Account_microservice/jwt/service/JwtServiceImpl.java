@@ -1,22 +1,26 @@
 package com.example.Account_microservice.jwt.service;
 
 import com.example.Account_microservice.jwt.dto.JwtAuthority;
-import com.example.Account_microservice.user.model.Role;
 import com.example.Account_microservice.user.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class JwtServiceImpl implements JwtService, JwtExtractService {
 
 
@@ -39,6 +43,7 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
     @Override
     public Long extractUserId(String token) {
         return Long.parseLong(extractClaim(token, Claims::getId));
+
     }
 
     @Override
@@ -52,6 +57,7 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
     }
 
 
+
     @Override
     public List<JwtAuthority> extractRole(String token) {
 
@@ -61,6 +67,9 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
                 .map(roleMap -> new JwtAuthority(roleMap.get("authority")))
                 .collect(Collectors.toList());
     }
+
+
+
 
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -83,6 +92,7 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
+        log.info("{},{}, {},{}",claims.getId(), claims.getSubject(), claims.getExpiration(), claims.getId());
         return claimsResolvers.apply(claims);
     }
 
@@ -91,6 +101,7 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
     public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
 
 
     @Override
@@ -103,6 +114,7 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
         return Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
                 .getBody();
     }
+
 
     private String createTokenJwt(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder().

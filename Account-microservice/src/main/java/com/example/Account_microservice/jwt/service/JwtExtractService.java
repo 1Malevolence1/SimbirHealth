@@ -13,5 +13,6 @@ public interface JwtExtractService {
     String extractSubject(String token);
     Date extractIssuedAt(String token);
     Date extractExpiration(String token);
+    Boolean isTokenExpired(String token);
     List<JwtAuthority> extractRole(String token);
 }

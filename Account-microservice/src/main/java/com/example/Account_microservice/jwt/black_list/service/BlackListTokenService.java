@@ -1,6 +1,6 @@
-package com.example.Account_microservice.jwt.service;
+package com.example.Account_microservice.jwt.black_list.service;
 
-import com.example.Account_microservice.jwt.model.BlackListToken;
+import com.example.Account_microservice.jwt.black_list.model.BlackListToken;
 
 import java.util.List;
 

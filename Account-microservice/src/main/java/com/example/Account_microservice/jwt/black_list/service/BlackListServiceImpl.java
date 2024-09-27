@@ -1,8 +1,8 @@
-package com.example.Account_microservice.jwt.service;
+package com.example.Account_microservice.jwt.black_list.service;
 
 
-import com.example.Account_microservice.jwt.model.BlackListToken;
-import com.example.Account_microservice.jwt.repository.BlackListRepository;
+import com.example.Account_microservice.jwt.black_list.model.BlackListToken;
+import com.example.Account_microservice.jwt.black_list.repository.BlackListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
