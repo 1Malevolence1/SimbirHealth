@@ -4,10 +4,12 @@ package com.example.Account_microservice.controller;
 import com.example.Account_microservice.mapper.MapperListUser;
 import com.example.Account_microservice.mapper.MapperUser;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
+import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.dto.ResponseAccountDto;
 import com.example.Account_microservice.user.serivice.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +50,7 @@ public class AccountRestController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/Update")
-    public ResponseEntity<?> updateCurrentAccount(@RequestBody RequestUpdateAccountDto updateAccountDto,
+    public ResponseEntity<?> updateCurrentAccount(@Valid @RequestBody RequestUpdateAccountDto updateAccountDto,
                                                   BindingResult bindingResult,
                                                   HttpServletRequest request) throws BindException {
 
@@ -84,5 +86,25 @@ public class AccountRestController {
                 mapperListUser.toDTO(
                         userService.findUsersFromOffsetWithLimit(from, count))
         );
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping()
+    public ResponseEntity<?> savaAdminNweUser(@Valid @RequestBody RequestAdminSaveAccount dto, BindingResult bindingResult) throws BindException {
+
+
+        if (bindingResult.hasErrors()) {
+            if (bindingResult instanceof BindException exception) {
+                throw exception;
+            } else {
+                throw new BindException(bindingResult);
+            }
+        } else {
+
+
+            log.info("поулчил данные: {}", dto);
+            userService.saveAdmin(dto);
+            return ResponseEntity.ok().build();
+        }
     }
 }

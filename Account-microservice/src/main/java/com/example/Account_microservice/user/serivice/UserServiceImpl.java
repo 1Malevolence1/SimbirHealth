@@ -2,7 +2,9 @@ package com.example.Account_microservice.user.serivice;
 
 
 import com.example.Account_microservice.config.ConstantResponseText;
+import com.example.Account_microservice.mapper.MapperAdmin;
 import com.example.Account_microservice.mapper.MapperUser;
+import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.model.Role;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MapperUser mapperUser;
+    private final MapperAdmin mapperAdmin;
 
 
     @Override
@@ -40,7 +44,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
 
+    public void saveAdmin(RequestAdminSaveAccount requestAdminSaveAccount) {
+        User user = mapperAdmin.toModel(requestAdminSaveAccount);
+        userRepository.save(user);
+
+    }
 
 
     @Override
