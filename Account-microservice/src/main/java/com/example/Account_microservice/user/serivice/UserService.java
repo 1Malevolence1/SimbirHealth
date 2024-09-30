@@ -10,11 +10,17 @@ import java.util.List;
 public interface UserService {
 
     User save(RequestSingUpAccountDto singUpDto);
+
     void saveAdmin(RequestAdminSaveAccount requestAdminSaveAccount);
 
     User findUserByUsername(String username);
+
     User findUserById(Long id);
+
     List<User> findUsersFromOffsetWithLimit(Integer from, Integer count);
+
     void update(RequestUpdateAccountDto updateAccountDto, Long id);
+
+    void deleteById(Long id);
 
 }

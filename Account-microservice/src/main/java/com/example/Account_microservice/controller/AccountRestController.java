@@ -1,6 +1,7 @@
 package com.example.Account_microservice.controller;
 
 
+import com.example.Account_microservice.config.ConstantResponseText;
 import com.example.Account_microservice.mapper.MapperListUser;
 import com.example.Account_microservice.mapper.MapperUser;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
@@ -79,9 +80,8 @@ public class AccountRestController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity<List<ResponseAccountDto>> getAllUser(
-                                            @RequestParam(name = "from") Integer from,
-                                            @RequestParam(name = "count") Integer count)
-    {
+            @RequestParam(name = "from") Integer from,
+            @RequestParam(name = "count") Integer count) {
         return ResponseEntity.ok().body(
                 mapperListUser.toDTO(
                         userService.findUsersFromOffsetWithLimit(from, count))
@@ -106,5 +106,14 @@ public class AccountRestController {
             userService.saveAdmin(dto);
             return ResponseEntity.ok().build();
         }
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("{accountId:\\d+}")
+    public ResponseEntity<String> deleteAccount(@PathVariable(name = "accountId") Long id) {
+        log.info("начался метод по удалению пользователя ");
+        userService.deleteById(id);
+        log.info("аккаунт удалён");
+        return ResponseEntity.ok().body(ConstantResponseText.SUCCESSFUL_DELETE_USER.formatted(id));
     }
 }

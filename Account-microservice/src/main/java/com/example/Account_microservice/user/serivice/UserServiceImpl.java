@@ -13,11 +13,13 @@ import com.example.Account_microservice.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,15 +39,15 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(RequestSingUpAccountDto dto) {
-         User user = mapperUser.toModel(dto);
-         user.setPassword(passwordEncoder.encode(user.getPassword()));
-         user.setRoles(Set.of(Role.builder().id(1L).roleName("ROLE_USER").build()));
-         return userRepository.save(user);
+        User user = mapperUser.toModel(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Set.of(Role.builder().id(1L).roleName("ROLE_USER").build()));
+        return userRepository.save(user);
 
     }
 
     @Override
-
+    @Transactional
     public void saveAdmin(RequestAdminSaveAccount requestAdminSaveAccount) {
         User user = mapperAdmin.toModel(requestAdminSaveAccount);
         userRepository.save(user);
@@ -55,19 +57,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByUsername(String username) {
-        return  userRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 
     }
 
     @Override
     public User findUserById(Long id) {
-        return  userRepository.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
     }
-
-
-
 
 
     @Override
@@ -76,21 +75,31 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     @Transactional
     public void update(RequestUpdateAccountDto updateAccountDto, Long id) {
-            log.info("Начался метод по обноволению данных текущего пользователя");
-            log.info("Данные для обновления: {}", updateAccountDto);
-            userRepository.findById(id).ifPresentOrElse(
-                    user ->{
-                        user.setLastName(updateAccountDto.lastName());
-                        user.setFirstName(updateAccountDto.lastName());
-                        user.setPassword(
-                                passwordEncoder.encode(updateAccountDto.password())
-                        );
-                    } , () -> new UsernameNotFoundException(ConstantResponseText.NOT_SUCH_USER)
-            );
-            log.info("Метод закончился ");
+        log.info("Начался метод по обноволению данных текущего пользователя");
+        log.info("Данные для обновления: {}", updateAccountDto);
+        userRepository.findById(id).ifPresentOrElse(
+                user -> {
+                    user.setLastName(updateAccountDto.lastName());
+                    user.setFirstName(updateAccountDto.lastName());
+                    user.setPassword(
+                            passwordEncoder.encode(updateAccountDto.password())
+                    );
+                }, () -> new UsernameNotFoundException(ConstantResponseText.NOT_SUCH_USER)
+        );
+        log.info("Метод закончился ");
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoSuchElementException(ConstantResponseText.NOT_FOUND_USER_BY_ID.formatted(id));
+        }
+
     }
 }
