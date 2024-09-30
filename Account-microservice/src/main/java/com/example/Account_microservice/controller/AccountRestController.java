@@ -1,10 +1,11 @@
 package com.example.Account_microservice.controller;
 
 
+import com.example.Account_microservice.mapper.MapperListUser;
+import com.example.Account_microservice.mapper.MapperUser;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.dto.ResponseAccountDto;
-import com.example.Account_microservice.user.serivice.ConvertUser;
 import com.example.Account_microservice.user.serivice.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/Accounts")
 @RequiredArgsConstructor
@@ -24,6 +27,8 @@ public class AccountRestController {
 
     private final UserService userService;
     private final JwtExtractService jwtExtractService;
+    private final MapperListUser mapperListUser;
+    private final MapperUser mapperUser;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/Me")
@@ -32,7 +37,7 @@ public class AccountRestController {
         String token = request.getHeader("Authorization").substring(7);
 
         return ResponseEntity.ok().body(
-                ConvertUser.toDTO(
+                mapperUser.toDTO(
                         userService.findUserById(
                                 jwtExtractService.extractUserId(token)
                         )
@@ -64,5 +69,17 @@ public class AccountRestController {
 
             return ResponseEntity.ok().body("Аккаунт успешно обновлён");
         }
+    }
+
+
+    // TODO добавить мапстракт для переделывания в юзера в дто
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping()
+    public ResponseEntity<List<ResponseAccountDto>> getAllUser(){
+        return ResponseEntity.ok().body(
+                mapperListUser.toDTO(
+                        userService.findAll())
+        );
     }
 }

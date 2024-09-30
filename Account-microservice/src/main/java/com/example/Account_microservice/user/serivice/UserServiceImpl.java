@@ -2,6 +2,7 @@ package com.example.Account_microservice.user.serivice;
 
 
 import com.example.Account_microservice.config.ConstantResponseText;
+import com.example.Account_microservice.mapper.MapperUser;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.model.Role;
@@ -26,12 +27,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MapperUser mapperUser;
 
 
     @Override
     @Transactional
     public User save(RequestSingUpAccountDto dto) {
-         User user = ConvertUser.toModel(dto);
+         User user = mapperUser.toModel(dto);
          user.setPassword(passwordEncoder.encode(user.getPassword()));
          user.setRoles(Set.of(Role.builder().id(1L).roleName("ROLE_USER").build()));
          return userRepository.save(user);
