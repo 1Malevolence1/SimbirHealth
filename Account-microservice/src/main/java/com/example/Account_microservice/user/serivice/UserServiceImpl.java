@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void saveAdmin(RequestAdminSaveAccount requestAdminSaveAccount) {
         User user = mapperAdmin.toModel(requestAdminSaveAccount);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
     }

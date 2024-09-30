@@ -11,4 +11,5 @@ public final class ConstantResponseText {
     public static final String NOT_FOUND_USER_BY_ID = "Пользователь с %d id не найден";
     public static final String INVALID_CREDENTIALS_MESSAGE = "Неверное имя пользователя или пароль";
     public static final String SUCCESSFUL_DELETE_USER = "Пользователь с %d id удалён";
+    public static final String NOT_FOUND_ROLE_EXCEPTION = "%s данной роли нет в базе данных";
 }
