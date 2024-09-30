@@ -7,6 +7,7 @@ import com.example.Account_microservice.exception.Validate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -33,4 +34,13 @@ public class GlobalExceptionUser {
                 error -> new Validate(error.getDefaultMessage())).toList();
         return ResponseEntity.badRequest().body(new BadRequestExceptionCustomer(errors));
     }
+
+
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<Validate> handlerMissingServletRequestParameterException(MissingServletRequestParameterException exception) {
+        return ResponseEntity.badRequest().body(new Validate(exception.getMessage()));
+    }
+
+
 }

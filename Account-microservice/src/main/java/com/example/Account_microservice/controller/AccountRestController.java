@@ -76,10 +76,13 @@ public class AccountRestController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping()
-    public ResponseEntity<List<ResponseAccountDto>> getAllUser(){
+    public ResponseEntity<List<ResponseAccountDto>> getAllUser(
+                                            @RequestParam(name = "from") Integer from,
+                                            @RequestParam(name = "count") Integer count)
+    {
         return ResponseEntity.ok().body(
                 mapperListUser.toDTO(
-                        userService.findAll())
+                        userService.findUsersFromOffsetWithLimit(from, count))
         );
     }
 }

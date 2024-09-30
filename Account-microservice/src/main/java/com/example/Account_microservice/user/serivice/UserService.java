@@ -12,6 +12,7 @@ public interface UserService {
 
     User findUserByUsername(String username);
     User findUserById(Long id);
-    List<User> findAll();
+    List<User> findUsersFromOffsetWithLimit(Integer from, Integer count);
     void update(RequestUpdateAccountDto updateAccountDto, Long id);
+
 }

@@ -56,9 +56,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
     }
 
+
+
+
+
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<User> findUsersFromOffsetWithLimit(Integer form, Integer count) {
+        return userRepository.getUsersFromOffsetWithLimit(form, count);
     }
 
 
