@@ -1,6 +1,9 @@
 package com.example.Account_microservice.security;
 
 
+import com.example.Account_microservice.config.ConstantResponseText;
+import com.example.Account_microservice.exception.BadRequestSingInCustomer;
+import com.example.Account_microservice.exception.Validate;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
@@ -11,10 +14,14 @@ import com.example.Account_microservice.user.serivice.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.lang.reflect.InvocationTargetException;
 
 @Service
 @RequiredArgsConstructor
@@ -39,11 +46,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     // @TODO обработать authenticationManager
     @Override
     public JwtAuthenticationResponse signIn(RequestSingInAccountDto singInDto) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
-                (
-                        singInDto.username(),
-                        singInDto.password())
-                );
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    singInDto.username(),
+                    singInDto.password())
+            );
+        } catch (BadCredentialsException e) {
+            throw new BadRequestSingInCustomer(new Validate(ConstantResponseText.INVALID_CREDENTIALS_MESSAGE)
+            );
+        }
 
 
         UserDetails user = userDetailsService.loadUserByUsername(singInDto.username());
@@ -59,7 +71,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         log.info("---------------> {}", refreshToken.equals(token));
         return new JwtAuthenticationResponse(refreshToken);
     }
-
 
 
 }

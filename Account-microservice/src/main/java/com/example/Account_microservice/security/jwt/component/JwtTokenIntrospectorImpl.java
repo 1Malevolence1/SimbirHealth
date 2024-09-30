@@ -24,7 +24,6 @@ public class JwtTokenIntrospectorImpl implements JwtTokenIntrospector {
 
                 jwtExtractService.extractUserId(token),
                 jwtExtractService.extractUserName(token),
-                jwtExtractService.extractSubject(token),
                 zoneDataService.getTime(jwtExtractService.extractIssuedAt(token)),
                 zoneDataService.getTime(jwtExtractService.extractExpiration(token)),
                 !blackListService.isTokenBlacklisted(token),

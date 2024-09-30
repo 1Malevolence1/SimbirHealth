@@ -1,10 +1,13 @@
 package com.example.Account_microservice.user.serivice;
 
 
+import com.example.Account_microservice.config.ConstantResponseText;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
+import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.model.Role;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public User save(RequestSingUpAccountDto dto) {
          User user = ConvertUser.toModel(dto);
          user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -53,5 +57,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+
+
+    @Override
+    @Transactional
+    public void update(RequestUpdateAccountDto updateAccountDto, Long id) {
+            log.info("Начался метод по обноволению данных текущего пользователя");
+            log.info("Данные для обновления: {}", updateAccountDto);
+            userRepository.findById(id).ifPresentOrElse(
+                    user ->{
+                        user.setLastName(updateAccountDto.lastName());
+                        user.setFirstName(updateAccountDto.lastName());
+                        user.setPassword(
+                                passwordEncoder.encode(updateAccountDto.password())
+                        );
+                    } , () -> new UsernameNotFoundException(ConstantResponseText.NOT_SUCH_USER)
+            );
+            log.info("Метод закончился ");
     }
 }

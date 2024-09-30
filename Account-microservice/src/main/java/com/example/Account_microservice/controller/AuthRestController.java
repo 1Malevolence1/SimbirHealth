@@ -105,11 +105,4 @@ public class AuthRestController {
     }
 
 
-    @ExceptionHandler(BindException.class)
-    public ResponseEntity<BadRequestExceptionCustomer> handlerBindExcept(BindException exception) {
-        List<Validate> errors = exception.getAllErrors().stream().map(
-                error -> new Validate(error.getDefaultMessage())).toList();
-        return ResponseEntity.badRequest().body(new BadRequestExceptionCustomer(errors));
-    }
-
 }
