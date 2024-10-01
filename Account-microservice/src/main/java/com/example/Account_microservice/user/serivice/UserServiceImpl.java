@@ -1,10 +1,12 @@
 package com.example.Account_microservice.user.serivice;
 
 
-import com.example.Account_microservice.config.ConstantResponseText;
+import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.mapper.MapperAdmin;
+import com.example.Account_microservice.mapper.MapperListRole;
 import com.example.Account_microservice.mapper.MapperUser;
 import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
+import com.example.Account_microservice.user.dto.RequestAdminUpdateAccount;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.model.Role;
@@ -21,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final MapperUser mapperUser;
     private final MapperAdmin mapperAdmin;
+    private final MapperListRole mapperListRole;
 
 
     @Override
@@ -53,6 +55,20 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
+    }
+
+    @Override
+    @Transactional
+    public void updateAdmin(RequestAdminUpdateAccount requestUpdateAccountDto, Long id) {
+        userRepository.findById(id).ifPresentOrElse(
+                user -> {
+                    user.setLastName(requestUpdateAccountDto.lastName());
+                    user.setFirstName(requestUpdateAccountDto.firstName());
+                    user.setUsername(requestUpdateAccountDto.username());
+                    user.setPassword(passwordEncoder.encode(requestUpdateAccountDto.password()));
+                    user.setRoles(mapperListRole.toModel(requestUpdateAccountDto.roles()));
+                }, () -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id))
+        );
     }
 
 
@@ -88,7 +104,7 @@ public class UserServiceImpl implements UserService {
                     user.setPassword(
                             passwordEncoder.encode(updateAccountDto.password())
                     );
-                }, () -> new UsernameNotFoundException(ConstantResponseText.NOT_SUCH_USER)
+                }, () -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_SUCH_USER)
         );
         log.info("Метод закончился ");
     }
@@ -99,7 +115,7 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new NoSuchElementException(ConstantResponseText.NOT_FOUND_USER_BY_ID.formatted(id));
+            throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
         }
 
     }

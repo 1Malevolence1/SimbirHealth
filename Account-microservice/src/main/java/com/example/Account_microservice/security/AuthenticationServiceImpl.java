@@ -1,7 +1,7 @@
 package com.example.Account_microservice.security;
 
 
-import com.example.Account_microservice.config.ConstantResponseText;
+import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.exception.BadRequestSingInCustomer;
 import com.example.Account_microservice.exception.Validate;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
@@ -15,13 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.InvocationTargetException;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     singInDto.password())
             );
         } catch (BadCredentialsException e) {
-            throw new BadRequestSingInCustomer(new Validate(ConstantResponseText.INVALID_CREDENTIALS_MESSAGE)
+            throw new BadRequestSingInCustomer(new Validate(ConstantResponseExceptionText.INVALID_CREDENTIALS_MESSAGE)
             );
         }
 

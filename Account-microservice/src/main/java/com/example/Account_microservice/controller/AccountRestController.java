@@ -1,7 +1,7 @@
 package com.example.Account_microservice.controller;
 
 
-import com.example.Account_microservice.config.ConstantResponseText;
+import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.mapper.MapperListUser;
 import com.example.Account_microservice.mapper.MapperUser;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
@@ -114,6 +114,7 @@ public class AccountRestController {
         log.info("начался метод по удалению пользователя ");
         userService.deleteById(id);
         log.info("аккаунт удалён");
-        return ResponseEntity.ok().body(ConstantResponseText.SUCCESSFUL_DELETE_USER.formatted(id));
+        return ResponseEntity.ok().body(ConstantResponseExceptionText.SUCCESSFUL_DELETE_USER.formatted(id));
     }
+
 }

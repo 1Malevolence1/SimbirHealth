@@ -2,9 +2,7 @@ package com.example.Account_microservice.controller;
 
 
 import com.example.Account_microservice.security.AuthenticationService;
-import com.example.Account_microservice.config.ConstantResponseText;
-import com.example.Account_microservice.exception.BadRequestExceptionCustomer;
-import com.example.Account_microservice.exception.Validate;
+import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.security.jwt.component.JwtTokenIntrospector;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
@@ -26,8 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/Authentication")
@@ -82,10 +78,10 @@ public class AuthRestController {
                         null,
                         token,
                         jwtService.getExpirationTime(token)));
-                return ResponseEntity.ok(ConstantResponseText.SING_OUT_USER_OK);
+                return ResponseEntity.ok(ConstantResponseExceptionText.SING_OUT_USER_OK);
 
         }
-       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ConstantResponseText.SING_OUT_USER_UNAUTHORIZED);
+       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ConstantResponseExceptionText.SING_OUT_USER_UNAUTHORIZED);
     }
 
 
