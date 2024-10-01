@@ -1,15 +1,14 @@
 package com.example.Account_microservice.controller;
 
 
-import com.example.Account_microservice.AuthenticationService;
-import com.example.Account_microservice.config.ConstantResponseText;
-import com.example.Account_microservice.exeption.BadRequestExceptionCustomer;
-import com.example.Account_microservice.exeption.Validate;
-import com.example.Account_microservice.jwt.component.JwtTokenIntrospector;
-import com.example.Account_microservice.jwt.dto.JwtAuthenticationResponse;
-import com.example.Account_microservice.jwt.black_list.model.BlackListToken;
-import com.example.Account_microservice.jwt.black_list.service.BlackListTokenService;
-import com.example.Account_microservice.jwt.service.JwtService;
+import com.example.Account_microservice.security.AuthenticationService;
+import com.example.Account_microservice.config.ConstantResponseExceptionText;
+import com.example.Account_microservice.security.jwt.component.JwtTokenIntrospector;
+import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
+import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
+import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
+import com.example.Account_microservice.security.jwt.dto.JwtRefreshTokeRequest;
+import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 import com.example.Account_microservice.user.serivice.UserService;
@@ -19,13 +18,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/Authentication")
@@ -68,6 +66,7 @@ public class AuthRestController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/SignOut")
     public ResponseEntity<?> signOut(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -79,10 +78,10 @@ public class AuthRestController {
                         null,
                         token,
                         jwtService.getExpirationTime(token)));
-                return ResponseEntity.ok(ConstantResponseText.SING_OUT_USER_OK);
+                return ResponseEntity.ok(ConstantResponseExceptionText.SING_OUT_USER_OK);
 
         }
-       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ConstantResponseText.SING_OUT_USER_UNAUTHORIZED);
+       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ConstantResponseExceptionText.SING_OUT_USER_UNAUTHORIZED);
     }
 
 
@@ -95,11 +94,11 @@ public class AuthRestController {
     }
 
 
-    @ExceptionHandler(BindException.class)
-    public ResponseEntity<BadRequestExceptionCustomer> handlerBindExcept(BindException exception) {
-        List<Validate> errors = exception.getAllErrors().stream().map(
-                error -> new Validate(error.getDefaultMessage())).toList();
-        return ResponseEntity.badRequest().body(new BadRequestExceptionCustomer(errors));
+
+    @PostMapping("/Refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody JwtRefreshTokeRequest jwtRefreshTokeRequest){
+        return ResponseEntity.ok(authenticationService.refreshToken(jwtRefreshTokeRequest.refreshToken()));
     }
+
 
 }
