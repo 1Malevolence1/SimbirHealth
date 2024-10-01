@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface DoctorRepository extends JpaRepository<User, Long> {
 
-
-    // TODO Перерделать запрос
     @Query(value = "SELECT u.* FROM users u " +
             "JOIN user_roles ur ON u.user_id = ur.user_id " +
-            "WHERE ur.role_id = 3 AND u.username LIKE %:filterName% " +
+            "JOIN role r ON ur.role_id = r.role_id " +
+            "WHERE r.role_id = 3 AND u.username LIKE %:filterName% " +
             "ORDER BY u.user_id LIMIT :count OFFSET :from",
             nativeQuery = true)
     List<User> findAllDoctors(@Param("filterName") String filterName, @Param("from") Integer from, @Param("count") Integer count);
+
 
 }
