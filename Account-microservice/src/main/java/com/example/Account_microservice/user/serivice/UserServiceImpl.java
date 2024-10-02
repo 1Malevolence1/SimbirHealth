@@ -2,13 +2,8 @@ package com.example.Account_microservice.user.serivice;
 
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.mapper.MapperAdmin;
-import com.example.Account_microservice.mapper.MapperListRole;
-import com.example.Account_microservice.mapper.MapperUser;
-import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
-import com.example.Account_microservice.user.dto.RequestAdminUpdateAccount;
+import com.example.Account_microservice.convert.manager_mapper.ManagerMapperAccount;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
-import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.model.Role;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.repository.UserRepository;
@@ -20,8 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -33,90 +28,63 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MapperUser mapperUser;
-    private final MapperAdmin mapperAdmin;
-    private final MapperListRole mapperListRole;
+    private final ManagerMapperAccount managerMapperAccount;
 
 
     @Override
     @Transactional
     public User save(RequestSingUpAccountDto dto) {
-        User user = mapperUser.toModel(dto);
+        User user = managerMapperAccount.toModelFromSignUp(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Set.of(Role.builder().id(1L).roleName("ROLE_USER").build()));
         return userRepository.save(user);
 
     }
 
-    @Override
-    @Transactional
-    public void saveAdmin(RequestAdminSaveAccount requestAdminSaveAccount) {
-        User user = mapperAdmin.toModel(requestAdminSaveAccount);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-
-    }
-
-    @Override
-    @Transactional
-    public void updateAdmin(RequestAdminUpdateAccount requestUpdateAccountDto, Long id) {
-        userRepository.findById(id).ifPresentOrElse(
-                user -> {
-                    user.setLastName(requestUpdateAccountDto.lastName());
-                    user.setFirstName(requestUpdateAccountDto.firstName());
-                    user.setUsername(requestUpdateAccountDto.username());
-                    user.setPassword(passwordEncoder.encode(requestUpdateAccountDto.password()));
-                    user.setRoles(mapperListRole.toModel(requestUpdateAccountDto.roles()));
-                }, () -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id))
-        );
-    }
-
 
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_USERNAME.formatted(username)));
 
     }
 
     @Override
     public User findUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id)));
     }
 
-
     @Override
-    public List<User> findUsersFromOffsetWithLimit(Integer form, Integer count) {
-        return userRepository.getUsersFromOffsetWithLimit(form, count);
+    public Optional<User> findUserByIdReturnOptional(Long id) {
+        return userRepository.findById(id);
     }
 
+    @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
 
     @Override
-    @Transactional
-    public void update(RequestUpdateAccountDto updateAccountDto, Long id) {
-        log.info("Начался метод по обноволению данных текущего пользователя");
-        log.info("Данные для обновления: {}", updateAccountDto);
+    public void update(User updateUser, Long id) {
+
         userRepository.findById(id).ifPresentOrElse(
                 user -> {
-                    user.setLastName(updateAccountDto.lastName());
-                    user.setFirstName(updateAccountDto.lastName());
-                    user.setPassword(
-                            passwordEncoder.encode(updateAccountDto.password())
-                    );
-                }, () -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_SUCH_USER)
+                    if(updateUser.getUsername() != null) user.setUsername(updateUser.getUsername());
+                    if(updateUser.getLastName() != null) user.setLastName(updateUser.getLastName());
+                    if(updateUser.getFirstName() != null) user.setFirstName(updateUser.getFirstName());
+                    if(updateUser.getPassword() != null) user.setPassword(passwordEncoder.encode(user.getPassword()));
+                    if(updateUser.getRoles() != null) user.setRoles(updateUser.getRoles());
+                }, () -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id))
         );
-        log.info("Метод закончился ");
     }
 
     @Override
     public void deleteById(Long id) {
-
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
         }
-
     }
 }

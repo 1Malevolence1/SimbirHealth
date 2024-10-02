@@ -1,4 +1,4 @@
-package com.example.Account_microservice.mapper;
+package com.example.Account_microservice.convert.mapper;
 
 
 import com.example.Account_microservice.user.model.Role;
@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface MapperRole {
+
 
     @Mapping(target = "id", expression = "java(RoleSettingId.getId(roleName))")
     Role toMODEL(String roleName);

@@ -89,6 +89,13 @@
 			<version>${org.mapstruct.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok-mapstruct-binding</artifactId>
+			<version>0.2.0</version>
+		</dependency>
 		<!-- MAPSTRUCT -->
 
 
@@ -126,6 +133,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

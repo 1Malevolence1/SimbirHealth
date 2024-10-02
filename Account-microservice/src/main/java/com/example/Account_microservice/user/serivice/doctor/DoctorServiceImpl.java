@@ -1,9 +1,9 @@
-package com.example.Account_microservice.user.serivice;
+package com.example.Account_microservice.user.serivice.doctor;
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.mapper.doctor.DoctorListMapper;
-import com.example.Account_microservice.mapper.doctor.DoctorMapper;
-import com.example.Account_microservice.user.dto.ResponseDoctorDto;
+import com.example.Account_microservice.convert.doctor.DoctorListMapper;
+import com.example.Account_microservice.convert.doctor.DoctorMapper;
+import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;
 import com.example.Account_microservice.user.repository.DoctorRepository;
 import com.example.Account_microservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final DoctorListMapper doctorListMapper;
     private final DoctorMapper doctorMapper;
+
 
     @Override
     public List<ResponseDoctorDto> finaAll(String filterName, Integer form, Integer count) {

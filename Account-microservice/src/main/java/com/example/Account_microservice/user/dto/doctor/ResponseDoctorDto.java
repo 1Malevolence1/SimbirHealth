@@ -1,4 +1,4 @@
-package com.example.Account_microservice.user.dto;
+package com.example.Account_microservice.user.dto.doctor;
 
 public record ResponseDoctorDto(
         Long id,

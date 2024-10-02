@@ -6,10 +6,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "role")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class Role {
 
@@ -20,4 +20,6 @@ public class Role {
 
     @Column(name = "role_name", unique = true)
     private String roleName;
+
+
 }

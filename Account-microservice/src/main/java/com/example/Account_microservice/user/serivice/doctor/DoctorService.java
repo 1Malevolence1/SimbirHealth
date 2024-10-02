@@ -1,7 +1,7 @@
-package com.example.Account_microservice.user.serivice;
+package com.example.Account_microservice.user.serivice.doctor;
 
 
-import com.example.Account_microservice.user.dto.ResponseDoctorDto;
+import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;
 
 import java.util.List;
 

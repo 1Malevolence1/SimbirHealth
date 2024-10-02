@@ -2,13 +2,15 @@ package com.example.Account_microservice.controller;
 
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.mapper.MapperListUser;
-import com.example.Account_microservice.mapper.MapperUser;
+import com.example.Account_microservice.config.ConstantResponseSuccessfulText;
+import com.example.Account_microservice.convert.manager_mapper.ManagerMapperAccount;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
+import com.example.Account_microservice.user.dto.RequestAdminUpdateAccount;
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.dto.ResponseAccountDto;
-import com.example.Account_microservice.user.serivice.UserService;
+import com.example.Account_microservice.user.serivice.admin.AdminService;
+import com.example.Account_microservice.user.serivice.authorized_user.AuthorizedUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +30,10 @@ import java.util.List;
 public class AccountRestController {
 
 
-    private final UserService userService;
+    private final AuthorizedUser authorizedUserService;
     private final JwtExtractService jwtExtractService;
-    private final MapperListUser mapperListUser;
-    private final MapperUser mapperUser;
+    private final ManagerMapperAccount managerMapperAccount;
+    private final AdminService adminService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/Me")
@@ -40,11 +42,10 @@ public class AccountRestController {
         String token = request.getHeader("Authorization").substring(7);
 
         return ResponseEntity.ok().body(
-                mapperUser.toDTO(
-                        userService.findUserById(
+                        authorizedUserService.findUserById(
                                 jwtExtractService.extractUserId(token)
                         )
-                )
+
         );
     }
 
@@ -65,7 +66,7 @@ public class AccountRestController {
 
             String token = request.getHeader("Authorization").substring(7);
 
-            userService.update(
+            authorizedUserService.update(
                     updateAccountDto,
                     jwtExtractService.extractUserId(token)
             );
@@ -83,8 +84,8 @@ public class AccountRestController {
             @RequestParam(name = "from") Integer from,
             @RequestParam(name = "count") Integer count) {
         return ResponseEntity.ok().body(
-                mapperListUser.toDTO(
-                        userService.findUsersFromOffsetWithLimit(from, count))
+                managerMapperAccount.toDtoListAccount(
+                        adminService.findUsersFromOffsetWithLimit(from, count))
         );
     }
 
@@ -101,18 +102,40 @@ public class AccountRestController {
             }
         } else {
 
-
             log.info("поулчил данные: {}", dto);
-            userService.saveAdmin(dto);
+            adminService.save(dto);
             return ResponseEntity.ok().build();
         }
     }
+
+
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("{accountId:\\d+}")
+    public ResponseEntity<?> updateAdminAccount(@Valid @RequestBody RequestAdminUpdateAccount dto, BindingResult bindingResult,
+                                                @PathVariable(name = "accountId") Long id) throws BindException {
+
+
+        if (bindingResult.hasErrors()) {
+            if (bindingResult instanceof BindException exception) {
+                throw exception;
+            } else {
+                throw new BindException(bindingResult);
+            }
+        } else {
+
+            log.info("поулчил данные: {}", dto);
+            adminService.update(dto, id);
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.SUCCESSFUL_ADMIN_UPDATE_ACCOUNT);
+        }
+    }
+
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("{accountId:\\d+}")
     public ResponseEntity<String> deleteAccount(@PathVariable(name = "accountId") Long id) {
         log.info("начался метод по удалению пользователя ");
-        userService.deleteById(id);
+        adminService.deleteById(id);
         log.info("аккаунт удалён");
         return ResponseEntity.ok().body(ConstantResponseExceptionText.SUCCESSFUL_DELETE_USER.formatted(id));
     }

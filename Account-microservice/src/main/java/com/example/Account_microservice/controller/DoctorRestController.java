@@ -1,8 +1,8 @@
 package com.example.Account_microservice.controller;
 
 
-import com.example.Account_microservice.user.dto.ResponseDoctorDto;
-import com.example.Account_microservice.user.serivice.DoctorService;
+import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;
+import com.example.Account_microservice.user.serivice.doctor.DoctorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

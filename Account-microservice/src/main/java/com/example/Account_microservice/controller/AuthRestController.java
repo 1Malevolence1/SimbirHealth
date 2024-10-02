@@ -1,6 +1,7 @@
 package com.example.Account_microservice.controller;
 
 
+import com.example.Account_microservice.config.ConstantResponseSuccessfulText;
 import com.example.Account_microservice.security.AuthenticationService;
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.security.jwt.component.JwtTokenIntrospector;
@@ -78,7 +79,7 @@ public class AuthRestController {
                         null,
                         token,
                         jwtService.getExpirationTime(token)));
-                return ResponseEntity.ok(ConstantResponseExceptionText.SING_OUT_USER_OK);
+                return ResponseEntity.ok(ConstantResponseSuccessfulText.SING_OUT_USER_OK);
 
         }
        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ConstantResponseExceptionText.SING_OUT_USER_UNAUTHORIZED);
