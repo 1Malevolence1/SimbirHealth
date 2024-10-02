@@ -1,4 +1,4 @@
-package com.example.Account_microservice.user.serivice;
+package com.example.Account_microservice.user.service.user;
 
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -27,16 +28,11 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final ManagerMapperAccount managerMapperAccount;
 
 
     @Override
     @Transactional
-    public User save(RequestSingUpAccountDto dto) {
-        User user = managerMapperAccount.toModelFromSignUp(dto);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Set.of(Role.builder().id(1L).roleName("ROLE_USER").build()));
+    public User save(User user) {
         return userRepository.save(user);
 
     }
@@ -60,22 +56,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
-    @Override
-    public void save(User user) {
-        userRepository.save(user);
-    }
 
     @Override
     public void update(User updateUser, Long id) {
 
         userRepository.findById(id).ifPresentOrElse(
                 user -> {
-                    if(updateUser.getUsername() != null) user.setUsername(updateUser.getUsername());
-                    if(updateUser.getLastName() != null) user.setLastName(updateUser.getLastName());
-                    if(updateUser.getFirstName() != null) user.setFirstName(updateUser.getFirstName());
-                    if(updateUser.getPassword() != null) user.setPassword(passwordEncoder.encode(user.getPassword()));
-                    if(updateUser.getRoles() != null) user.setRoles(updateUser.getRoles());
-                }, () -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id))
+                    if (updateUser.getUsername() != null) user.setUsername(updateUser.getUsername());
+                    if (updateUser.getLastName() != null) user.setLastName(updateUser.getLastName());
+                    if (updateUser.getFirstName() != null) user.setFirstName(updateUser.getFirstName());
+                    if (updateUser.getPassword() != null) user.setPassword(user.getPassword());
+                    if (updateUser.getRoles() != null) user.setRoles(updateUser.getRoles());
+                }, () -> {
+                  throw  new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
+                }
         );
     }
 
@@ -86,5 +80,10 @@ public class UserServiceImpl implements UserService {
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
         }
+    }
+
+    @Override
+    public List<User> getUsersFromOffsetWithLimit(Integer from, Integer count) {
+        return userRepository.getUsersFromOffsetWithLimit(from, count);
     }
 }

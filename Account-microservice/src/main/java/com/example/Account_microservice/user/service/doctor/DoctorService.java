@@ -1,4 +1,4 @@
-package com.example.Account_microservice.user.serivice.doctor;
+package com.example.Account_microservice.user.service.doctor;
 
 
 import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;

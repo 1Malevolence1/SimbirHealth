@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice
-public class GlobalExceptionUser {
+public class GlobalExceptionForUser {
 
 
     @ExceptionHandler(NoSuchElementException.class)

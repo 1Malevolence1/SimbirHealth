@@ -1,4 +1,4 @@
-package com.example.Account_microservice.user.serivice;
+package com.example.Account_microservice.user.service;
 
 
 import com.example.Account_microservice.user.model.Role;

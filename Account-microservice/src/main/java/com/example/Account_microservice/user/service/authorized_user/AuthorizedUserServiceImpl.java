@@ -1,9 +1,9 @@
-package com.example.Account_microservice.user.serivice.authorized_user;
+package com.example.Account_microservice.user.service.authorized_user;
 
 import com.example.Account_microservice.convert.manager_mapper.ManagerMapperAccount;
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.dto.ResponseAccountDto;
-import com.example.Account_microservice.user.serivice.UserService;
+import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthorizedUserImpl implements AuthorizedUser {
+public class AuthorizedUserServiceImpl implements AuthorizedUserService {
 
     private final UserService userService;
     private final ManagerMapperAccount managerMapperAccount;

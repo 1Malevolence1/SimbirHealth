@@ -1,8 +1,9 @@
 package com.example.Account_microservice.convert.manager_mapper;
 
-import com.example.Account_microservice.convert.mapper.MapperListUser;
-import com.example.Account_microservice.convert.mapper.MapperUser;
+import com.example.Account_microservice.convert.mapper.user.MapperListUser;
+import com.example.Account_microservice.convert.mapper.user.MapperUser;
 import com.example.Account_microservice.user.dto.*;
+import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto;
 import com.example.Account_microservice.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,9 +14,10 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ManagerMapperAccountImpl implements ManagerMapperAccount {
+
     private final MapperUser mapperUser;
     private final MapperListUser mapperListUser;
-    private final ManagerMapperRole managerMapperRole;
+
 
     @Override
     public ResponseAccountDto toDto(User user) {
@@ -25,6 +27,11 @@ public class ManagerMapperAccountImpl implements ManagerMapperAccount {
     @Override
     public List<ResponseAccountDto> toDtoListAccount(List<User> users) {
         return mapperListUser.toDTO(users);
+    }
+
+    @Override
+    public User toModelFormSingUpGuestUser(RequestSingInGuestUserDto singUpGuestDto) {
+        return mapperUser.toModelFromSingUpGuestUser(singUpGuestDto);
     }
 
     @Override
@@ -39,21 +46,12 @@ public class ManagerMapperAccountImpl implements ManagerMapperAccount {
 
     @Override
     public User toModelFromAdminUpdate(RequestAdminUpdateAccount adminUpdateAccount) {
-        User user = mapperUser.toModelFromAdminUpdate(adminUpdateAccount);
-        user.setRoles(
-                managerMapperRole.toSetModel(adminUpdateAccount.roles())
-        );
-        return user;
+        return mapperUser.toModelFromAdminUpdate(adminUpdateAccount);
     }
 
 
     @Override
     public User toModelFromAdminSave(RequestAdminSaveAccount adminSaveAccount) {
-
-      User user = mapperUser.toModelFromAdminSave(adminSaveAccount);
-      user.setRoles(
-              managerMapperRole.toSetModel(adminSaveAccount.roles())
-      );
-      return user;
+        return mapperUser.toModelFromAdminSave(adminSaveAccount);
     }
 }

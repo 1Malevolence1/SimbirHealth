@@ -1,8 +1,8 @@
-package com.example.Account_microservice.user.serivice.admin;
+package com.example.Account_microservice.user.service.admin;
 
 import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.RequestAdminUpdateAccount;
-import com.example.Account_microservice.user.model.User;
+import com.example.Account_microservice.user.dto.ResponseAccountDto;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface AdminService {
 
     void deleteById(Long id);
 
-    List<User> findUsersFromOffsetWithLimit(Integer from, Integer count);
+    List<ResponseAccountDto> getAll(Integer from, Integer count);
 }

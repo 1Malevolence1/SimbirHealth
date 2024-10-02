@@ -6,7 +6,7 @@ import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 
 public interface AuthenticationService {
 
-    JwtAuthenticationResponse signUp(RequestSingUpAccountDto singUpDto);
+    // JwtAuthenticationResponse signUp(RequestSingUpAccountDto singUpDto);
 
     JwtAuthenticationResponse signIn(RequestSingInAccountDto singInDto);
 

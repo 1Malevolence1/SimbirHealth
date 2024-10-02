@@ -1,14 +1,14 @@
-package com.example.Account_microservice.user.serivice.admin;
+package com.example.Account_microservice.user.service.admin;
 
 import com.example.Account_microservice.convert.manager_mapper.ManagerMapperAccount;
-import com.example.Account_microservice.convert.manager_mapper.ManagerMapperRole;
 import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.RequestAdminUpdateAccount;
+import com.example.Account_microservice.user.dto.ResponseAccountDto;
 import com.example.Account_microservice.user.model.User;
-import com.example.Account_microservice.user.repository.UserRepository;
-import com.example.Account_microservice.user.serivice.UserService;
+import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,13 +20,12 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
 
     private final UserService userService;
-    private final UserRepository userRepository;
     private final ManagerMapperAccount managerMapperAccount;
-    private final ManagerMapperRole managerMapperRole;
+    private final PasswordEncoder passwordEncoder;
+
 
 
     @Override
-
     public void save(RequestAdminSaveAccount requestAdminSaveAccount) {
         userService.save(
                 managerMapperAccount.toModelFromAdminSave(requestAdminSaveAccount)
@@ -36,7 +35,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void update(RequestAdminUpdateAccount requestUpdateAccountDto, Long id) {
         User user = managerMapperAccount.toModelFromAdminUpdate(requestUpdateAccountDto);
-        user.setRoles(managerMapperRole.toSetModel(requestUpdateAccountDto.roles()));
+        user.setPassword(passwordEncoder.encode(requestUpdateAccountDto.password()));
         userService.update(user, id);
     }
 
@@ -47,7 +46,8 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public List<User> findUsersFromOffsetWithLimit(Integer form, Integer count) {
-        return userRepository.getUsersFromOffsetWithLimit(form, count);
+    public List<ResponseAccountDto> getAll(Integer form, Integer count) {
+        return managerMapperAccount.toDtoListAccount(
+                userService.getUsersFromOffsetWithLimit(form, count));
     }
 }

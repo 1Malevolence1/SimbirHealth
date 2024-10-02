@@ -1,17 +1,15 @@
-package com.example.Account_microservice.user.serivice.doctor;
+package com.example.Account_microservice.user.service.doctor;
 
-import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.convert.doctor.DoctorListMapper;
-import com.example.Account_microservice.convert.doctor.DoctorMapper;
+import com.example.Account_microservice.convert.mapper.doctor.MapperDoctor;
+import com.example.Account_microservice.convert.mapper.doctor.MapperListDoctor;
 import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;
 import com.example.Account_microservice.user.repository.DoctorRepository;
-import com.example.Account_microservice.user.repository.UserRepository;
+import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 @Service
@@ -19,11 +17,11 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class DoctorServiceImpl implements DoctorService {
 
-    private final UserRepository userRepository;
 
+    private final UserService userService;
     private final DoctorRepository doctorRepository;
-    private final DoctorListMapper doctorListMapper;
-    private final DoctorMapper doctorMapper;
+    private final MapperListDoctor doctorListMapper;
+    private final MapperDoctor doctorMapper;
 
 
     @Override
@@ -33,6 +31,6 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public ResponseDoctorDto findById(Long id) {
-        return doctorMapper.toDTO(userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id))));
+        return doctorMapper.toDTO(userService.findUserById(id));
     }
 }

@@ -1,10 +1,9 @@
-package com.example.Account_microservice.user.serivice.authorized_user;
+package com.example.Account_microservice.user.service.authorized_user;
 
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.dto.ResponseAccountDto;
-import com.example.Account_microservice.user.model.User;
 
-public interface AuthorizedUser {
+public interface AuthorizedUserService {
 
     ResponseAccountDto findUserById(Long id);
 

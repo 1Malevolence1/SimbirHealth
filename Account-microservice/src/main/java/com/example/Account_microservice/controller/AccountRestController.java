@@ -3,14 +3,15 @@ package com.example.Account_microservice.controller;
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.config.ConstantResponseSuccessfulText;
-import com.example.Account_microservice.convert.manager_mapper.ManagerMapperAccount;
+import com.example.Account_microservice.security.AuthenticationService;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.RequestAdminUpdateAccount;
 import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
 import com.example.Account_microservice.user.dto.ResponseAccountDto;
-import com.example.Account_microservice.user.serivice.admin.AdminService;
-import com.example.Account_microservice.user.serivice.authorized_user.AuthorizedUser;
+import com.example.Account_microservice.user.service.admin.AdminService;
+
+import com.example.Account_microservice.user.service.authorized_user.AuthorizedUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,9 @@ import java.util.List;
 public class AccountRestController {
 
 
-    private final AuthorizedUser authorizedUserService;
-    private final JwtExtractService jwtExtractService;
-    private final ManagerMapperAccount managerMapperAccount;
+    private final AuthorizedUserService authorizedUserService;
     private final AdminService adminService;
+    private final JwtExtractService jwtExtractService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/Me")
@@ -84,8 +84,7 @@ public class AccountRestController {
             @RequestParam(name = "from") Integer from,
             @RequestParam(name = "count") Integer count) {
         return ResponseEntity.ok().body(
-                managerMapperAccount.toDtoListAccount(
-                        adminService.findUsersFromOffsetWithLimit(from, count))
+                        adminService.getAll(from, count)
         );
     }
 

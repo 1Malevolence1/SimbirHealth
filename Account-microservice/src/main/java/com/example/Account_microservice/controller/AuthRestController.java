@@ -12,7 +12,9 @@ import com.example.Account_microservice.security.jwt.dto.JwtRefreshTokeRequest;
 import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
-import com.example.Account_microservice.user.serivice.UserService;
+import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto;
+import com.example.Account_microservice.user.service.guest_user.GuestUserService;
+import com.example.Account_microservice.user.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthRestController {
 
     private final AuthenticationService authenticationService;
-    private final UserService userService;
+    private final GuestUserService guestUserService;
     private final JwtService jwtService;
     private final BlackListTokenService blackListService;
     private final JwtTokenIntrospector jwtTokenIntrospector;
@@ -42,16 +44,16 @@ public class AuthRestController {
 
 
     @PostMapping("/SignUp")
-    public ResponseEntity<?> singUp(@Valid @RequestBody RequestSingUpAccountDto singUpDto,
+    public ResponseEntity<?> singUp(@Valid @RequestBody RequestSingInGuestUserDto singUpGuestUserDto,
                                     BindingResult bindingResult) throws BindException {
-        log.info("данные для регестрации: {}", singUpDto);
+        log.info("данные для регестрации: {}", singUpGuestUserDto);
         if (bindingResult.hasErrors()) {
             if (bindingResult instanceof BindException exception) {
                 throw exception;
             } else throw new BindException(bindingResult);
         } else {
 
-            userService.save(singUpDto);
+            guestUserService.addAccount(singUpGuestUserDto);
             log.info("аккаунт зарегестрирован");
             return ResponseEntity.ok().body("Аккаунт успешно зарегестрирован");
         }

@@ -1,4 +1,4 @@
-package com.example.Account_microservice.convert.doctor;
+package com.example.Account_microservice.convert.mapper.doctor;
 
 
 import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;
@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = DoctorMapper.class)
-public interface DoctorListMapper {
+public interface MapperListDoctor {
 
     List<ResponseDoctorDto> toDTO(List<User> user);
 }

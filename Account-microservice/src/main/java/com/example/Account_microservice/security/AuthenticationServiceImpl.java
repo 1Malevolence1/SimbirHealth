@@ -10,7 +10,7 @@ import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
 import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 import com.example.Account_microservice.user.model.User;
-import com.example.Account_microservice.user.serivice.UserService;
+import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
+
     private final UserService userService;
     private final JwtService jwtService;
     private final JwtExtractService jwtExtractService;
@@ -32,13 +33,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     // регестрация пользователя
-    @Override
-    public JwtAuthenticationResponse signUp(RequestSingUpAccountDto singUpDto) {
-
-        User user = userService.save(singUpDto);
-        String jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
-    }
+//    @Override
+//    public JwtAuthenticationResponse signUp(RequestSingUpAccountDto singUpDto) {
+//
+//        User user = userService.save(singUpDto);
+//        String jwt = jwtService.generateToken(user);
+//        return new JwtAuthenticationResponse(jwt);
+//    }
 
     // @TODO обработать authenticationManager
     @Override
