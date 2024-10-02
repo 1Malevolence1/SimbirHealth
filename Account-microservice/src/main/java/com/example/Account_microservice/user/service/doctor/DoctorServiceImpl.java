@@ -25,8 +25,21 @@ public class DoctorServiceImpl implements DoctorService {
 
 
     @Override
-    public List<ResponseDoctorDto> finaAll(String filterName, Integer form, Integer count) {
-        return doctorListMapper.toDTO(doctorRepository.findAllDoctors(filterName, form, count));
+    public List<ResponseDoctorDto> findAll(String filterName, Integer from, Integer count) {
+        log.info("Finding doctors with filterName: {}, from: {}, count: {}", filterName, from, count);
+
+
+        int offset = (from != null) ? from : 0;
+        int limit = (count != null) ? count : Integer.MAX_VALUE;
+
+
+        if (filterName == null || filterName.isEmpty()) {
+
+            return doctorListMapper.toDTO(doctorRepository.findAllDoctorsWithoutNameFilter(offset, limit));
+        } else {
+
+            return doctorListMapper.toDTO(doctorRepository.findAllDoctors(filterName, offset, limit));
+        }
     }
 
     @Override

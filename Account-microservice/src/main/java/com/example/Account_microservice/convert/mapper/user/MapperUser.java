@@ -14,7 +14,7 @@
 
         ResponseUserAccountDto toDTO(User user);
 
-        User toModelFromSingUP(RequestSingUpAccountDto dto);
+        User toModelFromSingUP(RequestSingUpUserAccountDto dto);
 
         User toModelFromSingUpGuestUser(RequestSingInGuestUserDto dto);
 

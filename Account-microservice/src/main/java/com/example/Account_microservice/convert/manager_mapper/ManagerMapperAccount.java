@@ -14,7 +14,7 @@ public interface ManagerMapperAccount {
     List<ResponseUserAccountDto> toDtoListAccount(List<User> users);
 
     User toModelFormSingUpGuestUser(RequestSingInGuestUserDto singUpGuestDto);
-    User toModelFromSignUp(RequestSingUpAccountDto signUpDto);
+    User toModelFromSignUp(RequestSingUpUserAccountDto signUpDto);
     User toModelFromUpdate(RequestUpdateUserAccountDto updateAccountDto);
     User toModelFromAdminUpdate(RequestAdminUpdateAccount adminUpdateAccount);
     User toModelFromAdminSave(RequestAdminSaveAccount adminSaveAccount);

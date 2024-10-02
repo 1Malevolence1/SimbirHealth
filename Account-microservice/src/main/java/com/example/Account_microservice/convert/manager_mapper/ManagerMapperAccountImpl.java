@@ -37,7 +37,7 @@ public class ManagerMapperAccountImpl implements ManagerMapperAccount {
     }
 
     @Override
-    public User toModelFromSignUp(RequestSingUpAccountDto signUpDto) {
+    public User toModelFromSignUp(RequestSingUpUserAccountDto signUpDto) {
         return mapperUser.toModelFromSingUP(signUpDto);
     }
 

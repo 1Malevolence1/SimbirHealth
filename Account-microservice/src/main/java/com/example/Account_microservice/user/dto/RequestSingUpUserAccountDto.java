@@ -2,7 +2,7 @@ package com.example.Account_microservice.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record RequestSingUpAccountDto(
+public record RequestSingUpUserAccountDto(
         @NotBlank(message = "lastName не должно быть пусытм")
         String lastName,
         @NotBlank(message = "firstName не должно быть пусытм")

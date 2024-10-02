@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DoctorService {
 
-  List<ResponseDoctorDto> finaAll(String filterName, Integer form, Integer count);
+  List<ResponseDoctorDto> findAll(String filterName, Integer form, Integer count);
 
   ResponseDoctorDto findById(Long id);
 }

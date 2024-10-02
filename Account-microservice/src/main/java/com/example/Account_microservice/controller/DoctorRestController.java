@@ -21,11 +21,11 @@ public class DoctorRestController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping()
-    public ResponseEntity<List<ResponseDoctorDto>> getAllDoctor(@RequestParam(name = "nameFilter") String nameFilter,
-                                                                @RequestParam(name = "from") Integer from,
-                                                                @RequestParam(name = "count") Integer count) {
+    public ResponseEntity<List<ResponseDoctorDto>> getAllDoctor(@RequestParam(name = "nameFilter", required = false) String nameFilter,
+                                                                @RequestParam(name = "from", required = false) Integer from,
+                                                                @RequestParam(name = "count", required = false) Integer count) {
 
-        return ResponseEntity.ok().body(doctorService.finaAll(nameFilter, from, count));
+        return ResponseEntity.ok().body(doctorService.findAll(nameFilter, from, count));
     }
 
 
