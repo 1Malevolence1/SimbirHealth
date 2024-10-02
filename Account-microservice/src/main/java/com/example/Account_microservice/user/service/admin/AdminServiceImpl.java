@@ -46,8 +46,9 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public List<ResponseUserAccountDto> getAll(Integer form, Integer count) {
-        return managerMapperAccount.toDtoListAccount(
-                userService.getUsersFromOffsetWithLimit(form, count));
+    public List<ResponseUserAccountDto> getAll(Integer from, Integer count) {
+        if(count == null) return managerMapperAccount.toDtoListAccount(userService.getUsersFromOffset(from));
+        return managerMapperAccount.toDtoListAccount(userService.getUsersFromOffsetWithLimit(from, count));
+
     }
 }

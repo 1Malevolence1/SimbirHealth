@@ -20,5 +20,6 @@ public interface UserService {
     void deleteById(Long id);
 
     List<User> getUsersFromOffsetWithLimit(Integer from, Integer count);
-
+    List<User> getUsersFromOffset(Integer from);
+    List<User> findAll();
 }

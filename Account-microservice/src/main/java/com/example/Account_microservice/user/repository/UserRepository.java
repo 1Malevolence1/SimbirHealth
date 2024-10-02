@@ -15,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> getUsersFromOffsetWithLimit(@Param("from") Integer from, @Param("count") Integer count);
 
 
+    @Query(value = "SELECT * FROM users ORDER BY user_id OFFSET :from", nativeQuery = true)
+    List<User> getUsersFromOffset(@Param("from") Integer from);
+
 }

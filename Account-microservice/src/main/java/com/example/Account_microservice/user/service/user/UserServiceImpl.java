@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
                     if (updateUser.getPassword() != null) user.setPassword(user.getPassword());
                     if (updateUser.getRoles() != null) user.setRoles(updateUser.getRoles());
                 }, () -> {
-                  throw  new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
+                    throw new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
                 }
         );
     }
@@ -81,4 +81,17 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsersFromOffsetWithLimit(Integer from, Integer count) {
         return userRepository.getUsersFromOffsetWithLimit(from, count);
     }
+
+
+
+    @Override
+    public List<User> getUsersFromOffset(Integer form) {
+        return userRepository.getUsersFromOffset(form);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
 }

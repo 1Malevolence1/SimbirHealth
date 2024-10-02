@@ -75,13 +75,13 @@ public class AccountRestController {
     }
 
 
-    // TODO добавить мапстракт для переделывания в юзера в дто
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity<List<ResponseUserAccountDto>> getAllUser(
-            @RequestParam(name = "from") Integer from,
-            @RequestParam(name = "count") Integer count) {
+                                             @RequestParam(name = "from", required = false) Integer from,
+                                             @RequestParam(name = "count", required = false) Integer count){
+        if(from == null) from = 0;
         return ResponseEntity.ok().body(
                         adminService.getAll(from, count)
         );
