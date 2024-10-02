@@ -1,11 +1,11 @@
 package com.example.Account_microservice.user.service.authorized_user;
 
-import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
-import com.example.Account_microservice.user.dto.ResponseAccountDto;
+import com.example.Account_microservice.user.dto.RequestUpdateUserAccountDto;
+import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
 
 public interface AuthorizedUserService {
 
-    ResponseAccountDto findUserById(Long id);
+    ResponseUserAccountDto findUserById(Long id);
 
-    void update(RequestUpdateAccountDto updateAccountDto, Long id);
+    void update(RequestUpdateUserAccountDto updateAccountDto, Long id);
 }

@@ -1,6 +1,5 @@
 package com.example.Account_microservice.user.service.user;
 
-import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
 import com.example.Account_microservice.user.model.User;
 
 import java.util.List;

@@ -1,11 +1,11 @@
-package com.example.Account_microservice.user.dto;
+package com.example.Account_microservice.user.dto.admin;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
 
-public record RequestAdminUpdateAccount(
+public record RequestAdminSaveAccount(
         @NotBlank(message = "lastName не должно быть пусытм")
         String lastName,
         @NotBlank(message = "firstName не должно быть пусытм")

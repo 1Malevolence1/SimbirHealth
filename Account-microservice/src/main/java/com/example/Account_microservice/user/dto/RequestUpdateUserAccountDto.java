@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 
 
-public record RequestUpdateAccountDto(
+public record RequestUpdateUserAccountDto(
         @NotBlank(message = "lastName не должно быть пусытм")
         String lastName,
         @NotBlank(message = "firstName не должно быть пусытм")

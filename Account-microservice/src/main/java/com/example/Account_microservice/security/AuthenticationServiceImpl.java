@@ -7,8 +7,7 @@ import com.example.Account_microservice.exception.Validate;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
-import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
-import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
+import com.example.Account_microservice.user.dto.RequestSingInUserAccountDto;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     // @TODO обработать authenticationManager
     @Override
-    public JwtAuthenticationResponse signIn(RequestSingInAccountDto singInDto) {
+    public JwtAuthenticationResponse signIn(RequestSingInUserAccountDto singInDto) {
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

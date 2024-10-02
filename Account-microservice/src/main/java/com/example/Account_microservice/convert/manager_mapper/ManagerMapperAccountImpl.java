@@ -3,6 +3,8 @@ package com.example.Account_microservice.convert.manager_mapper;
 import com.example.Account_microservice.convert.mapper.user.MapperListUser;
 import com.example.Account_microservice.convert.mapper.user.MapperUser;
 import com.example.Account_microservice.user.dto.*;
+import com.example.Account_microservice.user.dto.admin.RequestAdminSaveAccount;
+import com.example.Account_microservice.user.dto.admin.RequestAdminUpdateAccount;
 import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto;
 import com.example.Account_microservice.user.model.User;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,12 @@ public class ManagerMapperAccountImpl implements ManagerMapperAccount {
 
 
     @Override
-    public ResponseAccountDto toDto(User user) {
+    public ResponseUserAccountDto toDto(User user) {
         return mapperUser.toDTO(user);
     }
 
     @Override
-    public List<ResponseAccountDto> toDtoListAccount(List<User> users) {
+    public List<ResponseUserAccountDto> toDtoListAccount(List<User> users) {
         return mapperListUser.toDTO(users);
     }
 
@@ -40,7 +42,7 @@ public class ManagerMapperAccountImpl implements ManagerMapperAccount {
     }
 
     @Override
-    public User toModelFromUpdate(RequestUpdateAccountDto updateAccountDto) {
+    public User toModelFromUpdate(RequestUpdateUserAccountDto updateAccountDto) {
         return mapperUser.toModelFromUpdateAccount(updateAccountDto);
     }
 

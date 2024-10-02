@@ -3,12 +3,11 @@ package com.example.Account_microservice.controller;
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.config.ConstantResponseSuccessfulText;
-import com.example.Account_microservice.security.AuthenticationService;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
-import com.example.Account_microservice.user.dto.RequestAdminSaveAccount;
-import com.example.Account_microservice.user.dto.RequestAdminUpdateAccount;
-import com.example.Account_microservice.user.dto.RequestUpdateAccountDto;
-import com.example.Account_microservice.user.dto.ResponseAccountDto;
+import com.example.Account_microservice.user.dto.admin.RequestAdminSaveAccount;
+import com.example.Account_microservice.user.dto.admin.RequestAdminUpdateAccount;
+import com.example.Account_microservice.user.dto.RequestUpdateUserAccountDto;
+import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
 import com.example.Account_microservice.user.service.admin.AdminService;
 
 import com.example.Account_microservice.user.service.authorized_user.AuthorizedUserService;
@@ -37,7 +36,7 @@ public class AccountRestController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/Me")
-    public ResponseEntity<ResponseAccountDto> getAccount(HttpServletRequest request) {
+    public ResponseEntity<ResponseUserAccountDto> getAccount(HttpServletRequest request) {
 
         String token = request.getHeader("Authorization").substring(7);
 
@@ -52,7 +51,7 @@ public class AccountRestController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/Update")
-    public ResponseEntity<?> updateCurrentAccount(@Valid @RequestBody RequestUpdateAccountDto updateAccountDto,
+    public ResponseEntity<?> updateCurrentAccount(@Valid @RequestBody RequestUpdateUserAccountDto updateAccountDto,
                                                   BindingResult bindingResult,
                                                   HttpServletRequest request) throws BindException {
 
@@ -80,7 +79,7 @@ public class AccountRestController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping()
-    public ResponseEntity<List<ResponseAccountDto>> getAllUser(
+    public ResponseEntity<List<ResponseUserAccountDto>> getAllUser(
             @RequestParam(name = "from") Integer from,
             @RequestParam(name = "count") Integer count) {
         return ResponseEntity.ok().body(
