@@ -8,7 +8,9 @@ import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationRespon
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInUserAccountDto;
+import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto;
 import com.example.Account_microservice.user.model.User;
+import com.example.Account_microservice.user.service.guest_user.GuestUserService;
 import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,20 +27,21 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserService userService;
+    private final GuestUserService guestUserService;
     private final JwtService jwtService;
     private final JwtExtractService jwtExtractService;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
 
 
-    // регестрация пользователя
-//    @Override
-//    public JwtAuthenticationResponse signUp(RequestSingUpAccountDto singUpDto) {
-//
-//        User user = userService.save(singUpDto);
-//        String jwt = jwtService.generateToken(user);
-//        return new JwtAuthenticationResponse(jwt);
-//    }
+
+    @Override
+    public JwtAuthenticationResponse signUp(RequestSingInGuestUserDto singUpDto) {
+
+        User user = guestUserService.addAccount(singUpDto);
+        String jwt = jwtService.generateToken(user);
+        return new JwtAuthenticationResponse(jwt);
+    }
 
     // @TODO обработать authenticationManager
     @Override

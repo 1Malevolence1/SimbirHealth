@@ -2,6 +2,7 @@ package com.example.Account_microservice.user.exception;
 
 
 import com.example.Account_microservice.exception.BadRequestExceptionCustomer;
+import com.example.Account_microservice.exception.BadRequestRolesException;
 import com.example.Account_microservice.exception.BadRequestSingInCustomer;
 import com.example.Account_microservice.exception.Validate;
 import org.springframework.http.HttpStatus;
@@ -42,5 +43,8 @@ public class GlobalExceptionForUser {
         return ResponseEntity.badRequest().body(new Validate(exception.getMessage()));
     }
 
-
+    @ExceptionHandler(BadRequestRolesException.class)
+    public ResponseEntity<Validate> handlerBadRequestRolesException(BadRequestRolesException exception) {
+        return ResponseEntity.badRequest().body(exception.getError());
+    }
 }

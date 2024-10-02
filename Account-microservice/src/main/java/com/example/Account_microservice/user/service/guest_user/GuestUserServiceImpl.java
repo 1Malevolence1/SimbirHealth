@@ -23,10 +23,12 @@ public class GuestUserServiceImpl implements GuestUserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void addAccount(RequestSingInGuestUserDto dto) {
+    public User addAccount(RequestSingInGuestUserDto dto) {
         User user = managerMapperAccount.toModelFormSingUpGuestUser(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Set.of(Role.builder().id(1L).roleName("ROLE_USER").build()));
-        userService.save(user);
+        return userService.save(user);
     }
+
+
 }

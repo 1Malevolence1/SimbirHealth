@@ -2,6 +2,7 @@ package com.example.Account_microservice.user.repository;
 
 import com.example.Account_microservice.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,5 +18,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users ORDER BY user_id OFFSET :from", nativeQuery = true)
     List<User> getUsersFromOffset(@Param("from") Integer from);
+
+
+    @Modifying
+    @Query(value = "DELETE FROM user_roles ur WHERE ur.user_id = :id", nativeQuery = true)
+    void deleteAllRolesForUser(@Param("id") Long id);
 
 }

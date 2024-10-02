@@ -17,7 +17,7 @@ public class RoleSettingId {
             case "ROLE_DOCTOR" -> 3L;
             case "ROLE_MANAGER" -> 4L;
             default ->
-                    throw new BadRequestRolesException(new Validate(ConstantResponseExceptionText.NOT_FOUND_ROLE_EXCEPTION));
+                    throw new BadRequestRolesException(new Validate(ConstantResponseExceptionText.NOT_FOUND_ROLE_EXCEPTION.formatted(role)));
         };
     }
 }

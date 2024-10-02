@@ -53,15 +53,21 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public void update(User updateUser, Long id) {
 
         userRepository.findById(id).ifPresentOrElse(
+
                 user -> {
                     if (updateUser.getUsername() != null) user.setUsername(updateUser.getUsername());
                     if (updateUser.getLastName() != null) user.setLastName(updateUser.getLastName());
                     if (updateUser.getFirstName() != null) user.setFirstName(updateUser.getFirstName());
                     if (updateUser.getPassword() != null) user.setPassword(user.getPassword());
-                    if (updateUser.getRoles() != null) user.setRoles(updateUser.getRoles());
+                    if (updateUser.getRoles() != null){
+
+                        userRepository.deleteAllRolesForUser(id);
+                        user.setRoles(updateUser.getRoles());
+                    }
                 }, () -> {
                     throw new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
                 }
@@ -69,6 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         try {
             userRepository.deleteById(id);

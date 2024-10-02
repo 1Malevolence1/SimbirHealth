@@ -51,20 +51,11 @@ public class AccountRestController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/Update")
-    public ResponseEntity<?> updateCurrentAccount(@Valid @RequestBody RequestUpdateUserAccountDto updateAccountDto,
-                                                  BindingResult bindingResult,
-                                                  HttpServletRequest request) throws BindException {
+    public ResponseEntity<?> updateCurrentAccount(@RequestBody RequestUpdateUserAccountDto updateAccountDto,
 
-        if (bindingResult.hasErrors()) {
-            if (bindingResult instanceof BindException exception) {
-                throw exception;
-            } else {
-                throw new BindException(bindingResult);
-            }
-        } else {
+                                                  HttpServletRequest request)  {
 
             String token = request.getHeader("Authorization").substring(7);
-
             authorizedUserService.update(
                     updateAccountDto,
                     jwtExtractService.extractUserId(token)
@@ -72,7 +63,8 @@ public class AccountRestController {
 
             return ResponseEntity.ok().body("Аккаунт успешно обновлён");
         }
-    }
+
+
 
 
 
@@ -89,7 +81,7 @@ public class AccountRestController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping()
-    public ResponseEntity<?> savaAdminNweUser(@Valid @RequestBody RequestAdminSaveAccount dto, BindingResult bindingResult) throws BindException {
+    public ResponseEntity<?> savaAdminNewUser(@Valid @RequestBody RequestAdminSaveAccount dto, BindingResult bindingResult) throws BindException {
 
 
         if (bindingResult.hasErrors()) {
@@ -102,7 +94,7 @@ public class AccountRestController {
 
             log.info("поулчил данные: {}", dto);
             adminService.save(dto);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.SUCCESSFUL_ADMIN_SAVE_ACCOUNT);
         }
     }
 
@@ -124,7 +116,7 @@ public class AccountRestController {
 
             log.info("поулчил данные: {}", dto);
             adminService.update(dto, id);
-            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.SUCCESSFUL_ADMIN_UPDATE_ACCOUNT);
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.SUCCESSFUL_ADMIN_UPDATE_ACCOUNT.formatted(id));
         }
     }
 
@@ -135,7 +127,7 @@ public class AccountRestController {
         log.info("начался метод по удалению пользователя ");
         adminService.deleteById(id);
         log.info("аккаунт удалён");
-        return ResponseEntity.ok().body(ConstantResponseExceptionText.SUCCESSFUL_DELETE_USER.formatted(id));
+        return ResponseEntity.ok().body(ConstantResponseSuccessfulText.SUCCESSFUL_DELETE_USER.formatted(id));
     }
 
 }

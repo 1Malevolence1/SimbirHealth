@@ -15,6 +15,6 @@ public record RequestAdminSaveAccount(
         @NotBlank(message = "password не должно быть пусытм")
         String password,
 
-        @NotNull(message = "role не должно быть пустым. Должна быть хотя бы одна роль")
+        @NotNull(message = "roles не должно быть пустым. Должна быть хотя бы одна роль")
         Set<String> roles
 ) {}
