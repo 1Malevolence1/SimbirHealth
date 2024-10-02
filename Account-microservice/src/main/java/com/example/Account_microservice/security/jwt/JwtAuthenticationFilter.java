@@ -4,6 +4,7 @@ import com.example.Account_microservice.security.CustomerUserDetailsService;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,38 +50,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Обрезаем префикс и получаем токен
         var jwt = authHeader.substring(BEARER_PREFIX.length());
 
-        // Проверяем наличие токена в черном списке
+
         if (blackListTokenService.isTokenBlacklisted(jwt)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
             log.info("токен нахоидтся в black list");
-            return; // Прерываем выполнение, если токен недействителен
-        }
-
-        if (jwtExtractService.isTokenExpired(jwt)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен истек.");
             return;
         }
 
-        // Извлекаем имя пользователя из токена
-        var username = jwtExtractService.extractUserName(jwt);
-
-        if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);
-
-            // Если токен валиден, то аутентифицируем пользователя
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+        try {
+            if (jwtExtractService.isTokenExpired(jwt)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен истек.");
+                return;
             }
+        } catch (ExpiredJwtException e) {
+            log.error("JWT expired: {}", e.getMessage());
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write("Токен истек и больше не действителен.");
+            log.error(("Токен истек и больше не действителен."));
         }
 
-        // Продолжаем обработку запроса
-        filterChain.doFilter(request, response);
+            var username = jwtExtractService.extractUserName(jwt);
+
+            if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);
+
+
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+
+            // Продолжаем обработку запроса
+            filterChain.doFilter(request, response);
+        }
     }
-}
+

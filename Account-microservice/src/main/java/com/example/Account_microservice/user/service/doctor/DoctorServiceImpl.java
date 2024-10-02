@@ -1,5 +1,6 @@
 package com.example.Account_microservice.user.service.doctor;
 
+import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.convert.mapper.doctor.MapperDoctor;
 import com.example.Account_microservice.convert.mapper.doctor.MapperListDoctor;
 import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Service
@@ -26,12 +28,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<ResponseDoctorDto> findAll(String filterName, Integer from, Integer count) {
-        log.info("Finding doctors with filterName: {}, from: {}, count: {}", filterName, from, count);
-
 
         int offset = (from != null) ? from : 0;
         int limit = (count != null) ? count : Integer.MAX_VALUE;
-
 
         if (filterName == null || filterName.isEmpty()) {
 
@@ -44,6 +43,6 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public ResponseDoctorDto findById(Long id) {
-        return doctorMapper.toDTO(userService.findUserById(id));
+        return doctorMapper.toDTO(doctorRepository.findDoctorByIdReturnOption(id).orElseThrow(() -> new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_DOCTOR_BY_ID.formatted(id))));
     }
 }
