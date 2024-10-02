@@ -1,17 +1,18 @@
 package com.example.Account_microservice.controller;
 
 
-import com.example.Account_microservice.security.AuthenticationService;
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.security.jwt.component.JwtTokenIntrospector;
-import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
+import com.example.Account_microservice.config.ConstantResponseSuccessfulText;
+import com.example.Account_microservice.security.AuthenticationService;
 import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
+import com.example.Account_microservice.security.jwt.component.JwtTokenIntrospector;
+import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.security.jwt.dto.JwtRefreshTokeRequest;
 import com.example.Account_microservice.security.jwt.service.JwtService;
-import com.example.Account_microservice.user.dto.RequestSingInAccountDto;
-import com.example.Account_microservice.user.dto.RequestSingUpAccountDto;
-import com.example.Account_microservice.user.serivice.UserService;
+import com.example.Account_microservice.user.dto.RequestSingInUserAccountDto;
+import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto;
+import com.example.Account_microservice.user.service.guest_user.GuestUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthRestController {
 
     private final AuthenticationService authenticationService;
-    private final UserService userService;
+    private final GuestUserService guestUserService;
     private final JwtService jwtService;
     private final BlackListTokenService blackListService;
     private final JwtTokenIntrospector jwtTokenIntrospector;
@@ -41,16 +42,16 @@ public class AuthRestController {
 
 
     @PostMapping("/SignUp")
-    public ResponseEntity<?> singUp(@Valid @RequestBody RequestSingUpAccountDto singUpDto,
+    public ResponseEntity<?> singUp(@Valid @RequestBody RequestSingInGuestUserDto singUpGuestUserDto,
                                     BindingResult bindingResult) throws BindException {
-        log.info("данные для регестрации: {}", singUpDto);
+        log.info("данные для регестрации: {}", singUpGuestUserDto);
         if (bindingResult.hasErrors()) {
             if (bindingResult instanceof BindException exception) {
                 throw exception;
             } else throw new BindException(bindingResult);
         } else {
 
-            userService.save(singUpDto);
+            guestUserService.addAccount(singUpGuestUserDto);
             log.info("аккаунт зарегестрирован");
             return ResponseEntity.ok().body("Аккаунт успешно зарегестрирован");
         }
@@ -58,7 +59,7 @@ public class AuthRestController {
 
 
     @PostMapping("/SignIn")
-    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody RequestSingInAccountDto singInDot) {
+    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody RequestSingInUserAccountDto singInDot) {
         log.info("данные для аунтефикации: {}", singInDot);
         JwtAuthenticationResponse jwt = authenticationService.signIn(singInDot);
         log.info("аунитфикация прошла успено");
@@ -78,7 +79,7 @@ public class AuthRestController {
                         null,
                         token,
                         jwtService.getExpirationTime(token)));
-                return ResponseEntity.ok(ConstantResponseExceptionText.SING_OUT_USER_OK);
+                return ResponseEntity.ok(ConstantResponseSuccessfulText.SING_OUT_USER_OK);
 
         }
        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ConstantResponseExceptionText.SING_OUT_USER_UNAUTHORIZED);

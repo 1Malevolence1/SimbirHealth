@@ -1,8 +1,8 @@
 package com.example.Account_microservice.controller;
 
 
-import com.example.Account_microservice.user.dto.ResponseDoctorDto;
-import com.example.Account_microservice.user.serivice.DoctorService;
+import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;
+import com.example.Account_microservice.user.service.doctor.DoctorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +21,11 @@ public class DoctorRestController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping()
-    public ResponseEntity<List<ResponseDoctorDto>> getAllDoctor(@RequestParam(name = "nameFilter") String nameFilter,
-                                                                @RequestParam(name = "from") Integer from,
-                                                                @RequestParam(name = "count") Integer count) {
+    public ResponseEntity<List<ResponseDoctorDto>> getAllDoctor(@RequestParam(name = "nameFilter", required = false) String nameFilter,
+                                                                @RequestParam(name = "from", required = false) Integer from,
+                                                                @RequestParam(name = "count", required = false) Integer count) {
 
-        return ResponseEntity.ok().body(doctorService.finaAll(nameFilter, from, count));
+        return ResponseEntity.ok().body(doctorService.findAll(nameFilter, from, count));
     }
 
 

@@ -114,7 +114,6 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
-        log.info("{},{}, {},{}",claims.getId(), claims.getSubject(), claims.getExpiration(), claims.getId());
         return claimsResolvers.apply(claims);
     }
 

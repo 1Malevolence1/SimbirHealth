@@ -1,7 +1,7 @@
 package com.example.Account_microservice.security;
 
 
-import com.example.Account_microservice.user.serivice.UserService;
+import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
