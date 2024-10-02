@@ -102,23 +102,15 @@ public class AccountRestController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("{accountId:\\d+}")
-    public ResponseEntity<?> updateAdminAccount(@Valid @RequestBody RequestAdminUpdateAccount dto, BindingResult bindingResult,
-                                                @PathVariable(name = "accountId") Long id) throws BindException {
-
-
-        if (bindingResult.hasErrors()) {
-            if (bindingResult instanceof BindException exception) {
-                throw exception;
-            } else {
-                throw new BindException(bindingResult);
-            }
-        } else {
+    public ResponseEntity<?> updateAdminAccount(@RequestBody RequestAdminUpdateAccount dto,
+                                                @PathVariable(name = "accountId") Long id)   {
 
             log.info("поулчил данные: {}", dto);
             adminService.update(dto, id);
             return ResponseEntity.ok().body(ConstantResponseSuccessfulText.SUCCESSFUL_ADMIN_UPDATE_ACCOUNT.formatted(id));
         }
-    }
+
+
 
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
