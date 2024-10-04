@@ -11,6 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String HEADER_NAME = "Authorization";
     private final JwtExtractService jwtExtractService;
     private final BlackListTokenService blackListTokenService;
+    private final UserDetailsService userDetailsService; // Добавлено для проверки ролей
 
     @Override
     protected void doFilterInternal(
@@ -33,23 +39,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-
+        // Получаем токен из заголовка
         var authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
-            return;
+            return; // Если заголовок отсутствует или не начинается с "Bearer ", продолжаем обработку
         }
 
-
+        // Обрезаем префикс и получаем токен
         var jwt = authHeader.substring(BEARER_PREFIX.length());
 
 
         if (blackListTokenService.isTokenBlacklisted(jwt)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
-            log.info("Токен находится в черном списке");
+            log.info("токен нахоидтся в black list");
             return;
         }
-
 
         try {
             if (jwtExtractService.isTokenExpired(jwt)) {
@@ -60,12 +65,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("JWT expired: {}", e.getMessage());
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write("Токен истек и больше не действителен.");
-            return;
+            log.error(("Токен истек и больше не действителен."));
         }
 
+        var username = jwtExtractService.extractUserName(jwt);
 
+        if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+
+            if (jwtExtractService.isTokenValid(jwt, userDetails.getUsername())) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+
+        // Продолжаем обработку запроса
         filterChain.doFilter(request, response);
     }
 }
-
 
