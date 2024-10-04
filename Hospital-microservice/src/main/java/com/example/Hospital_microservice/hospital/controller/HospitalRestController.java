@@ -3,6 +3,7 @@ package com.example.Hospital_microservice.hospital.controller;
 
 import com.example.Hospital_microservice.hospital.dto.RequestCreateHospitalDto;
 import com.example.Hospital_microservice.hospital.dto.ResponseHospitalDto;
+import com.example.Hospital_microservice.hospital.dto.ResponseHospitalRoomsDto;
 import com.example.Hospital_microservice.hospital.service.admin.AdminService;
 import com.example.Hospital_microservice.hospital.service.authorized_user.AuthorizedUserService;
 import jakarta.validation.Valid;
@@ -35,6 +36,12 @@ public class HospitalRestController {
        return ResponseEntity.ok().body(
                authorizedUserService.getHospitalById(id)
         );
+    }
+
+
+    @GetMapping("/{hospitalId:\\d+}/Rooms")
+    public ResponseEntity<List<ResponseHospitalRoomsDto>> getRoomsByIdHospital(@PathVariable(name = "hospitalId") Long id) {
+        return ResponseEntity.ok().body(authorizedUserService.getAllHospitalRooms(id));
     }
 
 

@@ -10,6 +10,6 @@ public record ResponseHospitalDto(
 
         String contactPhone,
 
-        List<ResponseRoomsDto> rooms
+        List<ResponseHospitalRoomsDto> rooms
 ) {
 }
