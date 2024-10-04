@@ -8,6 +8,7 @@ import com.example.Hospital_microservice.hospital.repository.HospitalRepository;
 import com.example.Hospital_microservice.hospital.service.room.HospitalRoomsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,4 +42,10 @@ public class HospitalServiceImpl implements HospitalService {
     public List<Room> findAllHospitalRooms(Long id) {
         return hospitalRoomsService.getHospitalRoomsByIdHospital(id);
     }
+
+    @Override
+    public void deleteHospitalById(Long id) {
+        hospitalRepository.deleteById(id);
+        }
 }
+

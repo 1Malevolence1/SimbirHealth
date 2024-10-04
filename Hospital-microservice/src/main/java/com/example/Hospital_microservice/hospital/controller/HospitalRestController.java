@@ -1,6 +1,7 @@
 package com.example.Hospital_microservice.hospital.controller;
 
 
+import com.example.Hospital_microservice.hospital.config.ConstantResponseSuccessfulText;
 import com.example.Hospital_microservice.hospital.dto.RequestCreateHospitalDto;
 import com.example.Hospital_microservice.hospital.dto.ResponseHospitalDto;
 import com.example.Hospital_microservice.hospital.dto.ResponseHospitalRoomsDto;
@@ -45,6 +46,7 @@ public class HospitalRestController {
     }
 
 
+
     // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<String> addAdminHospital(@Valid @RequestBody RequestCreateHospitalDto dto,
@@ -63,5 +65,12 @@ public class HospitalRestController {
 
             return ResponseEntity.ok().body("Больница успешно добавлена");
         }
+    }
+
+
+    @DeleteMapping({"/{hospitalId:\\d+}"})
+    public ResponseEntity<String> deleteHospitalById(@PathVariable(name = "hospitalId") Long id){
+        adminService.deleteHospital(id);
+        return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_HOSPITAL.formatted(id));
     }
 }

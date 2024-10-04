@@ -4,8 +4,6 @@ package com.example.Hospital_microservice.hospital.config;
 
 public final class ConstantResponseSuccessfulText {
 
-    public static final String SING_OUT_USER_OK = "Вы успешно вышли из системы";
-    public static final String SUCCESSFUL_ADMIN_UPDATE_ACCOUNT = "Админ обновил аккаунт с id %d";
-    public static final String SUCCESSFUL_ADMIN_SAVE_ACCOUNT = "Админ добавил новый аккаунт";
-    public static final String SUCCESSFUL_DELETE_USER = "Пользователь с id %d удалён";
+    public static final String DELETE_HOSPITAL = "Больница с id %d удалена";
+
 }

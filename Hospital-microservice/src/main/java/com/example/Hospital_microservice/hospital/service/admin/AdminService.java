@@ -9,6 +9,5 @@ import java.util.List;
 public interface AdminService {
 
     void addHospital(RequestCreateHospitalDto requestCreateHospitalDto);
-
-
+    void deleteHospital(Long id);
 }
