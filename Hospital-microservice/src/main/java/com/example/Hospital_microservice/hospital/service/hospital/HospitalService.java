@@ -9,4 +9,6 @@ public interface HospitalService  {
     void save(Hospital hospital);
 
     List<Hospital> getAllWithParamFromAndCount(Integer from, Integer count);
+
+    Hospital findHospitalById(Long id);
 }

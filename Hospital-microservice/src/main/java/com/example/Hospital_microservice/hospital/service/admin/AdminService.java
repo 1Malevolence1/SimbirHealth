@@ -10,5 +10,5 @@ public interface AdminService {
 
     void addHospital(RequestCreateHospitalDto requestCreateHospitalDto);
 
-    List<ResponseHospitalDto> getAllHospitals(Integer from, Integer count);
+
 }

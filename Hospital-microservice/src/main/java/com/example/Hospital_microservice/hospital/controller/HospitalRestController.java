@@ -4,6 +4,7 @@ package com.example.Hospital_microservice.hospital.controller;
 import com.example.Hospital_microservice.hospital.dto.RequestCreateHospitalDto;
 import com.example.Hospital_microservice.hospital.dto.ResponseHospitalDto;
 import com.example.Hospital_microservice.hospital.service.admin.AdminService;
+import com.example.Hospital_microservice.hospital.service.authorized_user.AuthorizedUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,19 @@ import java.util.List;
 public class HospitalRestController {
 
     private final AdminService adminService;
-
+    private final AuthorizedUserService authorizedUserService;
 
     @GetMapping()
     public ResponseEntity<List<ResponseHospitalDto>> getAllHospitals(@RequestParam(name = "from", required = false) Integer from,
                                                                      @RequestParam(name = "count", required = false) Integer count){
-        return ResponseEntity.ok().body(adminService.getAllHospitals(from, count));
+        return ResponseEntity.ok().body(authorizedUserService.getAllHospitals(from, count));
+    }
+
+    @GetMapping({"/{hospitalId:\\d+}"})
+    public ResponseEntity<ResponseHospitalDto> getHospitalById(@PathVariable(name = "hospitalId") Long id){
+       return ResponseEntity.ok().body(
+               authorizedUserService.getHospitalById(id)
+        );
     }
 
 

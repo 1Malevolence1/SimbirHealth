@@ -10,5 +10,6 @@ import java.util.List;
 public interface ManagerMapperHospital {
 
     Hospital toModel(RequestCreateHospitalDto requestCreateHospitalDto);
+    ResponseHospitalDto toDto(Hospital hospital);
     List<ResponseHospitalDto> toDto(List<Hospital> hospitals);
 }

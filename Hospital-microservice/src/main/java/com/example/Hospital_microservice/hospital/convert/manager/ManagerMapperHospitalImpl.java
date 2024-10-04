@@ -24,6 +24,11 @@ public class ManagerMapperHospitalImpl implements ManagerMapperHospital {
     }
 
     @Override
+    public ResponseHospitalDto toDto(Hospital hospital) {
+        return mapperHospital.toDto(hospital);
+    }
+
+    @Override
     public List<ResponseHospitalDto> toDto(List<Hospital> hospitals) {
         return mapperListHospitals.toDto(hospitals);
     }
