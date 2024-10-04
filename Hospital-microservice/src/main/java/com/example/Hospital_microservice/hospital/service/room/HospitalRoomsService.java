@@ -7,4 +7,6 @@ import java.util.List;
 public interface HospitalRoomsService {
 
     List<Room> getHospitalRoomsByIdHospital(Long id);
+
+    void deleteAllRoomsForHospital(Long id);
 }

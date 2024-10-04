@@ -3,6 +3,7 @@ package com.example.Hospital_microservice.hospital.controller;
 
 import com.example.Hospital_microservice.hospital.config.ConstantResponseSuccessfulText;
 import com.example.Hospital_microservice.hospital.dto.RequestCreateHospitalDto;
+import com.example.Hospital_microservice.hospital.dto.RequestUpdateHospitalDto;
 import com.example.Hospital_microservice.hospital.dto.ResponseHospitalDto;
 import com.example.Hospital_microservice.hospital.dto.ResponseHospitalRoomsDto;
 import com.example.Hospital_microservice.hospital.service.admin.AdminService;
@@ -65,6 +66,14 @@ public class HospitalRestController {
 
             return ResponseEntity.ok().body("Больница успешно добавлена");
         }
+    }
+
+
+    @PutMapping({"/{hospitalId:\\d+}"})
+    public ResponseEntity<String> updateHospitalById(@RequestBody RequestUpdateHospitalDto dto, @PathVariable(name = "hospitalId") Long id){
+        dto.setId(id);
+        adminService.updateHospital(dto);
+        return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_HOSPITAL.formatted(id));
     }
 
 
