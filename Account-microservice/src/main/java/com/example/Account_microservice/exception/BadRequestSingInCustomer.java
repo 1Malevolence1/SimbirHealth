@@ -3,8 +3,6 @@ package com.example.Account_microservice.exception;
 
 import lombok.Getter;
 
-import java.util.List;
-
 
 @Getter
 public class BadRequestSingInCustomer extends RuntimeException {

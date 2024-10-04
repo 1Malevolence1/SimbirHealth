@@ -64,7 +64,6 @@ public class UserServiceImpl implements UserService {
                     if (updateUser.getFirstName() != null) user.setFirstName(updateUser.getFirstName());
                     if (updateUser.getPassword() != null) user.setPassword(user.getPassword());
                     if (updateUser.getRoles() != null){
-
                         userRepository.deleteAllRolesForUser(id);
                         user.setRoles(updateUser.getRoles());
                     }
