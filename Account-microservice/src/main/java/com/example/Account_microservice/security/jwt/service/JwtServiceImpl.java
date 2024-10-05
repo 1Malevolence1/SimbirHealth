@@ -1,6 +1,10 @@
 package com.example.Account_microservice.security.jwt.service;
 
+import com.example.Account_microservice.config.ConstantResponseExceptionText;
+import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthority;
+import com.example.Account_microservice.security.jwt.exception.TokenBlackListException;
+import com.example.Account_microservice.security.jwt.exception.ValidateToken;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.service.user.UserService;
 import io.jsonwebtoken.Claims;
@@ -29,6 +33,7 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
 
     private final String JWT_SING_IN_KEY = "53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855";
     private final UserService userService;
+    private final BlackListTokenService blackListTokenService;
 
     // Генерация токена
 
@@ -139,13 +144,21 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
                 .getBody();
     }
 
+
+    @Override
     public boolean isTokenActive(String token) {
+
+        if(blackListTokenService.isTokenBlacklisted(token)){
+            throw new TokenBlackListException(new ValidateToken(
+                    ConstantResponseExceptionText.VALIDATE_TOKEN_BLACK_LIST,
+                    token
+            ));
+        }
+
 
         if (token == null || isTokenExpired(token)) {
             return false;
         }
-
-
         Long userId = extractUserId(token);
 
 
@@ -157,7 +170,6 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
         }return true;
     }
 
-    // Получение ключа для подписи токена
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(JWT_SING_IN_KEY);
         return Keys.hmacShaKeyFor(keyBytes);

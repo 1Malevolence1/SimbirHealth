@@ -5,8 +5,7 @@ package com.example.Account_microservice.config;
 public final class ConstantResponseExceptionText {
 
     public static final String SING_OUT_USER_UNAUTHORIZED = "Пользователь не аутентифицирован";
-    public static final String VALIDATE_TOKEN_DEAD = "У данного токена истёк срок жизни";
-    public static final String NOT_SUCH_USER = "Данный пользователь не найден";
+    public static final String VALIDATE_TOKEN_BLACK_LIST = "Данный токен в находится в блэк листе";
     public static final String NOT_FOUND_USER_BY_ID = "Пользователь с  id %d не найден";
     public static final String NOT_FOUND_DOCTOR_BY_ID = "Доктор с  id %d не найден";
     public static final String NOT_FOUND_USER_BY_USERNAME = "Пользователь с ником %s не найден";
