@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,17 @@ public class HospitalRestController {
     private final AdminService adminService;
     private final AuthorizedUserService authorizedUserService;
 
+
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping()
     public ResponseEntity<List<ResponseHospitalDto>> getAllHospitals(@RequestParam(name = "from", required = false) Integer from,
                                                                      @RequestParam(name = "count", required = false) Integer count){
         return ResponseEntity.ok().body(authorizedUserService.getAllHospitals(from, count));
     }
 
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping({"/{hospitalId:\\d+}"})
     public ResponseEntity<ResponseHospitalDto> getHospitalById(@PathVariable(name = "hospitalId") Long id){
        return ResponseEntity.ok().body(
@@ -40,7 +46,7 @@ public class HospitalRestController {
         );
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{hospitalId:\\d+}/Rooms")
     public ResponseEntity<List<ResponseHospitalRoomsDto>> getRoomsByIdHospital(@PathVariable(name = "hospitalId") Long id) {
         return ResponseEntity.ok().body(authorizedUserService.getAllHospitalRooms(id));
@@ -48,7 +54,7 @@ public class HospitalRestController {
 
 
 
-    // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<String> addAdminHospital(@Valid @RequestBody RequestCreateHospitalDto dto,
                                                    BindingResult bindingResult) throws BindException {
@@ -68,7 +74,7 @@ public class HospitalRestController {
         }
     }
 
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping({"/{hospitalId:\\d+}"})
     public ResponseEntity<String> updateHospitalById(@RequestBody RequestUpdateHospitalDto dto, @PathVariable(name = "hospitalId") Long id){
         dto.setId(id);
@@ -76,7 +82,7 @@ public class HospitalRestController {
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_HOSPITAL.formatted(id));
     }
 
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping({"/{hospitalId:\\d+}"})
     public ResponseEntity<String> deleteHospitalById(@PathVariable(name = "hospitalId") Long id){
         adminService.deleteHospital(id);

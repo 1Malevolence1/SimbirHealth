@@ -10,4 +10,5 @@ import java.util.Set;
 public interface MapperListRole {
 
     Set<Role> toModel(Set<String> roles);
+
 }

@@ -13,5 +13,7 @@ public interface JwtService {
 
     Long getExpirationTime(String token);
 
+    boolean isTokenActive(String token);
+
 
 }
