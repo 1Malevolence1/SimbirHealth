@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
-
+import java.util.stream.Collectors;
 
 
 @Service
@@ -43,8 +44,10 @@ public class JwtServiceImpl implements JwtExtractService {
 
     @Override
     public List<String> extractRoles(String token) {
-        List<String> roles = extractClaim(token, claims -> (List<String>) claims.get("role"));
-        return roles;
+        List<Map<String, String>> roles = extractClaim(token, claims -> (List<Map<String, String>>) claims.get("role"));
+        return roles.stream()
+                .map(roleMap -> roleMap.get("authority")) // Получаем значение "authority"
+                .collect(Collectors.toList());
     }
 
     @Override

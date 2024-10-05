@@ -11,15 +11,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -28,9 +37,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
+    private final RestTemplate restTemplate;
+    private final RestClient restClient;
     private final JwtExtractService jwtExtractService;
-    private final BlackListTokenService blackListTokenService;
-    private final UserDetailsService userDetailsService; // Добавлено для проверки ролей
+
 
     @Override
     protected void doFilterInternal(
@@ -39,38 +49,56 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Получаем токен из заголовка
         var authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
-            return; // Если заголовок отсутствует или не начинается с "Bearer ", продолжаем обработку
-        }
-
-        // Обрезаем префикс и получаем токен
-        var jwt = authHeader.substring(BEARER_PREFIX.length());
-
-
-        if (blackListTokenService.isTokenBlacklisted(jwt)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
-            log.info("токен нахоидтся в black list");
             return;
         }
 
+        var jwt = authHeader.substring(BEARER_PREFIX.length());
+
+
+        Map<String, String> params = new HashMap<>();
+        params.put("accessToken", jwt);
+        ResponseEntity<Map> validationResponse;
+
         try {
-            if (jwtExtractService.isTokenExpired(jwt)) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен истек.");
+            validationResponse = restTemplate.getForEntity("http://localhost:8081/api/Authentication/Validate?accessToken={accessToken}", Map.class, params);
+            if (validationResponse.getBody() == null || !Boolean.TRUE.equals(validationResponse.getBody().get("active"))) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
                 return;
             }
-        } catch (ExpiredJwtException e) {
-            log.error("JWT expired: {}", e.getMessage());
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().write("Токен истек и больше не действителен.");
-            log.error(("Токен истек и больше не действителен."));
+        } catch (Exception e) {
+            log.error("Ошибка при валидации токена: {}", e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Ошибка при валидации токена.");
+            return;
         }
 
-        var username = jwtExtractService.extractUserName(jwt);
+        String username = jwtExtractService.extractUserName(jwt);
 
-        // Продолжаем обработку запроса
+        List<String> roles = jwtExtractService.extractRoles(jwt);
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities = roles.stream().map(SimpleGrantedAuthority::new).toList();
+
+
+        if (StringUtils.isNotEmpty(username)) {
+
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    username,
+                    null, // пароля нет, так как мы используем токен
+                    simpleGrantedAuthorities// здесь можно указать роли/разрешения, если они есть
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+        }
+
+
+     else {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
+        return;
+    }
+
+
+
         filterChain.doFilter(request, response);
     }
 }

@@ -6,7 +6,6 @@ import com.example.Account_microservice.config.ConstantResponseSuccessfulText;
 import com.example.Account_microservice.security.AuthenticationService;
 import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
-import com.example.Account_microservice.security.jwt.component.JwtTokenIntrospector;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.security.jwt.dto.JwtRefreshTokeRequest;
 import com.example.Account_microservice.security.jwt.service.JwtService;
@@ -26,6 +25,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/Authentication")
 @RequiredArgsConstructor
@@ -36,7 +37,8 @@ public class AuthRestController {
     private final GuestUserService guestUserService;
     private final JwtService jwtService;
     private final BlackListTokenService blackListService;
-    private final JwtTokenIntrospector jwtTokenIntrospector;
+
+
 
 
 
@@ -86,12 +88,12 @@ public class AuthRestController {
     }
 
 
+
     @GetMapping("/Validate")
     public ResponseEntity<?> introspect(@RequestParam(name = "accessToken") String token){
-        log.info("->>>>>{}", token);
-        return ResponseEntity.ok().body(
-                jwtTokenIntrospector.build(token)
-        );
+        log.info("начался мето проверки");
+        boolean active = jwtService.isTokenActive(token);
+      return ResponseEntity.ok().body(Map.of("active", active));
     }
 
 

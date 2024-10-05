@@ -12,4 +12,6 @@ public interface MapperRole {
     @Mapping(target = "id", expression = "java(RoleSettingId.getId(roleName))")
     Role toMODEL(String roleName);
 
+    String toDto(Role role);
+
 }

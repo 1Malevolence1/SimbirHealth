@@ -2,11 +2,13 @@ package com.example.Account_microservice.security.jwt.service;
 
 import com.example.Account_microservice.security.jwt.dto.JwtAuthority;
 import com.example.Account_microservice.user.model.User;
+import com.example.Account_microservice.user.service.user.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class JwtServiceImpl implements JwtService, JwtExtractService {
 
 
     private final String JWT_SING_IN_KEY = "53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855";
-
+    private final UserService userService;
 
     // Генерация токена
 
@@ -136,8 +139,23 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
                 .getBody();
     }
 
+    public boolean isTokenActive(String token) {
+
+        if (token == null || isTokenExpired(token)) {
+            return false;
+        }
 
 
+        Long userId = extractUserId(token);
+
+
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            return false;
+
+
+        }return true;
+    }
 
     // Получение ключа для подписи токена
     private Key getSigningKey() {
