@@ -84,9 +84,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     username,
-                    null, // пароля нет, так как мы используем токен
-                    simpleGrantedAuthorities// здесь можно указать роли/разрешения, если они есть
-            );
+                    null,
+                    simpleGrantedAuthorities);
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
