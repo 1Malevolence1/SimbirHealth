@@ -25,7 +25,7 @@ public class HospitalGlobalHandlerException {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Validate> handlerNoSuchElementException(NoSuchElementException exception){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Validate(exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Validate(exception.getMessage()));
     }
 
 }
