@@ -39,4 +39,9 @@ public class TimetableServiceImpl implements TimetableService {
                 }
         );
     }
+
+    @Override
+    public void deleteById(Long id) {
+        timetableRepository.deleteById(id);
+    }
 }

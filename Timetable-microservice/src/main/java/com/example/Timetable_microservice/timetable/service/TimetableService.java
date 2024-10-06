@@ -7,4 +7,6 @@ public interface TimetableService {
     void save(Timetable timetable);
 
     void update(Timetable timetable);
+
+    void deleteById(Long id);
 }

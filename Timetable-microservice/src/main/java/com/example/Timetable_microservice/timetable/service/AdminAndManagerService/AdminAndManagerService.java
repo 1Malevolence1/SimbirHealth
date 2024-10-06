@@ -7,4 +7,6 @@ public interface AdminAndManagerService {
     void add(RequestTimetableDto dto);
 
     void update(RequestTimetableDto dto, Long id);
+
+    void deleteById(Long id);
 }

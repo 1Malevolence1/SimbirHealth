@@ -1,5 +1,7 @@
 package com.example.Timetable_microservice.timetable.controller;
 
+import com.example.Timetable_microservice.timetable.config.ConstantResponseExceptionText;
+import com.example.Timetable_microservice.timetable.config.ConstantResponseSuccessfulText;
 import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
 import com.example.Timetable_microservice.timetable.service.AdminAndManagerService.AdminAndManagerService;
 import com.example.Timetable_microservice.timetable.service.AuthorizationHeaderExtractor;
@@ -39,7 +41,7 @@ public class TimetableRestController {
             microserviceEntityChecker.checkEntityForHospital(dto.hospitalId(), dto.room(), token);
             microserviceEntityChecker.checkEntityForUser(dto.doctorId(), token);
             adminAndManagerService.add(dto);
-            return ResponseEntity.ok().body("Запись успешно добавлена");
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.SAVE_TIMETABLE);
         }
     }
 
@@ -64,9 +66,14 @@ public class TimetableRestController {
             microserviceEntityChecker.checkEntityForHospital(dto.hospitalId(), dto.room(), token);
             microserviceEntityChecker.checkEntityForUser(dto.doctorId(), token);
             adminAndManagerService.update(dto, id);
-            return ResponseEntity.ok().body("Запись успешно обнавлена");
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_TIMETABLE);
         }
     }
 
 
+    @DeleteMapping("{timetableId:\\d+}")
+    public ResponseEntity<String> deleteOneTimetableById(@PathVariable(name = "timetableId") Long id){
+        adminAndManagerService.deleteById(id);
+        return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_TIMETABLE.formatted(id));
+    }
 }

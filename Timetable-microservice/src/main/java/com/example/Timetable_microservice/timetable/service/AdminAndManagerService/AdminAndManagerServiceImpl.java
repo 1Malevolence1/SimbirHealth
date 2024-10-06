@@ -29,4 +29,9 @@ public class AdminAndManagerServiceImpl implements AdminAndManagerService {
                 mapperTimetable.toModel(dto, id)
         );
     }
+
+    @Override
+    public void deleteById(Long id) {
+        timetableService.deleteById(id);
+    }
 }
