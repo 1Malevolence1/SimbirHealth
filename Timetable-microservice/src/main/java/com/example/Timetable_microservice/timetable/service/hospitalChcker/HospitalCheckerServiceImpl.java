@@ -47,6 +47,22 @@ public class HospitalCheckerServiceImpl implements HospitalCheckerService {
     }
 
     @Override
+    public void findReturnVoid(Long id, String token) {
+        try {
+            restClientForHospital.get().uri("/api/Hospitals/{id}", id)
+                    .header("Authorization", "Bearer " + token)
+                    .retrieve().body(Void.class);
+
+        } catch (HttpClientErrorException exception) {
+            log.info("{}", exception.getStatusCode());
+            if (exception.getStatusCode() == HttpStatus.NOT_FOUND) {
+                log.error("больница не найдена");
+                throw new NoSuchElementException(exception.getMessage());
+            }
+        }
+    }
+
+    @Override
     public void checkRoomForHospital(String room, ResponseCheckHospitalDto dto, Long id) {
         List<String> listRooms = covertRoomInListString(dto.rooms());
         if(!listRooms.contains(room)){

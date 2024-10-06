@@ -11,4 +11,6 @@ public interface TimetableService {
     void deleteById(Long id);
 
     void deleteAllByDoctorId(Long id);
+
+    void deleteAllByHospitalId(Long id);
 }

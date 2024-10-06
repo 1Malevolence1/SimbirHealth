@@ -39,4 +39,9 @@ public class AdminAndManagerServiceImpl implements AdminAndManagerService {
     public void deleteAllByDoctorId(Long id) {
         timetableService.deleteAllByDoctorId(id);
     }
+
+    @Override
+    public void deleteAllByHospitalId(Long id) {
+            timetableService.deleteAllByHospitalId(id);
+    }
 }

@@ -12,4 +12,8 @@ public interface TimetableRepository  extends JpaRepository<Timetable, Long> {
     @Modifying
     @Query(value = "DELETE FROM timetable AS t WHERE t.doctor_id = :doctorId", nativeQuery = true )
     void deleteAllByDoctorId(@Param(value = "doctorId") Long doctorId);
+
+    @Modifying
+    @Query(value = "DELETE FROM timetable AS t WHERE t.hospital_id = :hospitalId", nativeQuery = true )
+    void deleteAllByHospitalId(@Param(value = "hospitalId") Long hospitalId);
 }

@@ -33,6 +33,12 @@ public class MicroserviceEntityCheckerImpl implements MicroserviceEntityChecker 
     }
 
     @Override
+    public void checkEntityForHospital(Long id, String token) {
+            log.info("{}", token);
+            hospitalCheckerService.findReturnVoid(id, token);
+    }
+
+    @Override
     public void checkEntityForUser(Long id, String token) {
         try {
             log.info("Начался поиск доктора");

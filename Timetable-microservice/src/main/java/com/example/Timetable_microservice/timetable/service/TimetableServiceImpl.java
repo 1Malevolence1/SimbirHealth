@@ -50,4 +50,10 @@
         public void deleteAllByDoctorId(Long id) {
             timetableRepository.deleteAllByDoctorId(id);
         }
+
+        @Override
+        @Transactional
+        public void deleteAllByHospitalId(Long id) {
+            timetableRepository.deleteAllByHospitalId(id);
+        }
     }
