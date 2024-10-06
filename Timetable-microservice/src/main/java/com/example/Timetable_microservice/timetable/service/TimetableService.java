@@ -9,4 +9,6 @@ public interface TimetableService {
     void update(Timetable timetable);
 
     void deleteById(Long id);
+
+    void deleteAllByDoctorId(Long id);
 }

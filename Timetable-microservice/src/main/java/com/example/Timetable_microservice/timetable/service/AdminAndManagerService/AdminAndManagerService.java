@@ -9,4 +9,6 @@ public interface AdminAndManagerService {
     void update(RequestTimetableDto dto, Long id);
 
     void deleteById(Long id);
+
+    void deleteAllByDoctorId(Long id);
 }

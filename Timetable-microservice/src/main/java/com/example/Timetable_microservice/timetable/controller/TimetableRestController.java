@@ -76,4 +76,15 @@ public class TimetableRestController {
         adminAndManagerService.deleteById(id);
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_TIMETABLE.formatted(id));
     }
+
+    @DeleteMapping("/Doctor/{doctorId:\\d+}")
+    public ResponseEntity<String> deleteAllTimetablesByDoctorId(@PathVariable(name = "doctorId") Long id,
+                                                                @RequestHeader("Authorization") String authorizationHeader){
+        microserviceEntityChecker.checkEntityForUser(
+                id,
+                AuthorizationHeaderExtractor.getJwtToken(authorizationHeader));
+
+        adminAndManagerService.deleteAllByDoctorId(id);
+        return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_TIMETABLE_FOR_DOCTOR.formatted(id));
+    }
 }
