@@ -60,6 +60,15 @@
         }
 
         @Override
+        public List<Timetable> getAllTimetableWithParamsFromAndToByHospitalIdAndRoom(LocalDateTime from, LocalDateTime to, String room, Long id) {
+            return timetableRepository.getAllTimetableWithParamsFromAndToByHospitalIdAndRoom(
+                    from,
+                    to,
+                    room,
+                    id);
+        }
+
+        @Override
         public List<Timetable> getAllTimetableWithParamsFromAndToByDoctorId(LocalDateTime from, LocalDateTime to, Long id) {
             return timetableRepository.getAllTimetableWithParamsFromAndToByDoctorId(from, to, id);
         }

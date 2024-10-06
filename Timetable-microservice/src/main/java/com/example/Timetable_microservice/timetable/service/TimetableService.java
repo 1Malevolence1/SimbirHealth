@@ -18,5 +18,6 @@ public interface TimetableService {
     void deleteAllByHospitalId(Long id);
 
     List<Timetable> getAllTimetableWithParamsFromAndToByHospitalId(LocalDateTime from, LocalDateTime to, Long id);
+    List<Timetable> getAllTimetableWithParamsFromAndToByHospitalIdAndRoom(LocalDateTime from, LocalDateTime to, String room, Long id);
     List<Timetable> getAllTimetableWithParamsFromAndToByDoctorId(LocalDateTime from, LocalDateTime to, Long id);
 }

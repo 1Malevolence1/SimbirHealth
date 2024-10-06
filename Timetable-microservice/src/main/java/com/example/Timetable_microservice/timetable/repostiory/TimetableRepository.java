@@ -27,4 +27,9 @@ public interface TimetableRepository  extends JpaRepository<Timetable, Long> {
 
     @Query(value = "SELECT * FROM timetable AS t WHERE t.start_time >= :from AND t.end_time <= :to AND t.doctor_id = :id", nativeQuery = true)
     List<Timetable> getAllTimetableWithParamsFromAndToByDoctorId(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to, @Param("id") Long id);
+
+
+    @Query(value = "SELECT * FROM timetable AS t WHERE t.start_time >= :from AND t.end_time <= :to AND t.hospital_id = :id  AND t.room = :room", nativeQuery = true)
+    List<Timetable> getAllTimetableWithParamsFromAndToByHospitalIdAndRoom(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to,
+                                                                          @Param("room") String room, @Param("id") Long id);
 }

@@ -15,9 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -124,7 +122,7 @@ public class TimetableRestController {
         LocalDateTime toDateTime = LocalDateTime.parse(to.replace("Z", ""));
 
         return ResponseEntity.ok().body(
-                authorizedUserService.getAllTimetableByHospitalById(fromDateTime, toDateTime, id)
+                authorizedUserService.getAllTimetableByHospitalId(fromDateTime, toDateTime, id)
         );
     }
 
@@ -148,4 +146,27 @@ public class TimetableRestController {
                 authorizedUserService.getAllTimetableByDoctorById(fromDateTime, toDateTime, id)
         );
     }
+
+    @GetMapping("/Hospital/{hospitalId:\\d+}/Room/{room}")
+    public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByHospitalIdAndByRoom(
+                                                                                @PathVariable(name = "hospitalId")Long id,
+                                                                                @PathVariable(name = "room")String room,
+                                                                                @RequestParam(name = "from") String from,
+                                                                                @RequestParam(name = "to") String to,
+                                                                                @RequestHeader("Authorization") String authorizationHeader){
+        microserviceEntityChecker.checkEntityForHospital(
+                id,
+                room,
+                AuthorizationHeaderExtractor.getJwtToken(authorizationHeader)
+        );
+
+        LocalDateTime fromDateTime = LocalDateTime.parse(from.replace("Z", ""));
+        LocalDateTime toDateTime = LocalDateTime.parse(to.replace("Z", ""));
+
+        return ResponseEntity.ok().body(
+                authorizedUserService.getAllTimetableByHospitalIdAndByRoom(fromDateTime, toDateTime, room ,id)
+        );
+    }
+
+
 }

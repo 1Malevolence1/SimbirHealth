@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface AuthorizedUserService {
 
-    List<ResponseTimetableDto> getAllTimetableByHospitalById(LocalDateTime from, LocalDateTime to, Long id);
+    List<ResponseTimetableDto> getAllTimetableByHospitalId(LocalDateTime from, LocalDateTime to, Long id);
+    List<ResponseTimetableDto> getAllTimetableByHospitalIdAndByRoom(LocalDateTime from, LocalDateTime to, String room, Long id);
     List<ResponseTimetableDto> getAllTimetableByDoctorById(LocalDateTime from, LocalDateTime to, Long id);
 }
