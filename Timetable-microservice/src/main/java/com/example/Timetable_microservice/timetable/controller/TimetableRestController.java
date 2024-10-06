@@ -1,11 +1,12 @@
 package com.example.Timetable_microservice.timetable.controller;
 
-import com.example.Timetable_microservice.timetable.config.ConstantResponseExceptionText;
 import com.example.Timetable_microservice.timetable.config.ConstantResponseSuccessfulText;
 import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
 import com.example.Timetable_microservice.timetable.service.AdminAndManagerService.AdminAndManagerService;
 import com.example.Timetable_microservice.timetable.service.AuthorizationHeaderExtractor;
 import com.example.Timetable_microservice.timetable.service.MicroserviceEntityChecker;
+import com.example.Timetable_microservice.timetable.service.authorized_user.AuthorizedUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,11 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/Timetable")
 @RequiredArgsConstructor
@@ -21,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class TimetableRestController {
 
     private final AdminAndManagerService adminAndManagerService;
+    private final AuthorizedUserService authorizedUserService;
     private final MicroserviceEntityChecker microserviceEntityChecker;
 
     @PostMapping()
@@ -102,4 +109,22 @@ public class TimetableRestController {
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_TIMETABLE_FOR_HOSPITAL.formatted(id));
     }
 
+
+    @GetMapping("/Hospital/{hospitalId:\\d+}")
+    public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByHospitalId(@PathVariable(name = "hospitalId")Long id,
+                                                                                  @RequestParam(name = "from") String from,
+                                                                                  @RequestParam(name = "to") String to,
+                                                                                  @RequestHeader("Authorization") String authorizationHeader){
+        microserviceEntityChecker.checkEntityForHospital(
+                id,
+                AuthorizationHeaderExtractor.getJwtToken(authorizationHeader)
+        );
+        LocalDateTime fromDateTime = LocalDateTime.parse(from.replace("Z", ""));
+        LocalDateTime toDateTime = LocalDateTime.parse(to.replace("Z", ""));
+
+
+        return ResponseEntity.ok().body(
+                authorizedUserService.getAllTimetable(fromDateTime, toDateTime, id)
+        );
+    }
 }

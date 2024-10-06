@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.PathVariable;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface TimetableRepository  extends JpaRepository<Timetable, Long> {
 
@@ -16,4 +19,8 @@ public interface TimetableRepository  extends JpaRepository<Timetable, Long> {
     @Modifying
     @Query(value = "DELETE FROM timetable AS t WHERE t.hospital_id = :hospitalId", nativeQuery = true )
     void deleteAllByHospitalId(@Param(value = "hospitalId") Long hospitalId);
+
+
+    @Query(value = "SELECT * FROM timetable AS t WHERE t.start_time >= :from AND t.end_time <= :to AND t.hospital_id = :hospital_id", nativeQuery = true)
+    List<Timetable> getAllTimetableWithParamsFromAndTo(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to, @Param("hospital_id") Long id);
 }

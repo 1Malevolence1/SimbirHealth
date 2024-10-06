@@ -8,6 +8,10 @@
     import lombok.extern.slf4j.Slf4j;
     import org.springframework.stereotype.Service;
 
+    import java.time.LocalDate;
+    import java.time.LocalDateTime;
+    import java.util.List;
+    import java.util.Locale;
     import java.util.NoSuchElementException;
 
 
@@ -29,12 +33,13 @@
         public void update(Timetable timetableUpdate) {
             timetableRepository.findById(timetableUpdate.getId()).ifPresentOrElse(
                     timetable -> {
-                        if(timetableUpdate.getHospitalId() != null) timetable.setHospitalId(timetableUpdate.getHospitalId());
-                        if(timetableUpdate.getDoctorId() != null) timetable.setDoctorId(timetableUpdate.getDoctorId());
-                        if(timetableUpdate.getRoom() != null) timetable.setRoom(timetableUpdate.getRoom());
-                        if(timetableUpdate.getFrom() != null) timetable.setFrom(timetableUpdate.getFrom());
-                        if(timetableUpdate.getTo() != null) timetable.setTo(timetableUpdate.getTo());
-                    } , () -> {
+                        if (timetableUpdate.getHospitalId() != null)
+                            timetable.setHospitalId(timetableUpdate.getHospitalId());
+                        if (timetableUpdate.getDoctorId() != null) timetable.setDoctorId(timetableUpdate.getDoctorId());
+                        if (timetableUpdate.getRoom() != null) timetable.setRoom(timetableUpdate.getRoom());
+                        if (timetableUpdate.getFrom() != null) timetable.setFrom(timetableUpdate.getFrom());
+                        if (timetableUpdate.getTo() != null) timetable.setTo(timetableUpdate.getTo());
+                    }, () -> {
                         throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_TIMETABLE_BY_ID.formatted(timetableUpdate.getHospitalId()));
                     }
             );
@@ -50,6 +55,12 @@
         public void deleteAllByDoctorId(Long id) {
             timetableRepository.deleteAllByDoctorId(id);
         }
+
+        @Override
+        public List<Timetable> getAllTimetableWithParamFromAndTo(LocalDateTime from, LocalDateTime to, Long id) {
+            return timetableRepository.getAllTimetableWithParamsFromAndTo(from, to, id);
+        }
+
 
         @Override
         @Transactional
