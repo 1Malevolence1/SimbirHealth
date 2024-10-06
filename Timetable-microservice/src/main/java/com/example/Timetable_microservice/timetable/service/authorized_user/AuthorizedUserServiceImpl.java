@@ -21,9 +21,16 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
     private final ManagerMapperTimetable mapperTimetable;
 
     @Override
-    public List<ResponseTimetableDto> getAllTimetable(LocalDateTime from, LocalDateTime to, Long id) {
+    public List<ResponseTimetableDto> getAllTimetableByHospitalById(LocalDateTime from, LocalDateTime to, Long id) {
         return mapperTimetable.toDto(
-                timetableService.getAllTimetableWithParamFromAndTo(from, to, id)
+                timetableService.getAllTimetableWithParamsFromAndToByHospitalId(from, to, id)
+        );
+    }
+
+    @Override
+    public List<ResponseTimetableDto> getAllTimetableByDoctorById(LocalDateTime from, LocalDateTime to, Long id) {
+        return mapperTimetable.toDto(
+                timetableService.getAllTimetableWithParamsFromAndToByDoctorId(from, to, id)
         );
     }
 }

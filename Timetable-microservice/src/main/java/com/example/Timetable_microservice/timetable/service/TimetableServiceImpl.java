@@ -8,10 +8,8 @@
     import lombok.extern.slf4j.Slf4j;
     import org.springframework.stereotype.Service;
 
-    import java.time.LocalDate;
     import java.time.LocalDateTime;
     import java.util.List;
-    import java.util.Locale;
     import java.util.NoSuchElementException;
 
 
@@ -57,8 +55,13 @@
         }
 
         @Override
-        public List<Timetable> getAllTimetableWithParamFromAndTo(LocalDateTime from, LocalDateTime to, Long id) {
-            return timetableRepository.getAllTimetableWithParamsFromAndTo(from, to, id);
+        public List<Timetable> getAllTimetableWithParamsFromAndToByHospitalId(LocalDateTime from, LocalDateTime to, Long id) {
+            return timetableRepository.getAllTimetableWithParamsFromAndToByHospitalId(from, to, id);
+        }
+
+        @Override
+        public List<Timetable> getAllTimetableWithParamsFromAndToByDoctorId(LocalDateTime from, LocalDateTime to, Long id) {
+            return timetableRepository.getAllTimetableWithParamsFromAndToByDoctorId(from, to, id);
         }
 
 

@@ -119,12 +119,33 @@ public class TimetableRestController {
                 id,
                 AuthorizationHeaderExtractor.getJwtToken(authorizationHeader)
         );
+
         LocalDateTime fromDateTime = LocalDateTime.parse(from.replace("Z", ""));
         LocalDateTime toDateTime = LocalDateTime.parse(to.replace("Z", ""));
 
+        return ResponseEntity.ok().body(
+                authorizedUserService.getAllTimetableByHospitalById(fromDateTime, toDateTime, id)
+        );
+    }
+
+
+
+
+    @GetMapping("/Doctor/{doctorId:\\d+}")
+    public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByDoctorId(@PathVariable(name = "doctorId")Long id,
+                                                                                  @RequestParam(name = "from") String from,
+                                                                                  @RequestParam(name = "to") String to,
+                                                                                  @RequestHeader("Authorization") String authorizationHeader){
+        microserviceEntityChecker.checkEntityForUser(
+                id,
+                AuthorizationHeaderExtractor.getJwtToken(authorizationHeader)
+        );
+
+        LocalDateTime fromDateTime = LocalDateTime.parse(from.replace("Z", ""));
+        LocalDateTime toDateTime = LocalDateTime.parse(to.replace("Z", ""));
 
         return ResponseEntity.ok().body(
-                authorizedUserService.getAllTimetable(fromDateTime, toDateTime, id)
+                authorizedUserService.getAllTimetableByDoctorById(fromDateTime, toDateTime, id)
         );
     }
 }
