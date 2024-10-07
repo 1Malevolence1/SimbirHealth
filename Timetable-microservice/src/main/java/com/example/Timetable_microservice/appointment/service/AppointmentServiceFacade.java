@@ -10,5 +10,5 @@ public interface AppointmentServiceFacade {
 
     List<Appointment> generateAppointments(LocalDateTime from, LocalDateTime to);
     List<ResponseAppointmentsDto> getAllAvailableSlots(Long id);
-
+    void make(LocalDateTime time, Long id);
 }

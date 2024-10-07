@@ -12,4 +12,5 @@ public interface AuthorizedUserService {
     List<ResponseTimetableDto> getAllTimetableByHospitalIdAndByRoom(LocalDateTime from, LocalDateTime to, String room, Long id);
     List<ResponseTimetableDto> getAllTimetableByDoctorById(LocalDateTime from, LocalDateTime to, Long id);
     List<ResponseAppointmentsDto> getAllAvailableSlotsByIdTimetable(Long id);
+    void makeAppointment(LocalDateTime time, Long id);
 }

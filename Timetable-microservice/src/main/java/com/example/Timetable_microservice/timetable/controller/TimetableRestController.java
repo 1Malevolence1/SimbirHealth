@@ -4,9 +4,11 @@ import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAp
 import com.example.Timetable_microservice.timetable.config.ConstantResponseSuccessfulText;
 import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
 import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.UserIdDto;
 import com.example.Timetable_microservice.timetable.service.AdminAndManagerService.AdminAndManagerService;
 import com.example.Timetable_microservice.timetable.service.AuthorizationHeaderExtractor;
 import com.example.Timetable_microservice.timetable.service.MicroserviceEntityChecker;
+import com.example.Timetable_microservice.timetable.service.SearchingFieldsBetweenMicroservices;
 import com.example.Timetable_microservice.timetable.service.authorized_user.AuthorizedUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class TimetableRestController {
     private final AdminAndManagerService adminAndManagerService;
     private final AuthorizedUserService authorizedUserService;
     private final MicroserviceEntityChecker microserviceEntityChecker;
+    private final SearchingFieldsBetweenMicroservices searchingFieldsBetweenMicroservices;
+
 
     @PostMapping()
     public ResponseEntity<String> addTimetable(@Valid @RequestBody RequestTimetableDto dto, BindingResult bindingResult,
@@ -54,7 +58,7 @@ public class TimetableRestController {
 
     @PutMapping("{timetableId:\\d+}")
     public ResponseEntity<String> Timetable(@Valid @RequestBody RequestTimetableDto dto, BindingResult bindingResult,
-                                               @RequestHeader("Authorization") String authorizationHeader,
+                                            @RequestHeader("Authorization") String authorizationHeader,
                                             @PathVariable(name = "timetableId") Long id) throws BindException {
 
         if (bindingResult.hasErrors()) {
@@ -78,14 +82,14 @@ public class TimetableRestController {
 
 
     @DeleteMapping("{timetableId:\\d+}")
-    public ResponseEntity<String> deleteOneTimetableById(@PathVariable(name = "timetableId") Long id){
+    public ResponseEntity<String> deleteOneTimetableById(@PathVariable(name = "timetableId") Long id) {
         adminAndManagerService.deleteById(id);
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_TIMETABLE.formatted(id));
     }
 
     @DeleteMapping("/Doctor/{doctorId:\\d+}")
     public ResponseEntity<String> deleteAllTimetablesByDoctorId(@PathVariable(name = "doctorId") Long id,
-                                                                @RequestHeader("Authorization") String authorizationHeader){
+                                                                @RequestHeader("Authorization") String authorizationHeader) {
         microserviceEntityChecker.checkEntityForUser(
                 id,
                 AuthorizationHeaderExtractor.getJwtToken(authorizationHeader));
@@ -97,7 +101,7 @@ public class TimetableRestController {
 
     @DeleteMapping("/Hospital/{hospitalId:\\d+}")
     public ResponseEntity<String> deleteAllTimetablesByHospitalId(@PathVariable(name = "hospitalId") Long id,
-                                                                @RequestHeader("Authorization") String authorizationHeader){
+                                                                  @RequestHeader("Authorization") String authorizationHeader) {
         log.info("{}", authorizationHeader);
 
         microserviceEntityChecker.checkEntityForHospital(
@@ -110,10 +114,10 @@ public class TimetableRestController {
 
 
     @GetMapping("/Hospital/{hospitalId:\\d+}")
-    public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByHospitalId(@PathVariable(name = "hospitalId")Long id,
+    public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByHospitalId(@PathVariable(name = "hospitalId") Long id,
                                                                                   @RequestParam(name = "from") String from,
                                                                                   @RequestParam(name = "to") String to,
-                                                                                  @RequestHeader("Authorization") String authorizationHeader){
+                                                                                  @RequestHeader("Authorization") String authorizationHeader) {
         microserviceEntityChecker.checkEntityForHospital(
                 id,
                 AuthorizationHeaderExtractor.getJwtToken(authorizationHeader)
@@ -128,13 +132,11 @@ public class TimetableRestController {
     }
 
 
-
-
     @GetMapping("/Doctor/{doctorId:\\d+}")
-    public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByDoctorId(@PathVariable(name = "doctorId")Long id,
-                                                                                  @RequestParam(name = "from") String from,
-                                                                                  @RequestParam(name = "to") String to,
-                                                                                  @RequestHeader("Authorization") String authorizationHeader){
+    public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByDoctorId(@PathVariable(name = "doctorId") Long id,
+                                                                                @RequestParam(name = "from") String from,
+                                                                                @RequestParam(name = "to") String to,
+                                                                                @RequestHeader("Authorization") String authorizationHeader) {
         microserviceEntityChecker.checkEntityForUser(
                 id,
                 AuthorizationHeaderExtractor.getJwtToken(authorizationHeader)
@@ -150,11 +152,11 @@ public class TimetableRestController {
 
     @GetMapping("/Hospital/{hospitalId:\\d+}/Room/{room}")
     public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByHospitalIdAndByRoom(
-                                                                                @PathVariable(name = "hospitalId")Long id,
-                                                                                @PathVariable(name = "room")String room,
-                                                                                @RequestParam(name = "from") String from,
-                                                                                @RequestParam(name = "to") String to,
-                                                                                @RequestHeader("Authorization") String authorizationHeader){
+            @PathVariable(name = "hospitalId") Long id,
+            @PathVariable(name = "room") String room,
+            @RequestParam(name = "from") String from,
+            @RequestParam(name = "to") String to,
+            @RequestHeader("Authorization") String authorizationHeader) {
         microserviceEntityChecker.checkEntityForHospital(
                 id,
                 room,
@@ -165,16 +167,32 @@ public class TimetableRestController {
         LocalDateTime toDateTime = LocalDateTime.parse(to.replace("Z", ""));
 
         return ResponseEntity.ok().body(
-                authorizedUserService.getAllTimetableByHospitalIdAndByRoom(fromDateTime, toDateTime, room ,id)
+                authorizedUserService.getAllTimetableByHospitalIdAndByRoom(fromDateTime, toDateTime, room, id)
         );
     }
 
     @GetMapping("{timetableId:\\d+}/Appointments")
-    public ResponseEntity<List<ResponseAppointmentsDto>> getAvailableAppointment(@PathVariable(name = "timetableId") Long id){
+    public ResponseEntity<List<ResponseAppointmentsDto>> getAvailableAppointment(@PathVariable(name = "timetableId") Long id) {
         microserviceEntityChecker.checkEntityTimetable(id);
         return ResponseEntity.ok().body(
                 authorizedUserService.getAllAvailableSlotsByIdTimetable(id)
         );
     }
 
+
+    @PostMapping("{timetableId:\\d+}/Appointments")
+    public ResponseEntity<String> makeAppointment(@PathVariable(name = "timetableId") Long id,
+                                                  @RequestParam("time") LocalDateTime time,
+                                                  @RequestHeader("Authorization") String authorizationHeader) {
+        microserviceEntityChecker.checkEntityTimetable(id);
+
+        authorizedUserService.makeAppointment(
+                time,
+                searchingFieldsBetweenMicroservices.getUserId(authorizationHeader)
+        );
+
+        return ResponseEntity.ok().body(
+                ConstantResponseSuccessfulText.UPDATE_APPOINTMENT_TRUE.formatted(time.toString())
+        );
+    }
 }

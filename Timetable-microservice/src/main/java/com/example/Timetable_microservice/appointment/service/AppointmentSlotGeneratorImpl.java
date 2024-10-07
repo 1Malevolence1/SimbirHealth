@@ -1,4 +1,4 @@
-package com.example.Timetable_microservice.timetable.service;
+package com.example.Timetable_microservice.appointment.service;
 
 import com.example.Timetable_microservice.appointment.dto.appointment.AppointmentDto;
 import lombok.RequiredArgsConstructor;

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -17,7 +18,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
 
-
     @Override
     public List<Appointment> fetchAvailableSlots(Long id) {
         return appointmentRepository.findAllAvailableSlots(id);
@@ -25,14 +25,14 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public void updateActiveOnTrue(Long id) {
-        appointmentRepository.updateSlotActiveToTrue(id);
+    public void updateActiveOnTrue(LocalDateTime time, Long userId) {
+        appointmentRepository.updateSlotActiveToTrue(time, userId);
     }
 
     @Override
     @Transactional
-    public void updateActiveOnFalse(Long id) {
-        appointmentRepository.updateSlotActiveToFalse(id);
+    public void updateActiveOnFalse(LocalDateTime time, Long userId) {
+        appointmentRepository.updateSlotActiveToFalse(time, userId);
     }
 }
 

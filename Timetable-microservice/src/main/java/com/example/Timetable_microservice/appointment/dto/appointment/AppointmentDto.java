@@ -6,6 +6,5 @@ public record AppointmentDto(
 
          LocalDateTime recording,
          Boolean active
-
 ) {
 }

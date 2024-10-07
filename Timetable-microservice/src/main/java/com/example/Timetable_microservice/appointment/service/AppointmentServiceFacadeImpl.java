@@ -4,8 +4,8 @@ package com.example.Timetable_microservice.appointment.service;
 import com.example.Timetable_microservice.appointment.convert.manager.ManagerMapperAppointment;
 import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAppointmentsDto;
 import com.example.Timetable_microservice.appointment.model.Appointment;
-import com.example.Timetable_microservice.timetable.service.AppointmentSlotGenerator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -13,6 +13,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class AppointmentServiceFacadeImpl implements AppointmentServiceFacade {
 
 
@@ -30,5 +31,11 @@ public class AppointmentServiceFacadeImpl implements AppointmentServiceFacade {
     @Override
     public List<ResponseAppointmentsDto> getAllAvailableSlots(Long id) {
         return mapperAppointment.toDto(appointmentService.fetchAvailableSlots(id));
+    }
+
+    @Override
+    public void make(LocalDateTime time, Long id) {
+        log.info("{}, {}", time, id);
+        appointmentService.updateActiveOnTrue(time, id);
     }
 }

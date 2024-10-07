@@ -23,6 +23,7 @@ public class Appointment {
 
     private Boolean active;
 
-
+    @Column(name = "user_id")
+    private Long userId;
 
 }

@@ -49,4 +49,9 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
     public List<ResponseAppointmentsDto> getAllAvailableSlotsByIdTimetable(Long id) {
         return appointmentServiceFacade.getAllAvailableSlots(id);
     }
+
+    @Override
+    public void makeAppointment(LocalDateTime time, Long id) {
+         appointmentServiceFacade.make(time, id);
+    }
 }
