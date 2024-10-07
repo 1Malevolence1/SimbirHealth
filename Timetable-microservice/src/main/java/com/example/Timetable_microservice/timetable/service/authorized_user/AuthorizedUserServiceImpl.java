@@ -2,7 +2,6 @@ package com.example.Timetable_microservice.timetable.service.authorized_user;
 
 
 import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAppointmentsDto;
-import com.example.Timetable_microservice.appointment.service.AppointmentService;
 import com.example.Timetable_microservice.appointment.service.AppointmentServiceFacade;
 import com.example.Timetable_microservice.timetable.convert.manager.ManagerMapperTimetable;
 import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
@@ -52,6 +51,11 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
 
     @Override
     public void makeAppointment(LocalDateTime time, Long id) {
-         appointmentServiceFacade.make(time, id);
+         appointmentServiceFacade.makeAppointment(time, id);
+    }
+
+    @Override
+    public void cancelAppointment(Long id, Long appointmentId) {
+            appointmentServiceFacade.cancelAppointment(id, appointmentId);
     }
 }
