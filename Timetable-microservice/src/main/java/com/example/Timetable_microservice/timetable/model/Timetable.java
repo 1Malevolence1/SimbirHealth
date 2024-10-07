@@ -3,6 +3,7 @@ package com.example.Timetable_microservice.timetable.model;
 
 
 
+import com.example.Timetable_microservice.appointment.model.Appointment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "timetable")
@@ -37,4 +39,8 @@ public class Timetable  {
     private LocalDateTime to;
 
     private String room;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "timetable_id")
+    private List<Appointment> appointments;
 }

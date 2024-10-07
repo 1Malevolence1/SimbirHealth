@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface TimetableService {
 
+
+
     void save(Timetable timetable);
 
     void update(Timetable timetable);
@@ -16,6 +18,10 @@ public interface TimetableService {
     void deleteAllByDoctorId(Long id);
 
     void deleteAllByHospitalId(Long id);
+
+    Timetable getTimeTableById(Long id);
+
+    void existsById(Long id);
 
     List<Timetable> getAllTimetableWithParamsFromAndToByHospitalId(LocalDateTime from, LocalDateTime to, Long id);
     List<Timetable> getAllTimetableWithParamsFromAndToByHospitalIdAndRoom(LocalDateTime from, LocalDateTime to, String room, Long id);

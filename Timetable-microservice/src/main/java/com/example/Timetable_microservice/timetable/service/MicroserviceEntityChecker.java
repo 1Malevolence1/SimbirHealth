@@ -6,5 +6,6 @@ public interface MicroserviceEntityChecker {
 
     void checkEntityForHospital(Long id, String room, String token);
     void checkEntityForHospital(Long id, String token);
+    void checkEntityTimetable(Long id);
     void checkEntityForUser(Long id, String token);
 }

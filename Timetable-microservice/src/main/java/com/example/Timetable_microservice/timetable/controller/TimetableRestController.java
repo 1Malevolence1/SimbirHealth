@@ -1,5 +1,6 @@
 package com.example.Timetable_microservice.timetable.controller;
 
+import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAppointmentsDto;
 import com.example.Timetable_microservice.timetable.config.ConstantResponseSuccessfulText;
 import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
 import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
@@ -168,5 +169,12 @@ public class TimetableRestController {
         );
     }
 
+    @GetMapping("{timetableId:\\d+}/Appointments")
+    public ResponseEntity<List<ResponseAppointmentsDto>> getAvailableAppointment(@PathVariable(name = "timetableId") Long id){
+        microserviceEntityChecker.checkEntityTimetable(id);
+        return ResponseEntity.ok().body(
+                authorizedUserService.getAllAvailableSlotsByIdTimetable(id)
+        );
+    }
 
 }

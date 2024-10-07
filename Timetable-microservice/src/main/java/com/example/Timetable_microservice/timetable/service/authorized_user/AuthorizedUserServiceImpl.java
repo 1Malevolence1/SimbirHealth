@@ -1,6 +1,9 @@
 package com.example.Timetable_microservice.timetable.service.authorized_user;
 
 
+import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAppointmentsDto;
+import com.example.Timetable_microservice.appointment.service.AppointmentService;
+import com.example.Timetable_microservice.appointment.service.AppointmentServiceFacade;
 import com.example.Timetable_microservice.timetable.convert.manager.ManagerMapperTimetable;
 import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
 import com.example.Timetable_microservice.timetable.service.TimetableService;
@@ -19,6 +22,7 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
 
     private final TimetableService timetableService;
     private final ManagerMapperTimetable mapperTimetable;
+    private final AppointmentServiceFacade appointmentServiceFacade;
 
     @Override
     public List<ResponseTimetableDto> getAllTimetableByHospitalId(LocalDateTime from, LocalDateTime to, Long id) {
@@ -39,5 +43,10 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
         return mapperTimetable.toDto(
                 timetableService.getAllTimetableWithParamsFromAndToByDoctorId(from, to, id)
         );
+    }
+
+    @Override
+    public List<ResponseAppointmentsDto> getAllAvailableSlotsByIdTimetable(Long id) {
+        return appointmentServiceFacade.getAllAvailableSlots(id);
     }
 }

@@ -22,6 +22,7 @@ public class MicroserviceEntityCheckerImpl implements MicroserviceEntityChecker 
 
     private final RestClient restClientForUser;
     private final HospitalCheckerService hospitalCheckerService;
+    private final TimetableService timetableService;
 
     @Override
     public void checkEntityForHospital(Long id, String room, String token) {
@@ -36,6 +37,11 @@ public class MicroserviceEntityCheckerImpl implements MicroserviceEntityChecker 
     public void checkEntityForHospital(Long id, String token) {
             log.info("{}", token);
             hospitalCheckerService.findReturnVoid(id, token);
+    }
+
+    @Override
+    public void checkEntityTimetable(Long id) {
+        timetableService.existsById(id);
     }
 
     @Override
