@@ -78,6 +78,12 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
     }
 
 
+    @Override
+    public List<String> extractRolesString(String token) {
+        return extractRole(token).stream().map(JwtAuthority::authority).toList();
+    }
+
+
     public String extractOneRole(String token) {
 
         List<Map<String, String>> roles = extractClaim(token, claims -> (List<Map<String, String>>) claims.get("role"));

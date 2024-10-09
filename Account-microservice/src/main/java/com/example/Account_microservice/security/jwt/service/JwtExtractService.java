@@ -13,4 +13,5 @@ public interface JwtExtractService {
     Date extractExpiration(String token);
     Boolean isTokenExpired(String token);
     List<JwtAuthority> extractRole(String token);
+    List<String >extractRolesString(String token);
 }
