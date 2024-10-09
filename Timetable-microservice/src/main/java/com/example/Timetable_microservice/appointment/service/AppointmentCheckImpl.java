@@ -11,7 +11,7 @@ public class AppointmentCheckImpl implements AppointmentCheck {
     private final AppointmentService appointmentService;
 
     @Override
-    public boolean checkUserIdInAppointment(Long appId) {
+    public boolean checkUserIdInAppointment(Long appId   ) {
        return appointmentService.findUserIdFromAppointment(appId);
     }
 }

@@ -1,6 +1,7 @@
-package com.example.Hospital_microservice.security.jwt;
+package com.example.Timetable_microservice.security.jwt;
 
-import com.example.Hospital_microservice.security.jwt.service.JwtExtractService;
+
+import com.example.Timetable_microservice.security.jwt.service.JwtExtractService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

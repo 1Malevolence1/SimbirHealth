@@ -1,4 +1,4 @@
-package com.example.Hospital_microservice.restclient;
+package com.example.Hospital_microservice.security.config.restTemplate;
 
 
 import org.springframework.context.annotation.Bean;

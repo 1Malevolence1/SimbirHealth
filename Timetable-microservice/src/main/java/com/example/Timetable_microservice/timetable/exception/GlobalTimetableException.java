@@ -36,4 +36,9 @@ public class GlobalTimetableException {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getError());
     }
 
+    @ExceptionHandler(BadUpdateTimetable.class)
+    public ResponseEntity<Validate> handlerBadUpdateTimetable(BadUpdateTimetable exception){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getError());
+    }
+
 }

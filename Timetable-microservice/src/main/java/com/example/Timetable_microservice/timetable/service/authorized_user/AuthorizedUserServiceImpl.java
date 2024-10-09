@@ -5,6 +5,8 @@ import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAp
 import com.example.Timetable_microservice.appointment.service.AppointmentServiceFacade;
 import com.example.Timetable_microservice.timetable.convert.manager.ManagerMapperTimetable;
 import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
+import com.example.Timetable_microservice.timetable.service.AdminAndManagerService.AdminAndManagerService;
+import com.example.Timetable_microservice.timetable.service.SearchingFieldsBetweenMicroservicesUser;
 import com.example.Timetable_microservice.timetable.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,8 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
     private final TimetableService timetableService;
     private final ManagerMapperTimetable mapperTimetable;
     private final AppointmentServiceFacade appointmentServiceFacade;
+    private final SearchingFieldsBetweenMicroservicesUser searchingFieldsBetweenMicroservicesUser;
+    private final AdminAndManagerService adminAndManagerService;
 
     @Override
     public List<ResponseTimetableDto> getAllTimetableByHospitalId(LocalDateTime from, LocalDateTime to, Long id) {
@@ -55,7 +59,15 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
     }
 
     @Override
-    public void cancelAppointment(Long id, Long appointmentId) {
-            appointmentServiceFacade.cancelAppointment(id, appointmentId);
+    public void cancelAppointment(String token, Long appointmentId) {
+            String role = searchingFieldsBetweenMicroservicesUser.getRole(token);
+
+            if(role.equals("ROLE_USER")) {
+                appointmentServiceFacade.cancelAppointment(
+                        searchingFieldsBetweenMicroservicesUser.getUserId(token),
+                        appointmentId);
+            } else {
+                adminAndManagerService.cancelAppointment(appointmentId);
+            }
     }
 }

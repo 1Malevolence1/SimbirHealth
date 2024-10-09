@@ -20,6 +20,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "UPDATE appointment SET active = false, user_id = null WHERE user_id = :userId AND id = :appointmentId",nativeQuery = true)
     void updateSlotActiveToFalse(@Param("userId") Long userId, @Param("appointmentId") Long appointmentId);
 
+
+    @Modifying
+    @Query(value = "UPDATE appointment SET active = false, user_id = null WHERE id = :appointmentId",nativeQuery = true)
+    void updateSlotActiveToFalse(@Param("appointmentId") Long appointmentId);
+
+
     @Modifying
     @Query(value = "UPDATE appointment  SET active = true, user_id = :userId WHERE recording = :time",nativeQuery = true)
     void updateSlotActiveToTrue(@Param("time") LocalDateTime time,@Param("userId") Long userId);
@@ -27,4 +33,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query(value = "SELECT a.user_id FROM appointment AS a WHERE a.id = :appointmentId ", nativeQuery = true)
     Long retrieveUserIdFromAppointment(@Param("appointmentId") Long id);
+
+
+    @Query(value = "SELECT COUNT(a.user_id) FROM appointment AS a WHERE a.timetable_id = :appointmentId ", nativeQuery = true)
+    Long retrieveCountUserIdFromAppointment(@Param("appointmentId") Long id);
+
+
+    @Modifying
+    @Query(value = "DELETE FROM appointment WHERE appointment.timetable_id = :timetableId", nativeQuery = true)
+    void deleteAllByIdTimetable(@Param("timetableId") Long timetableId);
 }

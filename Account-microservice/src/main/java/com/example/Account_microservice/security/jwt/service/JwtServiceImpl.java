@@ -3,6 +3,7 @@ package com.example.Account_microservice.security.jwt.service;
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthority;
+import com.example.Account_microservice.security.jwt.dto.JwtDecongestingDtoResponse;
 import com.example.Account_microservice.security.jwt.exception.TokenBlackListException;
 import com.example.Account_microservice.security.jwt.exception.ValidateToken;
 import com.example.Account_microservice.user.model.User;
@@ -76,6 +77,15 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
                 .collect(Collectors.toList());
     }
 
+
+    public String extractOneRole(String token) {
+
+        List<Map<String, String>> roles = extractClaim(token, claims -> (List<Map<String, String>>) claims.get("role"));
+
+        return roles.stream()
+                .map(roleMap -> roleMap.get("authority"))
+                .toList().getFirst();
+    }
 
 
 
@@ -168,6 +178,15 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
 
 
         }return true;
+    }
+
+    @Override
+    public JwtDecongestingDtoResponse tokenDecoding(String token) {
+        return new JwtDecongestingDtoResponse(
+                extractUserId(token),
+                extractUserName(token),
+                extractOneRole(token)
+        );
     }
 
     private Key getSigningKey() {

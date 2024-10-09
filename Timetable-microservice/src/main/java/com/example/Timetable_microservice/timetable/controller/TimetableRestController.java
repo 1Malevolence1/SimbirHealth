@@ -4,16 +4,16 @@ import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAp
 import com.example.Timetable_microservice.timetable.config.ConstantResponseSuccessfulText;
 import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
 import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
-import com.example.Timetable_microservice.timetable.dto.UserIdDto;
 import com.example.Timetable_microservice.timetable.service.AdminAndManagerService.AdminAndManagerService;
 import com.example.Timetable_microservice.timetable.service.AuthorizationHeaderExtractor;
 import com.example.Timetable_microservice.timetable.service.MicroserviceEntityChecker;
-import com.example.Timetable_microservice.timetable.service.SearchingFieldsBetweenMicroservices;
+import com.example.Timetable_microservice.timetable.service.SearchingFieldsBetweenMicroservicesUser;
 import com.example.Timetable_microservice.timetable.service.authorized_user.AuthorizedUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +30,9 @@ public class TimetableRestController {
     private final AdminAndManagerService adminAndManagerService;
     private final AuthorizedUserService authorizedUserService;
     private final MicroserviceEntityChecker microserviceEntityChecker;
-    private final SearchingFieldsBetweenMicroservices searchingFieldsBetweenMicroservices;
+    private final SearchingFieldsBetweenMicroservicesUser searchingFieldsBetweenMicroservicesUser;
 
-
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     @PostMapping()
     public ResponseEntity<String> addTimetable(@Valid @RequestBody RequestTimetableDto dto, BindingResult bindingResult,
                                                @RequestHeader("Authorization") String authorizationHeader) throws BindException {
@@ -55,11 +55,11 @@ public class TimetableRestController {
         }
     }
 
-
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     @PutMapping("{timetableId:\\d+}")
-    public ResponseEntity<String> Timetable(@Valid @RequestBody RequestTimetableDto dto, BindingResult bindingResult,
+    public ResponseEntity<String> updateTimetable(@Valid @RequestBody RequestTimetableDto dto, BindingResult bindingResult,
                                             @RequestHeader("Authorization") String authorizationHeader,
-                                            @PathVariable(name = "timetableId") Long id) throws BindException {
+                                            @PathVariable(name = "timetableId") Long timetableId) throws BindException {
 
         if (bindingResult.hasErrors()) {
             if (bindingResult instanceof BindException bindException) {
@@ -75,18 +75,20 @@ public class TimetableRestController {
             log.info("{}", token);
             microserviceEntityChecker.checkEntityForHospital(dto.hospitalId(), dto.room(), token);
             microserviceEntityChecker.checkEntityForUser(dto.doctorId(), token);
-            adminAndManagerService.update(dto, id);
-            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_TIMETABLE);
+            adminAndManagerService.update(dto, timetableId);
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_TIMETABLE.formatted(timetableId));
         }
     }
 
-
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     @DeleteMapping("{timetableId:\\d+}")
     public ResponseEntity<String> deleteOneTimetableById(@PathVariable(name = "timetableId") Long id) {
         adminAndManagerService.deleteById(id);
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_TIMETABLE.formatted(id));
     }
 
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     @DeleteMapping("/Doctor/{doctorId:\\d+}")
     public ResponseEntity<String> deleteAllTimetablesByDoctorId(@PathVariable(name = "doctorId") Long id,
                                                                 @RequestHeader("Authorization") String authorizationHeader) {
@@ -98,7 +100,7 @@ public class TimetableRestController {
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_TIMETABLE_FOR_DOCTOR.formatted(id));
     }
 
-
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     @DeleteMapping("/Hospital/{hospitalId:\\d+}")
     public ResponseEntity<String> deleteAllTimetablesByHospitalId(@PathVariable(name = "hospitalId") Long id,
                                                                   @RequestHeader("Authorization") String authorizationHeader) {
@@ -112,7 +114,7 @@ public class TimetableRestController {
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.DELETE_TIMETABLE_FOR_HOSPITAL.formatted(id));
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/Hospital/{hospitalId:\\d+}")
     public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByHospitalId(@PathVariable(name = "hospitalId") Long id,
                                                                                   @RequestParam(name = "from") String from,
@@ -131,7 +133,7 @@ public class TimetableRestController {
         );
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/Doctor/{doctorId:\\d+}")
     public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByDoctorId(@PathVariable(name = "doctorId") Long id,
                                                                                 @RequestParam(name = "from") String from,
@@ -150,6 +152,7 @@ public class TimetableRestController {
         );
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_DOCTOR')")
     @GetMapping("/Hospital/{hospitalId:\\d+}/Room/{room}")
     public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByHospitalIdAndByRoom(
             @PathVariable(name = "hospitalId") Long id,
@@ -171,6 +174,7 @@ public class TimetableRestController {
         );
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("{timetableId:\\d+}/Appointments")
     public ResponseEntity<List<ResponseAppointmentsDto>> getAvailableAppointment(@PathVariable(name = "timetableId") Long id) {
         microserviceEntityChecker.checkEntityTimetable(id);
@@ -180,6 +184,7 @@ public class TimetableRestController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("{timetableId:\\d+}/Appointments")
     public ResponseEntity<String> makeAppointment(@PathVariable(name = "timetableId") Long id,
                                                   @RequestParam("time") LocalDateTime time,
@@ -188,7 +193,7 @@ public class TimetableRestController {
 
         authorizedUserService.makeAppointment(
                 time,
-                searchingFieldsBetweenMicroservices.getUserId(authorizationHeader)
+                searchingFieldsBetweenMicroservicesUser.getUserId(authorizationHeader)
         );
 
         return ResponseEntity.ok().body(

@@ -1,12 +1,12 @@
-package com.example.Timetable_microservice.appointment;
+package com.example.Timetable_microservice.appointment.controller;
 
 
 import com.example.Timetable_microservice.timetable.config.ConstantResponseSuccessfulText;
-import com.example.Timetable_microservice.timetable.service.SearchingFieldsBetweenMicroservices;
 import com.example.Timetable_microservice.timetable.service.authorized_user.AuthorizedUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,18 +17,19 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AppointmentRestController {
     private final AuthorizedUserService authorizedUserService;
-    private final SearchingFieldsBetweenMicroservices searchingFieldsBetweenMicroservices;
+
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_USER')")
     @DeleteMapping()
     public ResponseEntity<String> makeAppointment(@PathVariable(name = "appointmentId") Long appointmentId,
                                                   @RequestHeader("Authorization") String authorizationHeader) {
 
         authorizedUserService.cancelAppointment(
-                searchingFieldsBetweenMicroservices.getUserId(authorizationHeader),
+                authorizationHeader,
                 appointmentId
         );
         return ResponseEntity.ok().body(
                 ConstantResponseSuccessfulText.UPDATE_APPOINTMENT_FALSE
         );
     }
-
 }
