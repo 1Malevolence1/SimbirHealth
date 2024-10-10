@@ -9,11 +9,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class HistoryDataValidateImpl implements HistoryDataValidate {
 
-    private final AccountRoleValidator accountRoleValidator;
+    private final AccountAndRoleOfAccountValidator accountValidator;
     private final HospitalAndRoomValidate hospitalAndRoomValidate;
     @Override
     public void validate(String authorizationHeader, RequestHistoryDto dto) {
-            accountRoleValidator.validateAccount(authorizationHeader, dto);
+        accountValidator.validateAccount(authorizationHeader, dto);
             hospitalAndRoomValidate.validateHospitalAndRoom(authorizationHeader, dto);
+    }
+
+    @Override
+    public void verification(String authorizationHeader, Long pacientId) {
+        accountValidator.verificationBelongsToUserHistory(authorizationHeader, pacientId);
     }
 }

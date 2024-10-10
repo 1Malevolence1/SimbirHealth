@@ -4,6 +4,9 @@ package com.example.Document_microservice.conttoller;
 import com.example.Document_microservice.config.ConstantResponseSuccessfulText;
 import com.example.Document_microservice.convert.manager.ManagerMapperHistory;
 import com.example.Document_microservice.dto.RequestHistoryDto;
+import com.example.Document_microservice.dto.ResponseHistoryDto;
+import com.example.Document_microservice.exeption.TheStoryDoesNotBelongToThisUser;
+import com.example.Document_microservice.exeption.Validate;
 import com.example.Document_microservice.service.HistoryDataValidate;
 import com.example.Document_microservice.service.HistoryService;
 import jakarta.validation.Valid;
@@ -46,6 +49,19 @@ public class HistoryRestController {
     }
 
 
+    @GetMapping("{historyId:\\d+}")
+    public ResponseEntity<ResponseHistoryDto> getHistoryById(@PathVariable(name = "historyId") Long historyId,
+                                                             @RequestHeader("Authorization") String authorizationHeader) {
+        ResponseHistoryDto dto = mapperHistory.toDto(historyService.getHistoryById(historyId));
+        Long pacientId = dto.pacientId();
+
+        historyDataValidate.verification(authorizationHeader, pacientId);
+
+        return ResponseEntity.ok().body(
+                dto
+        );
+    }
+
 
     @PutMapping("{historyId:\\d+}")
     public ResponseEntity<String> updateHistory(@RequestBody RequestHistoryDto dto,
@@ -53,14 +69,14 @@ public class HistoryRestController {
                                                 @RequestHeader("Authorization") String authorizationHeader) {
 
 
-            historyDataValidate.validate(authorizationHeader, dto);
-            historyService.update(
-                    mapperHistory.toModel(
-                            dto,
-                            historyId
-                    )
+        historyDataValidate.validate(authorizationHeader, dto);
+        historyService.update(
+                mapperHistory.toModel(
+                        dto,
+                        historyId
+                )
 
-            );
-            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_HISTORY_OK);
-        }
+        );
+        return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_HISTORY_OK);
     }
+}

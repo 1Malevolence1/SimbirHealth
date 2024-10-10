@@ -35,4 +35,7 @@ public class History {
 
     private String data;
 
+    @Column(name = "room")
+    private String room;
+
 }

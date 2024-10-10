@@ -42,4 +42,9 @@ public class HistoryGlobalException {
     public ResponseEntity<Validate> handlerTheUserHasSeveralRoles(TheUserHasSeveralRoles error) {
         return ResponseEntity.badRequest().body(error.getError());
     }
+
+    @ExceptionHandler(TheStoryDoesNotBelongToThisUser.class)
+    public ResponseEntity<Validate> handlerTheStoryDoesNotBelongToThisUser(TheStoryDoesNotBelongToThisUser error) {
+        return ResponseEntity.badRequest().body(error.getError());
+    }
 }

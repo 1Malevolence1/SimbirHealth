@@ -2,6 +2,7 @@ package com.example.Document_microservice.service;
 
 
 import com.example.Document_microservice.config.ConstantResponseExceptionText;
+import com.example.Document_microservice.exeption.TheStoryDoesNotBelongToThisUser;
 import com.example.Document_microservice.exeption.TheUserHasSeveralRoles;
 import com.example.Document_microservice.exeption.UserDoesNotHaveARole;
 import com.example.Document_microservice.exeption.Validate;
@@ -44,5 +45,15 @@ public class CheckerDataAccountImpl implements CheckerDataAccount {
         List<String> role = contactingMicroserviceAccount.requestForRoleRecognition(token, accountId);
         if (!role.contains("ROLE_DOCTOR"))
             throw new UserDoesNotHaveARole(new Validate(ConstantResponseExceptionText.USER_DOES_NOT_HAVE_THIS_ROLE.formatted(accountId, "ROLE_DOCTOR")));
+    }
+
+    @Override
+    public void verificationUser(Long pacientIdOfHistory, Long userId) {
+       if(!Objects.equals(pacientIdOfHistory, userId)) throw
+               new TheStoryDoesNotBelongToThisUser(
+                       new Validate(
+                               ConstantResponseExceptionText.ID_NOT_BELONG_USER.formatted(userId)
+
+       ));
     }
 }
