@@ -2,6 +2,7 @@ package com.example.Account_microservice.user.service.user;
 
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
+import com.example.Account_microservice.user.model.Role;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -100,6 +102,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<String> getRolesUserById(Long id) {
+        if(!userRepository.existsById(id)) throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
+        return userRepository.getRolesById(id);
     }
 
 }

@@ -50,7 +50,6 @@ public class AccountRestController {
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/Update")
     public ResponseEntity<?> updateCurrentAccount(@RequestBody RequestUpdateUserAccountDto updateAccountDto,
-
                                                   HttpServletRequest request)  {
 
             String token = request.getHeader("Authorization").substring(7);
