@@ -1,0 +1,13 @@
+spring:
+    application:
+        name: Document-microservice
+
+    datasource:
+        url: jdbc:postgresql://localhost:5433/mydb
+        username: postgres
+        password: 123
+
+
+
+server:
+    port: 8084
