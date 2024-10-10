@@ -1,0 +1,16 @@
+spring:
+    application:
+        name: Hospital-microservice
+
+    datasource:
+        url: jdbc:postgresql://localhost:5433/mydb
+        username: postgres
+        password: 123
+
+    jpa:
+        hibernate:
+            ddl-auto: update
+
+
+server:
+    port: 8082
