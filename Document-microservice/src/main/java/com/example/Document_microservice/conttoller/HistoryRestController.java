@@ -17,6 +17,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/History")
 @RequiredArgsConstructor
@@ -59,6 +61,19 @@ public class HistoryRestController {
 
         return ResponseEntity.ok().body(
                 dto
+        );
+    }
+
+    @GetMapping("Account/{pacientId:\\d+}")
+    public ResponseEntity<List<ResponseHistoryDto>> getAllHistoryUserByIdUser(@PathVariable(name = "pacientId") Long pacientId,
+                                                                              @RequestHeader("Authorization") String authorizationHeader) {
+
+        historyDataValidate.verification(authorizationHeader, pacientId);
+
+        return ResponseEntity.ok().body(
+                mapperHistory.toDto(
+                        historyService.getAllHistoryByPacientId(pacientId)
+                )
         );
     }
 

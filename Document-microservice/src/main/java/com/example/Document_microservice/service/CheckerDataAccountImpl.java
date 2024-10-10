@@ -7,6 +7,7 @@ import com.example.Document_microservice.exeption.TheUserHasSeveralRoles;
 import com.example.Document_microservice.exeption.UserDoesNotHaveARole;
 import com.example.Document_microservice.exeption.Validate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,12 +15,14 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CheckerDataAccountImpl implements CheckerDataAccount {
 
     private final ContactingMicroserviceAccount contactingMicroserviceAccount;
 
 
     private String getRole(List<String> roles, Long accountId) {
+        log.info("{}", roles);
         if (roles.size() == 1) {
             return roles.get(0);
         } else
