@@ -10,5 +10,6 @@ public record RequestHistoryDto(
         @jakarta.validation.constraints.NotNull(message = "поле {%s} не должно быть  null") Long pacientId,
         @jakarta.validation.constraints.NotNull(message = "поле {%s} не должно быть  null") Long hospitalId,
         @jakarta.validation.constraints.NotNull(message = "поле {%s}  не должно быть  null") Long doctorId,
+        @jakarta.validation.constraints.NotNull(message = "поле {%s}  не должно быть  null") String room,
         @jakarta.validation.constraints.NotEmpty(message = "поле {%s} не должно быть пустым") String data) {
 }

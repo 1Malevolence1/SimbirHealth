@@ -105,7 +105,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<Role> getRolesUserById(Long id) {
+    public List<String> getRolesUserById(Long id) {
+        if(!userRepository.existsById(id)) throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
         return userRepository.getRolesById(id);
     }
 

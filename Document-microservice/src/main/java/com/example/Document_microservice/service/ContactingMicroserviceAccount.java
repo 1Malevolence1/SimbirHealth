@@ -5,4 +5,5 @@ import java.util.List;
 public interface ContactingMicroserviceAccount {
 
     List<String> requestForRoleRecognition(String token, Long accountId);
+
 }

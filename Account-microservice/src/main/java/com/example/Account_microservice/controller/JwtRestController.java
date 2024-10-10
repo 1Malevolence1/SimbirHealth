@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/jwt")
@@ -22,7 +23,7 @@ import java.util.List;
 public class JwtRestController {
 
     private final JwtService jwtService;
-    private final JwtExtractService jwtExtractService;
+
     private final UserService userService;
 
     @GetMapping()
@@ -37,8 +38,8 @@ public class JwtRestController {
 
     @GetMapping("/roles/{accountId:\\d+}")
     public ResponseEntity<ResponseRolesUser> getDecodingJwtRoles(@PathVariable("accountId") Long id) {
-
-        List<String> roles = userService.getRolesUserById(id).stream().map(Role::getRoleName).toList();
+        List<String> roles = userService.getRolesUserById(id);
+        log.info("{}" , roles);
         return ResponseEntity.ok().body(new ResponseRolesUser(roles));
     }
 }
