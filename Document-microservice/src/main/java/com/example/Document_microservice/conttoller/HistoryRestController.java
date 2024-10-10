@@ -1,6 +1,7 @@
 package com.example.Document_microservice.conttoller;
 
 
+import com.example.Document_microservice.config.ConstantResponseSuccessfulText;
 import com.example.Document_microservice.convert.manager.ManagerMapperHistory;
 import com.example.Document_microservice.dto.RequestHistoryDto;
 import com.example.Document_microservice.service.HistoryDataValidate;
@@ -34,16 +35,32 @@ public class HistoryRestController {
             } else throw new BindException(bindingResult);
         } else {
 
-
-
-
             historyDataValidate.validate(authorizationHeader, dto);
             historyService.save(
                     mapperHistory.toModel(
                             dto
                     )
             );
-            return ResponseEntity.ok().body("");
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.CREATE_HISTORY_OK);
         }
     }
-}
+
+
+
+    @PutMapping("{historyId:\\d+}")
+    public ResponseEntity<String> updateHistory(@RequestBody RequestHistoryDto dto,
+                                                @PathVariable(name = "historyId") Long historyId,
+                                                @RequestHeader("Authorization") String authorizationHeader) {
+
+
+            historyDataValidate.validate(authorizationHeader, dto);
+            historyService.update(
+                    mapperHistory.toModel(
+                            dto,
+                            historyId
+                    )
+
+            );
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_HISTORY_OK);
+        }
+    }

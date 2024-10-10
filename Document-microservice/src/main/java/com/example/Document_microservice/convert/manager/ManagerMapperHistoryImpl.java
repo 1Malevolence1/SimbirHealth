@@ -14,4 +14,9 @@ public class ManagerMapperHistoryImpl implements ManagerMapperHistory {
     public History toModel(RequestHistoryDto dto) {
         return mapperHistory.toModel(dto);
     }
+
+    @Override
+    public History toModel(RequestHistoryDto dto, Long historyId) {
+        return mapperHistory.toModel(dto, historyId);
+    }
 }

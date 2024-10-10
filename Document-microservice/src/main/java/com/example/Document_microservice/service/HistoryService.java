@@ -5,4 +5,5 @@ import com.example.Document_microservice.model.History;
 public interface HistoryService {
 
     void save(History history);
+    void update(History history);
 }

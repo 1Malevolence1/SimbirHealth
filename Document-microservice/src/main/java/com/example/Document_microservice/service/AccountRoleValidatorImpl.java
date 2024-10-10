@@ -13,7 +13,7 @@ public class AccountRoleValidatorImpl implements AccountRoleValidator {
 
     @Override
     public void validateAccount(String authorizationHeader, RequestHistoryDto dto) {
-        checkerMicroserviceAccount.checkPacient(authorizationHeader, dto.pacientId());
-        checkerMicroserviceAccount.checkDoctor(authorizationHeader, dto.doctorId());
+        if(dto.pacientId() != null) checkerMicroserviceAccount.checkPacient(authorizationHeader, dto.pacientId());
+        if(dto.doctorId() != null)  checkerMicroserviceAccount.checkDoctor(authorizationHeader, dto.doctorId());
     }
 }

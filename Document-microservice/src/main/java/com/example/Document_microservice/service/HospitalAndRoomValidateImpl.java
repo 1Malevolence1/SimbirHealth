@@ -13,6 +13,7 @@ public class HospitalAndRoomValidateImpl implements HospitalAndRoomValidate {
 
     @Override
     public void validateHospitalAndRoom(String token, RequestHistoryDto dto) {
-        checkerDataHospital.checkHospital(token, dto.hospitalId(), dto.room());
+        if(dto.hospitalId() != null) checkerDataHospital.checkHospital(token, dto.hospitalId(), dto.room());
+
     }
 }

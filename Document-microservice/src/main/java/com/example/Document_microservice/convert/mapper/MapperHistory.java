@@ -8,4 +8,5 @@ import org.mapstruct.Mapper;
 public interface MapperHistory {
 
     History toModel(RequestHistoryDto dto);
+    History toModel(RequestHistoryDto dto, Long id);
 }
