@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new JwtAuthenticationResponse(jwt);
     }
 
-    // @TODO обработать authenticationManager
+
     @Override
     public JwtAuthenticationResponse signIn(RequestSingInUserAccountDto singInDto) {
 
