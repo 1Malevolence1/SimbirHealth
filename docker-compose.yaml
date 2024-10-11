@@ -5,14 +5,12 @@ services:
     restart: "no"
     ports:
       - "5433:5432"
-    volumes:
-      - database_data:/var/lib/postgresql/data
+
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: mydb
 
 
-volumes:
-  database_data:
+
 

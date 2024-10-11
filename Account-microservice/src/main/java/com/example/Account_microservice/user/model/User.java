@@ -3,6 +3,8 @@ package com.example.Account_microservice.user.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE user_id =?")
+@SQLRestriction(value = "deleted = false")
 public class User implements UserDetails {
 
 
@@ -47,6 +51,9 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
