@@ -12,6 +12,6 @@ import java.util.List;
 public interface HospitalRepository extends JpaRepository<Hospital, Long> {
 
 
-    @Query(value = "SELECT DISTINCT h.* FROM hospital AS h JOIN rooms AS r USING(hospital_id) WHERE h.deleted = false LIMIT :count OFFSET :from",nativeQuery = true)
+    @Query(value = "SELECT DISTINCT h.* FROM hospital AS h JOIN room AS r USING(hospital_id) WHERE h.deleted = false LIMIT :count OFFSET :from",nativeQuery = true)
     List<Hospital> findAllHospitalsWithParamFormAndCount(@Param("from") Integer from, @Param("count") Integer count);
 }

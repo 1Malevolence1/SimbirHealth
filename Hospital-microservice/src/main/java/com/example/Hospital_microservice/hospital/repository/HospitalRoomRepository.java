@@ -11,11 +11,11 @@ import java.util.List;
 public interface HospitalRoomRepository extends JpaRepository<Room, Long> {
 
 
-    @Query(value = "SELECT * FROM rooms WHERE rooms.hospital_id = :hospital_id", nativeQuery = true)
+    @Query(value = "SELECT r.* FROM room r JOIN hospital h USING(hospital_id) WHERE h.hospital_id = :hospital_id AND h.deleted = FALSE", nativeQuery = true)
     List<Room> findAllRoomsByIdHospital(@Param("hospital_id") Long id);
 
 
     @Modifying
-    @Query(value = "DELETE FROM rooms WHERE hospital_id = :hospital_id", nativeQuery = true)
+    @Query(value = "DELETE FROM room WHERE hospital_id = :hospital_id", nativeQuery = true)
     void deleteAllRoomsForHospitalById(@Param("hospital_id") Long id);
 }

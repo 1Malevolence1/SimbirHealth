@@ -24,7 +24,8 @@ public class Hospital {
     @Column(name = "hospital_id")
     private Long id;
 
-    @Column(nullable = false)
+
+    @Column(name = "hospital_name", nullable = false)
     private String name;
 
     @Column(nullable = false)

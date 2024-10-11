@@ -6,14 +6,14 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "rooms")
+@Table(name = "room")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "room_id", nullable = false)
     private Long id;
 
     private String title;

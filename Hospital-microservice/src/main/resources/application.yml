@@ -9,7 +9,14 @@ spring:
 
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
+        defer-datasource-initialization: true
+
+    sql:
+        init:
+            schema-locations: classpath:schema.sql
+            data-locations: classpath:data.sql
+            mode: always
 
 
 server:

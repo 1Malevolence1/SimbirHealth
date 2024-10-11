@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "history")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -18,24 +18,25 @@ public class History {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "history_id")
     private Long id;
-
+    @Column(name = "history_date", nullable = false)
     private LocalDateTime date;
 
 
-    @Column(name = "pacient_id")
+    @Column(name = "pacient_id", nullable = false)
     private Long pacientId;
 
-    @Column(name = "hospital_id")
+    @Column(name = "hospital_id", nullable = false)
     private Long hospitalId;
 
-    @Column(name = "doctor_id")
+    @Column(name = "doctor_id", nullable = false)
     private Long doctorId;
 
-
+    @Column(nullable = false)
     private String data;
 
-    @Column(name = "room")
+    @Column(name = "room", nullable = false)
     private String room;
 
 }
