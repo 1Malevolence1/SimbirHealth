@@ -8,10 +8,15 @@ spring:
         username: postgres
         password: 123
 
+    sql:
+        init:
+            schema-locations:
+            data-locations:
+            mode: always
     jpa:
         hibernate:
-            ddl-auto: update
-
+            ddl-auto: none
+        defer-datasource-initialization: true
 
 server:
     port: 8083

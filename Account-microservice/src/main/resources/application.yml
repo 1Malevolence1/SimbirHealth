@@ -6,12 +6,27 @@ spring:
         url: jdbc:postgresql://localhost:5433/mydb
         username: postgres
         password: 123
+        initialization-model: always
+
+    sql:
+        init:
+            schema-locations: classpath:schema.sql
+            data-locations: classpath:data.sql
+            mode: always
+
 
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
+        defer-datasource-initialization: true
 
-   
+
+
+    show-sql: true
+    properties:
+        hibernate.format_sql: true
+
+
 
 server:
     port: 8081
