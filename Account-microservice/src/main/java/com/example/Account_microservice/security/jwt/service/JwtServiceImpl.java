@@ -176,10 +176,8 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
             return false;
         }
         Long userId = extractUserId(token);
-
-
         User user = userService.findUserById(userId);
-        if (user == null) {
+        if (user == null || user.getDeleted()) {
             return false;
 
 
