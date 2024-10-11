@@ -33,6 +33,7 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
 
     @Override
     public List<ResponseHospitalRoomsDto> getAllHospitalRooms(Long id) {
+        hospitalService.findHospitalById(id);
         return mapperHospitalRooms.toDto(hospitalService.findAllHospitalRooms(id));
     }
 

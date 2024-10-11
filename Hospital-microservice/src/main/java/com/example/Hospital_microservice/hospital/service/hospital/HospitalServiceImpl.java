@@ -25,6 +25,7 @@ public class HospitalServiceImpl implements HospitalService {
     @Override
     @Transactional
     public void save(Hospital hospital) {
+        hospital.setDeleted(false);
         hospitalRepository.save(hospital);
     }
 
