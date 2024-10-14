@@ -56,6 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             ResponseEntity<?> responseEntity = restTemplate.getForEntity("http://localhost:8081/api/Authentication/Validate?accessToken={accessToken}", Void.class, params);
             if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
 
                 return;
