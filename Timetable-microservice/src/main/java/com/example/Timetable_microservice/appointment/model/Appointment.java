@@ -26,4 +26,7 @@ public class Appointment {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "timetable_id")
+    private Long timetableId;
+
 }
