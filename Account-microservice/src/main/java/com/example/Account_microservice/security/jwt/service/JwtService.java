@@ -13,7 +13,7 @@ public interface JwtService {
     boolean isTokenValid(String token, UserDetails userDetails);
 
 
-    boolean isTokenActive(String token);
+    void isTokenActive(String token);
 
     JwtDecongestingDtoResponse tokenDecoding(String token);
 }

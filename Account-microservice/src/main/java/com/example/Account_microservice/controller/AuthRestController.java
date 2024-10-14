@@ -16,6 +16,7 @@ import com.example.Account_microservice.user.dto.RequestSingInUserAccountDto;
 import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto;
 import com.example.Account_microservice.user.service.guest_user.GuestUserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,8 +30,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/Authentication")
@@ -47,6 +46,11 @@ public class AuthRestController {
 
     @PostMapping("/SignUp")
     @Operation(summary = "Регестрация нового аккаунта")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Польователь добавлен в базу данных", content = @Content(schema = @Schema(type = "string",example = ConstantResponseSuccessfulText.REGISTER_NEW_USER))),
+            @ApiResponse(responseCode = "400", description = "Вернётся список полей, в которых не верно указанны данные",
+            content = @Content(array =  @ArraySchema(schema = @Schema(implementation = Validate.class))))
+    })
     public ResponseEntity<?> singUp(@Valid @RequestBody RequestSingInGuestUserDto singUpGuestUserDto,
                                     BindingResult bindingResult) throws BindException {
         log.info("данные для регестрации: {}", singUpGuestUserDto);
@@ -58,7 +62,7 @@ public class AuthRestController {
 
             guestUserService.addAccount(singUpGuestUserDto);
             log.info("аккаунт зарегестрирован");
-            return ResponseEntity.ok().body("Аккаунт успешно зарегестрирован");
+            return ResponseEntity.ok().body(ConstantResponseSuccessfulText.REGISTER_NEW_USER);
         }
     }
 
@@ -81,7 +85,7 @@ public class AuthRestController {
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/SignOut")
     @SecurityRequirement(name = "JWT")
-    @Operation(summary = "Выход из аккаунта")
+    @Operation(summary = "Выход из аккаунта", description = "После выхода из аккаунта, токен поподает в чёрный списко токенов. Испльзовать его потоврно будет нельзя")
     public ResponseEntity<?> signOut(@RequestHeader("Authorization") String authorizationHeader) {
 
 
@@ -103,16 +107,16 @@ public class AuthRestController {
             @ApiResponse(responseCode = "403", description = "ошибка, возникшая при обработке токена",
                     content =
                     @Content(schema = @Schema(oneOf = {ValidateToken.class, Validate.class}))),
-            @ApiResponse(responseCode = "200", description = "вернёт статуст active(true)")})
+            @ApiResponse(responseCode = "200", description = "вернёт статуст 200, если нет ошибок")})
     public ResponseEntity<?> introspect(@RequestParam(name = "accessToken") String token) {
         log.info("начался мето проверки");
-        boolean active = jwtService.isTokenActive(token);
-        return ResponseEntity.ok().body(Map.of("active", active));
+        jwtService.isTokenActive(token);
+        return ResponseEntity.ok().build();
     }
 
 
     @PostMapping("/Refresh")
-    @Operation(summary = "Обновление пары токенов")
+    @Operation(summary = "Обновление пары токенов",  description ="Cтарый токен поподает в чёрный списко токенов. Испльзовать его потоврно будет нельзя")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "403", description = "ошибка, возникшая при обработке токена",
                     content =

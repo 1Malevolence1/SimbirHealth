@@ -1,9 +1,11 @@
 package com.example.Account_microservice.security.jwt.service;
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
+import com.example.Account_microservice.exception.Validate;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthority;
 import com.example.Account_microservice.security.jwt.dto.JwtDecongestingDtoResponse;
+import com.example.Account_microservice.security.jwt.exception.BadDataTokenCustomerException;
 import com.example.Account_microservice.security.jwt.exception.TokenBlackListException;
 import com.example.Account_microservice.security.jwt.exception.ValidateToken;
 import com.example.Account_microservice.user.model.User;
@@ -163,9 +165,9 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
 
 
     @Override
-    public boolean isTokenActive(String token) {
+    public void isTokenActive(String token) {
 
-        if(blackListTokenService.isTokenBlacklisted(token)){
+        if (blackListTokenService.isTokenBlacklisted(token)) {
             throw new TokenBlackListException(new ValidateToken(
                     ConstantResponseExceptionText.VALIDATE_TOKEN_BLACK_LIST,
                     token
@@ -174,16 +176,15 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
 
 
         if (token == null || isTokenExpired(token)) {
-            return false;
+            throw new BadDataTokenCustomerException(new Validate(ConstantResponseExceptionText.BAD_TOKEN));
         }
         Long userId = extractUserId(token);
         User user = userService.findUserById(userId);
         if (user == null || user.getDeleted()) {
-            return false;
-
-
-        }return true;
+            throw new BadDataTokenCustomerException(new Validate(ConstantResponseExceptionText.BAD_TOKEN));
+        }
     }
+
 
     @Override
     public JwtDecongestingDtoResponse tokenDecoding(String token) {

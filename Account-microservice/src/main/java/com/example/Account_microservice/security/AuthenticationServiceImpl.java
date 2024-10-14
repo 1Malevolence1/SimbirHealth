@@ -7,7 +7,6 @@ import com.example.Account_microservice.exception.Validate;
 import com.example.Account_microservice.security.jwt.black_list.dto.BlackListTokenDto;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
-import com.example.Account_microservice.security.jwt.exception.BadDataTokenCustomerException;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInUserAccountDto;
@@ -36,7 +35,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final BlackListTokenService blackListTokenService;
-
 
 
     @Override
@@ -70,13 +68,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtAuthenticationResponse refreshToken(String oldToken) {
-        if(!jwtService.isTokenActive(oldToken))
-            throw new BadDataTokenCustomerException(new Validate(ConstantResponseExceptionText.BAD_TOKEN));
+        jwtService.isTokenActive(oldToken);
         blackListTokenService.save(
                 new BlackListTokenDto(
                         oldToken,
                         jwtExtractService.extractExpirationGetLocalDataTime((oldToken)
-                )));
+                        )));
         Long userId = jwtExtractService.extractUserId(oldToken);
         User user = userService.findUserById(userId);
         String refreshToken = jwtService.generateRefreshToken(user);
