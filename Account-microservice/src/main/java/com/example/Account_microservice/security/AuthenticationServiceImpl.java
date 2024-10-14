@@ -4,7 +4,10 @@ package com.example.Account_microservice.security;
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.exception.BadRequestSingInCustomer;
 import com.example.Account_microservice.exception.Validate;
+import com.example.Account_microservice.security.jwt.black_list.dto.BlackListTokenDto;
+import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
+import com.example.Account_microservice.security.jwt.exception.BadDataTokenCustomerException;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.RequestSingInUserAccountDto;
@@ -32,6 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtExtractService jwtExtractService;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final BlackListTokenService blackListTokenService;
 
 
 
@@ -52,6 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     singInDto.username(),
                     singInDto.password())
             );
+
         } catch (BadCredentialsException e) {
             throw new BadRequestSingInCustomer(new Validate(ConstantResponseExceptionText.INVALID_CREDENTIALS_MESSAGE)
             );
@@ -64,11 +69,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public JwtAuthenticationResponse refreshToken(String token) {
-        Long userId = jwtExtractService.extractUserId(token);
-        User user = userService.findUserById(userId); // exception not found
-        String refreshToken = jwtService.generateRefreshToken(user); // exception другая ошибка связанная с токеном
-        log.info("---------------> {}", refreshToken.equals(token));
+    public JwtAuthenticationResponse refreshToken(String oldToken) {
+        if(!jwtService.isTokenActive(oldToken))
+            throw new BadDataTokenCustomerException(new Validate(ConstantResponseExceptionText.BAD_TOKEN));
+        blackListTokenService.save(
+                new BlackListTokenDto(
+                        oldToken,
+                        jwtExtractService.extractExpirationGetLocalDataTime((oldToken)
+                )));
+        Long userId = jwtExtractService.extractUserId(oldToken);
+        User user = userService.findUserById(userId);
+        String refreshToken = jwtService.generateRefreshToken(user);
         return new JwtAuthenticationResponse(refreshToken);
     }
 

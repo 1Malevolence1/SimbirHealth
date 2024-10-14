@@ -20,3 +20,13 @@ CREATE TABLE IF NOT EXISTS public.user_roles (
     user_id INT REFERENCES public.users(user_id),
     PRIMARY KEY (role_id, user_id)
 );
+
+
+CREATE TABLE IF NOT EXISTS public.black_listed_token(
+    black_listed_token_id serial primary key,
+    token text not null,
+    expiration_time timestamp not null
+);
+
+
+

@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +67,10 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    @Override
+    public LocalDateTime extractExpirationGetLocalDataTime(String token) {
+        return extractExpiration(token).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
 
 
     @Override
@@ -149,11 +155,6 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
 
 
 
-    @Override
-    public Long getExpirationTime(String token) {
-        Date expirationDate = extractExpiration(token);
-        return expirationDate.getTime() - System.currentTimeMillis();
-    }
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)

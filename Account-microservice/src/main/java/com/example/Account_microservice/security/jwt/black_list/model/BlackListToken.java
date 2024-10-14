@@ -4,6 +4,8 @@ package com.example.Account_microservice.security.jwt.black_list.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "black_listed_token")
 @Getter
@@ -21,6 +23,6 @@ public class BlackListToken {
     private String token;
 
     @Column(name = "expiration_time")
-    private Long expirationTime;
+    private LocalDateTime expirationTime;
 
 }
