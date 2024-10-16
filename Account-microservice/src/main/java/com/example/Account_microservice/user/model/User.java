@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    // TODO добавить проверку ролей. Нужно проверить входящие роли на наличе в базе данных
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
             name = "user_roles",

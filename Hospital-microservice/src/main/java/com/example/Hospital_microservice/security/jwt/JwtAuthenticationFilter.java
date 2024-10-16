@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -50,16 +51,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         Map<String, String> params = new HashMap<>();
         params.put("accessToken", jwt);
-        ResponseEntity<Map> validationResponse;
+
 
         try {
-            validationResponse = restTemplate.getForEntity("http://localhost:8081/api/Authentication/Validate?accessToken={accessToken}", Map.class, params);
-            if (validationResponse.getBody() == null || !Boolean.TRUE.equals(validationResponse.getBody().get("active"))) {
+            ResponseEntity<?> responseEntity = restTemplate.getForEntity("http://localhost:8081/api/Authentication/Validate?accessToken={accessToken}", Void.class, params);
+            if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
+
                 return;
             }
         } catch (Exception e) {
-            log.error("Ошибка при валидации токена: {}", e.getMessage());
+            log.error("Ошибка при валидации токена");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Ошибка при валидации токена.");
             return;
         }

@@ -2,11 +2,13 @@ package com.example.Account_microservice.user.service.user;
 
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
+import com.example.Account_microservice.exception.Validate;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,10 +30,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setDeleted(false);
-        return userRepository.save(user);
-
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setDeleted(false);
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException exception) {
+            throw new UsernameAlreadyExistsException(new Validate(ConstantResponseExceptionText.USERNAME_ALREADY_EXISTS));
+        }
     }
 
 
@@ -57,22 +62,27 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(User updateUser, Long id) {
+        try {
 
-        userRepository.findById(id).ifPresentOrElse(
+            userRepository.findById(id).ifPresentOrElse(
 
-                user -> {
-                    if (updateUser.getUsername() != null) user.setUsername(updateUser.getUsername());
-                    if (updateUser.getLastName() != null) user.setLastName(updateUser.getLastName());
-                    if (updateUser.getFirstName() != null) user.setFirstName(updateUser.getFirstName());
-                    if (updateUser.getPassword() != null) user.setPassword(user.getPassword());
-                    if (updateUser.getRoles() != null){
-                        userRepository.deleteAllRolesForUser(id);
-                        user.setRoles(updateUser.getRoles());
+                    user -> {
+                        if (updateUser.getUsername() != null) user.setUsername(updateUser.getUsername());
+                        if (updateUser.getLastName() != null) user.setLastName(updateUser.getLastName());
+                        if (updateUser.getFirstName() != null) user.setFirstName(updateUser.getFirstName());
+                        if (updateUser.getPassword() != null)
+                            user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+                        if (updateUser.getRoles() != null) {
+                            userRepository.deleteAllRolesForUser(id);
+                            user.setRoles(updateUser.getRoles());
+                        }
+                    }, () -> {
+                        throw new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
                     }
-                }, () -> {
-                    throw new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
-                }
-        );
+            );
+        } catch (DataIntegrityViolationException exception) {
+            throw new UsernameAlreadyExistsException(new Validate(ConstantResponseExceptionText.USERNAME_ALREADY_EXISTS));
+        }
     }
 
     @Override
@@ -82,12 +92,10 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public List<User> getUsersFromOffsetWithLimit(Integer from, Integer count) {
         return userRepository.getUsersFromOffsetWithLimit(from, count);
     }
-
 
 
     @Override
@@ -102,7 +110,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<String> getRolesUserById(Long id) {
-        if(!userRepository.existsById(id)) throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
+        if (!userRepository.existsById(id))
+            throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id));
         return userRepository.getRolesById(id);
     }
 

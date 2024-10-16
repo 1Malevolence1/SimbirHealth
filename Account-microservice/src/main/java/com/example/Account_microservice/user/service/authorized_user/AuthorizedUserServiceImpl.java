@@ -28,7 +28,6 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
         log.info("Начался метод по обноволению данных текущего пользователя");
         log.info("Данные для обновления: {}", updateAccountDto);
         userService.update(
-
                 managerMapperAccount.toModelFromUpdate(updateAccountDto),
                 id
         );

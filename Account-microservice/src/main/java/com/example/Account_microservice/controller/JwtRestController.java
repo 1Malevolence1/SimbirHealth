@@ -2,24 +2,22 @@ package com.example.Account_microservice.controller;
 
 
 import com.example.Account_microservice.security.jwt.dto.JwtDecongestingDtoResponse;
-import com.example.Account_microservice.security.jwt.dto.JwtDecongestingRolesDtoResponse;
-import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.ResponseRolesUser;
-import com.example.Account_microservice.user.model.Role;
 import com.example.Account_microservice.user.service.user.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/jwt")
 @RequiredArgsConstructor
 @Slf4j
+@Hidden
 public class JwtRestController {
 
     private final JwtService jwtService;

@@ -1,7 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.users (
-    user_id SERIAL PRIMARY KEY,
-    username VARCHAR(255) NOT NULL
-);
+
 
 CREATE TABLE IF NOT EXISTS public.timetable (
     timetable_id SERIAL PRIMARY KEY,
