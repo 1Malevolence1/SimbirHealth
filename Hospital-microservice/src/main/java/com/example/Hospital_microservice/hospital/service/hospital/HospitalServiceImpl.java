@@ -31,8 +31,8 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Override
     @Transactional
-    public void update(Hospital hospital) {
-        hospitalRepository.findById(hospital.getId()).ifPresentOrElse(
+    public void update(Hospital hospital, Long id) {
+        hospitalRepository.findById(id).ifPresentOrElse(
                 updateHospital -> {
                     if(hospital.getName() != null) updateHospital.setName(hospital.getName());
                     if(hospital.getAddress() != null) updateHospital.setAddress(hospital.getAddress());
@@ -42,7 +42,7 @@ public class HospitalServiceImpl implements HospitalService {
                         updateHospital.setRooms(hospital.getRooms());
                     }
                 }, () -> {
-                    throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_HOSPITAL_BY_ID.formatted(hospital.getId()));
+                    throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_HOSPITAL_BY_ID.formatted(id));
                 }
         );
     }
