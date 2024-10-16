@@ -16,4 +16,5 @@ public interface AppointmentService {
     void updateActiveOnFalse(Long userId, Long appointmentId);
     void updateActiveOnFalse(Long appointmentId);
     void deleteAllAppointmentByIdTimetable(Long timetable);
+    void saveAppointments(List<Appointment> appointments);
 }

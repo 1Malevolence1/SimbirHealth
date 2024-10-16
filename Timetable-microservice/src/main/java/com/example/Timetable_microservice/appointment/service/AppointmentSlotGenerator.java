@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AppointmentSlotGenerator {
 
-    List<AppointmentDto> generate(LocalDateTime from, LocalDateTime to);
+    List<AppointmentDto> generate(LocalDateTime from, LocalDateTime to, Long timetableId);
 }

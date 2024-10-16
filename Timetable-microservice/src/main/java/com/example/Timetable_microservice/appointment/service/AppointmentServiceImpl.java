@@ -14,6 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -61,6 +62,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional
     public void deleteAllAppointmentByIdTimetable(Long timetable) {
         appointmentRepository.deleteAllByIdTimetable(timetable);
+    }
+
+    @Override
+    @Transactional
+    public void saveAppointments(List<Appointment> appointments) {
+        appointmentRepository.saveAll(appointments);
     }
 }
 

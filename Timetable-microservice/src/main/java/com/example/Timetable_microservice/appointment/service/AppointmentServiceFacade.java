@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AppointmentServiceFacade {
 
-    List<Appointment> generateAppointments(LocalDateTime from, LocalDateTime to);
+    List<Appointment> generateAppointments(LocalDateTime from, LocalDateTime to, Long timetableId);
     List<ResponseAppointmentsDto> getAllAvailableSlots(Long id);
     void makeAppointment(LocalDateTime time, Long id);
     void cancelAppointment(Long userId, Long appointmentId);

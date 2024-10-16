@@ -40,7 +40,7 @@ public class Timetable  {
 
     private String room;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "timetable_id")
+
+    @OneToMany(mappedBy = "timetable", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
 }

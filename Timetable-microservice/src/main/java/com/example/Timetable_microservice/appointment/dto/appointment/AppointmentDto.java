@@ -5,6 +5,6 @@ import java.time.LocalDateTime;
 public record AppointmentDto(
 
          LocalDateTime recording,
-         Boolean active
-) {
+         Boolean active,
+         Long timetableId) {
 }

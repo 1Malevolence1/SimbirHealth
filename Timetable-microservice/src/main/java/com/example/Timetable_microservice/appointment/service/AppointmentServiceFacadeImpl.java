@@ -31,9 +31,9 @@ public class AppointmentServiceFacadeImpl implements AppointmentServiceFacade {
 
 
     @Override
-    public List<Appointment> generateAppointments(LocalDateTime from, LocalDateTime to) {
+    public List<Appointment> generateAppointments(LocalDateTime from, LocalDateTime to, Long timetableId) {
         return mapperAppointment.toModel(
-                appointmentSlotGenerator.generate(from, to));
+                appointmentSlotGenerator.generate(from, to, timetableId));
     }
 
     @Override

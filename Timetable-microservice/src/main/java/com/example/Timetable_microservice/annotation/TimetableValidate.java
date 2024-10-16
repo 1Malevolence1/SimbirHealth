@@ -1,4 +1,4 @@
-package com.example.Timetable_microservice;
+package com.example.Timetable_microservice.annotation;
 
 import java.time.LocalDateTime;
 

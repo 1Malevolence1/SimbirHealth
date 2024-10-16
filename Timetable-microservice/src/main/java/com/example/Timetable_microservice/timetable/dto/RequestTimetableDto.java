@@ -1,7 +1,7 @@
 package com.example.Timetable_microservice.timetable.dto;
 
-import com.example.Timetable_microservice.TimetableValidate;
-import com.example.Timetable_microservice.ValidTimetable;
+import com.example.Timetable_microservice.annotation.TimetableValidate;
+import com.example.Timetable_microservice.annotation.ValidTimetable;
 
 import java.time.LocalDateTime;
 

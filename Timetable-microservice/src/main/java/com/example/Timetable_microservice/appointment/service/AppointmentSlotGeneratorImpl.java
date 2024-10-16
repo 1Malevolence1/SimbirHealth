@@ -17,14 +17,15 @@ public class AppointmentSlotGeneratorImpl implements AppointmentSlotGenerator {
 
 
     @Override
-    public List<AppointmentDto> generate(LocalDateTime from, LocalDateTime to) {
+    public List<AppointmentDto> generate(LocalDateTime from, LocalDateTime to, Long timetableId) {
         List<AppointmentDto> appointmentDtoList = new ArrayList<>();
         LocalDateTime slot = from;
         while (slot.isBefore(to)) {
             appointmentDtoList.add(
                     new AppointmentDto(
                             slot,
-                            false
+                            false,
+                            timetableId
                     )
             );
             slot = slot.plusMinutes(30);

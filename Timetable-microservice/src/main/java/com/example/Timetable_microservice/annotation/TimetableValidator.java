@@ -1,8 +1,9 @@
-package com.example.Timetable_microservice;
+package com.example.Timetable_microservice.annotation;
 
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
 import java.time.Duration;
 
 public class TimetableValidator implements ConstraintValidator<ValidTimetable, TimetableValidate> {

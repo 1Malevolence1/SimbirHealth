@@ -9,7 +9,7 @@ public interface TimetableService {
 
 
 
-    void save(Timetable timetable);
+    Timetable save(Timetable timetable);
 
     void update(Timetable timetable);
 
