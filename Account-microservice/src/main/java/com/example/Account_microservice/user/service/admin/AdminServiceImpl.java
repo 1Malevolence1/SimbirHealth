@@ -1,9 +1,9 @@
 package com.example.Account_microservice.user.service.admin;
 
 import com.example.Account_microservice.convert.manager_mapper.ManagerMapperAccount;
+import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
 import com.example.Account_microservice.user.dto.admin.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.admin.RequestAdminUpdateAccount;
-import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void update(RequestAdminUpdateAccount requestUpdateAccountDto, Long id) {
         User user = managerMapperAccount.toModelFromAdminUpdate(requestUpdateAccountDto);
-        user.setPassword(passwordEncoder.encode(requestUpdateAccountDto.password()));
         userService.update(user, id);
     }
 

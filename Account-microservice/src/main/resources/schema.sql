@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS public.users (
     user_id SERIAL PRIMARY KEY,
     last_name VARCHAR(30) NOT NULL,
     first_name VARCHAR(30) NOT NULL,
-    username VARCHAR(30) NOT NULL,
+    username VARCHAR(30) NOT NULL unique,
     password TEXT NOT NULL,
     deleted BOOLEAN NOT null
 );

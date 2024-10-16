@@ -3,6 +3,7 @@ package com.example.Account_microservice.controller;
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.config.ConstantResponseSuccessfulText;
+import com.example.Account_microservice.config.ManagerAuthorizationRequest;
 import com.example.Account_microservice.exception.Validate;
 import com.example.Account_microservice.security.AuthenticationService;
 import com.example.Account_microservice.security.jwt.black_list.dto.BlackListTokenDto;
@@ -22,6 +23,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/Authentication")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Authentication", description = "все запросы начинающиеся с Authentication")
 public class AuthRestController {
 
     private final AuthenticationService authenticationService;
@@ -42,6 +46,7 @@ public class AuthRestController {
     private final JwtService jwtService;
     private final JwtExtractService extractService;
     private final BlackListTokenService blackListService;
+    private final ManagerAuthorizationRequest managerAuthorizationRequest;
 
 
     @PostMapping("/SignUp")
@@ -85,11 +90,11 @@ public class AuthRestController {
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/SignOut")
     @SecurityRequirement(name = "JWT")
-    @Operation(summary = "Выход из аккаунта", description = "После выхода из аккаунта, токен поподает в чёрный списко токенов. Испльзовать его потоврно будет нельзя")
-    public ResponseEntity<?> signOut(@RequestHeader("Authorization") String authorizationHeader) {
+    @Operation(summary = "Выход из аккаунта", description = "Только авторизованные пользователи. После выхода из аккаунта, токен поподает в чёрный списко токенов. Испльзовать его потоврно будет нельзя")
+    public ResponseEntity<?> signOut(HttpServletRequest request) {
 
 
-        String token = authorizationHeader.substring(7);
+        String token = managerAuthorizationRequest.getToken(request);
 
         blackListService.save(
                 new BlackListTokenDto(
