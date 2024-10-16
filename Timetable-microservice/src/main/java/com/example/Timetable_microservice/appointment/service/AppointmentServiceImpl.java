@@ -42,8 +42,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public void updateActiveOnTrue(LocalDateTime time, Long userId) {
-        appointmentRepository.updateSlotActiveToTrue(time, userId);
+    public void updateActiveOnTrue(LocalDateTime time, Long timetableId, Long userId) {
+        log.info("{}, {}, {}", time, timetableId, userId);
+        appointmentRepository.updateSlotActiveToTrue(time, timetableId, userId);
     }
 
     @Override

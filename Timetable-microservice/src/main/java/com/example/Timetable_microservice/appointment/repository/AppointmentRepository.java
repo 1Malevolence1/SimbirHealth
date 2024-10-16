@@ -27,11 +27,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
     @Modifying
-    @Query(value = "UPDATE appointment  SET active = true, user_id = :userId WHERE recording = :time",nativeQuery = true)
-    void updateSlotActiveToTrue(@Param("time") LocalDateTime time,@Param("userId") Long userId);
+    @Query(value = "UPDATE appointment SET active = true, user_id = :userId WHERE recording = :time and  timetable_id= :timetableId",nativeQuery = true)
+    void updateSlotActiveToTrue(@Param("time") LocalDateTime time, @Param("timetableId") Long timetableId, @Param("userId") Long userId);
 
 
-    @Query(value = "SELECT a.user_id FROM appointment AS a WHERE a.id = :appointmentId ", nativeQuery = true)
+    @Query(value = "SELECT a.user_id FROM appointment AS a WHERE a.appointment_id = :appointmentId ", nativeQuery = true)
     Long retrieveUserIdFromAppointment(@Param("appointmentId") Long id);
 
 

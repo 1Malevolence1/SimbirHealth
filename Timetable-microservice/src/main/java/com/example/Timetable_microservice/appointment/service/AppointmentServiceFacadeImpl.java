@@ -7,6 +7,7 @@ import com.example.Timetable_microservice.appointment.exception.RecordLockedByAn
 import com.example.Timetable_microservice.appointment.model.Appointment;
 import com.example.Timetable_microservice.timetable.config.ConstantResponseExceptionText;
 import com.example.Timetable_microservice.timetable.exception.Validate;
+import com.example.Timetable_microservice.timetable.model.Timetable;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +32,11 @@ public class AppointmentServiceFacadeImpl implements AppointmentServiceFacade {
 
 
     @Override
-    public List<Appointment> generateAppointments(LocalDateTime from, LocalDateTime to, Long timetableId) {
-        return mapperAppointment.toModel(
-                appointmentSlotGenerator.generate(from, to, timetableId));
+    public List<Appointment> generateAppointments(LocalDateTime from, LocalDateTime to, Timetable timetable) {
+        return appointmentSlotGenerator.generate(from, to, timetable);
     }
+
+
 
     @Override
     public List<ResponseAppointmentsDto> getAllAvailableSlots(Long id) {
@@ -42,9 +44,9 @@ public class AppointmentServiceFacadeImpl implements AppointmentServiceFacade {
     }
 
     @Override
-    public void makeAppointment(LocalDateTime time, Long id) {
-        log.info("{}, {}", time, id);
-        appointmentService.updateActiveOnTrue(time, id);
+    public void makeAppointment(LocalDateTime time, Long timetableId,  Long userId) {
+        log.info("{}, {}, {}", time, timetableId, userId);
+        appointmentService.updateActiveOnTrue(time, timetableId, userId);
     }
 
     @Override

@@ -10,4 +10,9 @@ public final class AuthorizationHeaderExtractorImpl implements AuthorizationHead
     public String getJwtToken(HttpServletRequest request){
           return request.getHeader("Authorization").substring(7);
     }
+
+    @Override
+    public String getAuthorization(HttpServletRequest request) {
+        return request.getHeader("Authorization");
+    }
 }

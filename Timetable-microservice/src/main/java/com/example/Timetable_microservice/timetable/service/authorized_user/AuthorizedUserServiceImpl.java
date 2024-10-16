@@ -54,8 +54,8 @@ public class AuthorizedUserServiceImpl implements AuthorizedUserService {
     }
 
     @Override
-    public void makeAppointment(LocalDateTime time, Long id) {
-         appointmentServiceFacade.makeAppointment(time, id);
+    public void makeAppointment(LocalDateTime time, Long timetableId, Long userId) {
+         appointmentServiceFacade.makeAppointment(time, timetableId, userId);
     }
 
     @Override

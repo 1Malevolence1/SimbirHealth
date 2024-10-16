@@ -271,15 +271,15 @@ public class TimetableRestController {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(type = "sting", example = ConstantResponseSuccessfulText.UPDATE_APPOINTMENT_TRUE))),
             @ApiResponse(responseCode = "404", description = "Елси не будет надено расписание", content = @Content(schema = @Schema(implementation = Validate.class)))
     })
-    public ResponseEntity<String> makeAppointment(@PathVariable(name = "timetableId") Long id,
+    public ResponseEntity<String> makeAppointment(@PathVariable(name = "timetableId") Long timetableId,
                                                   @RequestParam("time") LocalDateTime time,
-                                                  @RequestHeader("Authorization") String authorizationHeader) {
-        microserviceEntityChecker.checkEntityTimetable(id);
+                                                  HttpServletRequest request) {
+        microserviceEntityChecker.checkEntityTimetable(timetableId);
 
         authorizedUserService.makeAppointment(
                 time,
-                searchingFieldsBetweenMicroservicesUser.getUserId(authorizationHeader)
-        );
+                timetableId,
+                searchingFieldsBetweenMicroservicesUser.getUserId(authorizationHeader.getAuthorization(request)));
 
         return ResponseEntity.ok().body(
                 ConstantResponseSuccessfulText.UPDATE_APPOINTMENT_TRUE.formatted(time.toString())
