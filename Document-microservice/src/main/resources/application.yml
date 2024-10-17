@@ -1,0 +1,23 @@
+spring:
+    application:
+        name: Document-microservice
+
+    datasource:
+        url: jdbc:postgresql://localhost:5433/mydb
+        username: postgres
+        password: 123
+
+    jpa:
+        hibernate:
+            ddl-auto: none
+        defer-datasource-initialization: true
+
+    sql:
+        init:
+            schema-locations: classpath:schema.sql
+            data-locations: classpath:data.sql
+            mode: always
+
+
+server:
+    port: 8084

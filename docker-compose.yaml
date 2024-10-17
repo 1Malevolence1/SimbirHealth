@@ -1,0 +1,83 @@
+services:
+
+  database:
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5432"
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: mydb
+
+
+  account-microservice:
+    restart: always
+    build:
+      context: ./Account-microservice
+      dockerfile: Dockerfile
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/mydb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+
+    ports:
+      - "8081:8081"
+    depends_on:
+      - database
+
+  hospital-microservice:
+    restart: always
+    build:
+      context: ./Hospital-microservice
+      dockerfile: Dockerfile
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/mydb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+
+    ports:
+      - "8082:8082"
+    depends_on:
+      - database
+      - account-microservice
+
+
+  timetable-microservice:
+    restart: always
+    build:
+      context: ./Timetable-microservice
+      dockerfile: Dockerfile
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/mydb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+
+    ports:
+      - "8083:8083"
+    depends_on:
+      - database
+      - account-microservice
+      - hospital-microservice
+
+  document-microservice:
+    restart: always
+    build:
+      context: ./Document-microservice
+      dockerfile: Dockerfile
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/mydb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+
+    ports:
+      - "8084:8084"
+    depends_on:
+      - database
+      - account-microservice
+      - hospital-microservice
