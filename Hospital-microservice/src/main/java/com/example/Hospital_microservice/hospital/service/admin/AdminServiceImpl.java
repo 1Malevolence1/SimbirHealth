@@ -34,9 +34,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateHospital(RequestUpdateHospitalDto updateHospitalDto) {
+    public void updateHospital(RequestUpdateHospitalDto updateHospitalDto, Long id) {
         hospitalService.update(
-                mapperHospital.toModel(updateHospitalDto)
+                mapperHospital.toModel(updateHospitalDto),
+                id
         );
     }
 }

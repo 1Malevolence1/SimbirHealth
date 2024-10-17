@@ -10,7 +10,6 @@ import com.example.Timetable_microservice.timetable.service.TimetablePreparation
 import com.example.Timetable_microservice.timetable.service.TimetableService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,24 +21,19 @@ public class AdminAndManagerServiceImpl implements AdminAndManagerService {
     private final AppointmentService appointmentService;
     private final TimetablePreparationService timetablePreparationService;
 
+
     @Override
     public void add(RequestTimetableDto dto) {
-        timetableService.save(
-                timetablePreparationService.build(dto)
-        );
+        timetableService.save(timetablePreparationService.build(dto));
+
     }
 
     @Override
     public void update(RequestTimetableDto dto, Long timetableId) {
-        if(appointmentService.getCountUserSignedUpForAppointment(timetableId) != 0) throw new BadUpdateTimetable(
-                new Validate(ConstantResponseExceptionText.BAD_UPDATE_TIMETABLE_BY_ID
-                ));
+        if (appointmentService.getCountUserSignedUpForAppointment(timetableId) != 0)
+            throw new BadUpdateTimetable(new Validate(ConstantResponseExceptionText.BAD_UPDATE_TIMETABLE_BY_ID));
         appointmentService.deleteAllAppointmentByIdTimetable(timetableId);
-        timetableService.update(
-                timetablePreparationService.build(
-                        dto, timetableId
-                )
-        );
+        timetableService.update(timetablePreparationService.build(dto, timetableId));
     }
 
     @Override
@@ -59,6 +53,6 @@ public class AdminAndManagerServiceImpl implements AdminAndManagerService {
 
     @Override
     public void cancelAppointment(Long appointmentId) {
-            appointmentService.updateActiveOnFalse(appointmentId);
+        appointmentService.updateActiveOnFalse(appointmentId);
     }
 }

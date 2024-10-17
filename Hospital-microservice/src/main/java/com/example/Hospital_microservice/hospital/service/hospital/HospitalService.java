@@ -8,7 +8,7 @@ import java.util.List;
 public interface HospitalService  {
 
     void save(Hospital hospital);
-    void update(Hospital hospital);
+    void update(Hospital hospital, Long id);
 
     List<Hospital> getAllWithParamFromAndCount(Integer from, Integer count);
 

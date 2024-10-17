@@ -1,9 +1,8 @@
 package com.example.Timetable_microservice.timetable.service;
 
-public final class AuthorizationHeaderExtractor {
+import jakarta.servlet.http.HttpServletRequest;
 
-    public static  String getJwtToken(String authorizationHeader){
-        return authorizationHeader.startsWith("Bearer ") ?
-                authorizationHeader.substring(7) : authorizationHeader;
-    }
+public interface AuthorizationHeaderExtractor {
+    String getJwtToken(HttpServletRequest request);
+    String getAuthorization(HttpServletRequest request);
 }

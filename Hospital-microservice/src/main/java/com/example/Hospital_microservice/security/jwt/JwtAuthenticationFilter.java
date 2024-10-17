@@ -1,6 +1,6 @@
 package com.example.Hospital_microservice.security.jwt;
 
-import com.example.Hospital_microservice.security.jwt.service.JwtExtractService;
+import com.example.Hospital_microservice.security.jwt.dto.ResponseDataUserDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,13 +14,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -29,8 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
-    private final RestTemplate restTemplate;
-    private final JwtExtractService jwtExtractService;
+    private final RestClient restClientSecurity;
+
 
 
     @Override
@@ -49,12 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         var jwt = authHeader.substring(BEARER_PREFIX.length());
 
 
-        Map<String, String> params = new HashMap<>();
-        params.put("accessToken", jwt);
-
-
         try {
-            ResponseEntity<?> responseEntity = restTemplate.getForEntity("http://localhost:8081/api/Authentication/Validate?accessToken={accessToken}", Void.class, params);
+            ResponseEntity<?> responseEntity = restClientSecurity.get().uri("/api/Authentication/Validate?accessToken=%s".formatted(jwt)).retrieve().toEntity(Void.class);
             if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
 
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
@@ -67,9 +61,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String username = jwtExtractService.extractUserName(jwt);
-
-        List<String> roles = jwtExtractService.extractRoles(jwt);
+        ResponseEntity<ResponseDataUserDto> responseDataUserDto = restClientSecurity.get().uri("/api/jwt/dataUser").header("Authorization", authHeader).retrieve().toEntity(ResponseDataUserDto.class);
+        String username = responseDataUserDto.getBody().username();
+        List<String> roles = responseDataUserDto.getBody().roles();
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = roles.stream().map(SimpleGrantedAuthority::new).toList();
 
 

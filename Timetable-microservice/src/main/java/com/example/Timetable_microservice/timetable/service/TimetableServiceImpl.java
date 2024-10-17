@@ -22,8 +22,8 @@
 
         @Override
         @Transactional
-        public void save(Timetable timetable) {
-            timetableRepository.save(timetable);
+        public Timetable save(Timetable timetable) {
+            return timetableRepository.save(timetable);
         }
 
         @Override
@@ -37,7 +37,7 @@
                         if (timetableUpdate.getRoom() != null) timetable.setRoom(timetableUpdate.getRoom());
                         if (timetableUpdate.getFrom() != null) timetable.setFrom(timetableUpdate.getFrom());
                         if (timetableUpdate.getTo() != null) timetable.setTo(timetableUpdate.getTo());
-                        if(timetableUpdate.getAppointments() != null) timetable.setAppointments(timetableUpdate.getAppointments());
+                        if (timetableUpdate.getAppointments() != null) timetable.setAppointments(timetableUpdate.getAppointments());
                     }, () -> {
                         throw new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_TIMETABLE_BY_ID.formatted(timetableUpdate.getHospitalId()));
                     }

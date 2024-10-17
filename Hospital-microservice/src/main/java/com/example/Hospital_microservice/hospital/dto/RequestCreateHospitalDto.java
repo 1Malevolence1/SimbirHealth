@@ -1,6 +1,7 @@
 package com.example.Hospital_microservice.hospital.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public record RequestCreateHospitalDto(
         @NotBlank(message = "поле contactPhone не должно быть пустым")
         String contactPhone,
 
+        @NotNull(message = "поле rooms должно содержать хотябы одну комнату")
         List<String> rooms
 ) {
 }

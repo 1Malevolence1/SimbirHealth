@@ -7,5 +7,5 @@ public interface AdminService {
 
     void addHospital(RequestCreateHospitalDto requestCreateHospitalDto);
     void deleteHospital(Long id);
-    void updateHospital(RequestUpdateHospitalDto updateHospitalDto);
+    void updateHospital(RequestUpdateHospitalDto updateHospitalDto, Long id);
 }

@@ -1,6 +1,7 @@
 package com.example.Timetable_microservice.appointment.model;
 
 
+import com.example.Timetable_microservice.timetable.model.Timetable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "appointment_id")
     private Long id;
 
     private LocalDateTime recording;
@@ -26,7 +28,8 @@ public class Appointment {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "timetable_id")
-    private Long timetableId;
+    @ManyToOne // Связь с Timetable
+    @JoinColumn(name = "timetable_id", nullable = false) // Обязательно должно быть не null
+    private Timetable timetable;
 
 }
