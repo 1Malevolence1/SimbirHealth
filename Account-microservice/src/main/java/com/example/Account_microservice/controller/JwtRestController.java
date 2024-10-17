@@ -2,6 +2,8 @@ package com.example.Account_microservice.controller;
 
 
 import com.example.Account_microservice.security.jwt.dto.JwtDecongestingDtoResponse;
+import com.example.Account_microservice.security.jwt.dto.ResponseDataUserDto;
+import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
 import com.example.Account_microservice.user.dto.ResponseRolesUser;
 import com.example.Account_microservice.user.service.user.UserService;
@@ -21,6 +23,7 @@ import java.util.List;
 public class JwtRestController {
 
     private final JwtService jwtService;
+    private final JwtExtractService extractService;
 
     private final UserService userService;
 
@@ -39,5 +42,19 @@ public class JwtRestController {
         List<String> roles = userService.getRolesUserById(id);
         log.info("{}" , roles);
         return ResponseEntity.ok().body(new ResponseRolesUser(roles));
+    }
+
+
+
+    @GetMapping("/dataUser")
+    public ResponseEntity<ResponseDataUserDto> getDataUser(@RequestHeader("Authorization") String authorization){
+        String token = authorization.substring(7);
+
+        return ResponseEntity.ok().body(
+                new ResponseDataUserDto(
+                        extractService.extractUserName(token),
+                        extractService.extractRolesString(token)
+                )
+        );
     }
 }

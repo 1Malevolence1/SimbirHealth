@@ -1,7 +1,7 @@
-package com.example.Timetable_microservice.security.jwt;
+package com.example.Document_microservice.security.jwt;
 
 
-import com.example.Timetable_microservice.security.jwt.dto.ResponseDataUserDto;
+import com.example.Document_microservice.security.jwt.dto.ResponseDataUserDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
