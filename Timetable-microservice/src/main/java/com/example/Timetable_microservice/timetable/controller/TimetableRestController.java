@@ -72,7 +72,7 @@ public class TimetableRestController {
 
             log.info("{}", token);
             microserviceEntityChecker.checkEntityForHospital(dto.hospitalId(), dto.room(), token);
-            microserviceEntityChecker.checkEntityForUser(dto.doctorId(), token);
+            microserviceEntityChecker.checkEntityForDoctor(dto.doctorId(), token);
             adminAndManagerService.add(dto);
             return ResponseEntity.ok().body(ConstantResponseSuccessfulText.SAVE_TIMETABLE);
         }
@@ -108,7 +108,7 @@ public class TimetableRestController {
 
             log.info("{}", token);
             microserviceEntityChecker.checkEntityForHospital(dto.hospitalId(), dto.room(), token);
-            microserviceEntityChecker.checkEntityForUser(dto.doctorId(), token);
+            microserviceEntityChecker.checkEntityForDoctor(dto.doctorId(), token);
             adminAndManagerService.update(dto, timetableId);
             return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_TIMETABLE.formatted(timetableId));
         }
@@ -135,7 +135,7 @@ public class TimetableRestController {
     })
     public ResponseEntity<String> deleteAllTimetablesByDoctorId(@PathVariable(name = "doctorId") Long id,
                                                                 HttpServletRequest request) {
-        microserviceEntityChecker.checkEntityForUser(
+        microserviceEntityChecker.checkEntityForDoctor(
                 id,
                 authorizationHeader.getJwtToken(request));
 
@@ -179,6 +179,7 @@ public class TimetableRestController {
     public ResponseEntity<List<ResponseTimetableDto>> getAllTimetableByHospitalId(@PathVariable(name = "hospitalId") Long id,
                                                                                   @RequestParam(name = "from") String from,
                                                                                   @RequestParam(name = "to") String to,
+
                                                                                  HttpServletRequest request) {
         microserviceEntityChecker.checkEntityForHospital(
                 id,
@@ -205,7 +206,7 @@ public class TimetableRestController {
                                                                                 @RequestParam(name = "from") String from,
                                                                                 @RequestParam(name = "to") String to,
                                                                                 HttpServletRequest request) {
-        microserviceEntityChecker.checkEntityForUser(
+        microserviceEntityChecker.checkEntityForDoctor(
                 id,
                 authorizationHeader.getJwtToken(request)
         );

@@ -46,7 +46,7 @@ public class MicroserviceEntityCheckerImpl implements MicroserviceEntityChecker 
     }
 
     @Override
-    public void checkEntityForUser(Long id, String token) {
+    public void checkEntityForDoctor(Long id, String token) {
         try {
             log.info("Начался поиск доктора");
             restClientForUser.get().uri("/api/Doctors/{id}", id)

@@ -13,6 +13,6 @@ CREATE TABLE IF NOT EXISTS public.appointment (
     appointment_id SERIAL PRIMARY KEY,
     recording TIMESTAMP NOT NULL,
     active BOOLEAN NOT NULL,
-    user_id INT REFERENCES public.users(user_id) ON DELETE CASCADE,  -- Каскадное удаление для user_id
-    timetable_id INT REFERENCES public.timetable(timetable_id) ON DELETE CASCADE NOT NULL  -- Каскадное удаление для timetable
+    user_id INT REFERENCES public.users(user_id) ON DELETE CASCADE,
+    timetable_id INT REFERENCES public.timetable(timetable_id) ON DELETE CASCADE NOT NULL
 );
