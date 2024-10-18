@@ -1,8 +1,9 @@
-package com.example.Account_microservice.convert.manager_mapper;
+package com.example.Account_microservice.user.convert.manager_mapper;
 
-import com.example.Account_microservice.convert.mapper.user.MapperListUser;
-import com.example.Account_microservice.convert.mapper.user.MapperUser;
-import com.example.Account_microservice.user.dto.*;
+import com.example.Account_microservice.user.convert.mapper.user.MapperListUser;
+import com.example.Account_microservice.user.convert.mapper.user.MapperUser;
+import com.example.Account_microservice.user.dto.RequestUpdateUserAccountDto;
+import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
 import com.example.Account_microservice.user.dto.admin.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.admin.RequestAdminUpdateAccount;
 import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto;
@@ -34,11 +35,6 @@ public class ManagerMapperAccountImpl implements ManagerMapperAccount {
     @Override
     public User toModelFormSingUpGuestUser(RequestSingInGuestUserDto singUpGuestDto) {
         return mapperUser.toModelFromSingUpGuestUser(singUpGuestDto);
-    }
-
-    @Override
-    public User toModelFromSignUp(RequestSingUpUserAccountDto signUpDto) {
-        return mapperUser.toModelFromSingUP(signUpDto);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.example.Account_microservice.user.service.doctor;
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.convert.mapper.doctor.MapperDoctor;
-import com.example.Account_microservice.convert.mapper.doctor.MapperListDoctor;
+import com.example.Account_microservice.user.convert.mapper.doctor.MapperDoctor;
+import com.example.Account_microservice.user.convert.mapper.doctor.MapperListDoctor;
 import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;
 import com.example.Account_microservice.user.repository.DoctorRepository;
 import com.example.Account_microservice.user.service.user.UserService;

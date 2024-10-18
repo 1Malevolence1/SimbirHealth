@@ -1,4 +1,4 @@
-package com.example.Account_microservice.convert.mapper.doctor;
+package com.example.Account_microservice.user.convert.mapper.doctor;
 
 
 import com.example.Account_microservice.user.dto.doctor.ResponseDoctorDto;

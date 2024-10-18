@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Hidden
-public class JwtRestController {
+public class JwtDecodingRestController {
 
     private final JwtService jwtService;
     private final JwtExtractService extractService;

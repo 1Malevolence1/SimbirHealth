@@ -1,4 +1,4 @@
-package com.example.Account_microservice.convert.mapper.user;
+package com.example.Account_microservice.user.convert.mapper.user;
 
 
 import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
