@@ -1,10 +1,8 @@
-package com.example.Account_microservice.security.jwt.black_list.service;
+package com.example.Account_microservice.security.jwt.black_list.convert.manager_maper;
 
 import com.example.Account_microservice.security.jwt.black_list.dto.BlackListTokenDto;
 import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
-import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
-public interface MapperBlackListToken {
+public interface ManagerMapperBlackListToken {
     BlackListToken toModel(BlackListTokenDto dto);
 }

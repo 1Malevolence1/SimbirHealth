@@ -9,7 +9,6 @@ import java.util.List;
 public interface JwtExtractService {
     Long extractUserId(String token);
     String extractUserName(String token);
-    String extractSubject(String token);
     Date extractIssuedAt(String token);
     Date extractExpiration(String token);
     LocalDateTime extractExpirationGetLocalDataTime(String token);

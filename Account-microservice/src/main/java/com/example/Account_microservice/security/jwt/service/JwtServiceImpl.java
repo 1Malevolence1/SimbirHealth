@@ -49,11 +49,6 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
     }
 
     @Override
-    public String extractSubject(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    @Override
     public Long extractUserId(String token) {
         return Long.parseLong(extractClaim(token, Claims::getId));
 
@@ -102,7 +97,6 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
     }
 
 
-
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
@@ -143,7 +137,6 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
     }
 
 
-
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
         return claimsResolvers.apply(claims);
@@ -154,8 +147,6 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
     public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
-
-
 
 
     private Claims extractAllClaims(String token) {

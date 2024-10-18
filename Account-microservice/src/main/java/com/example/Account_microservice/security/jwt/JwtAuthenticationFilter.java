@@ -41,20 +41,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Получаем токен из заголовка
+
         var authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
-            return; // Если заголовок отсутствует или не начинается с "Bearer ", продолжаем обработку
+            return;
         }
 
-        // Обрезаем префикс и получаем токен
         var jwt = authHeader.substring(BEARER_PREFIX.length());
 
 
         if (blackListTokenService.isTokenBlacklisted(jwt)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Токен недействителен.");
-            log.info("токен нахоидтся в black list");
+            log.error("токен нахоидтся в black list");
             return;
         }
 
@@ -95,7 +94,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
 
-            // Продолжаем обработку запроса
+
             filterChain.doFilter(request, response);
         }
     }

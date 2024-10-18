@@ -1,14 +1,12 @@
 package com.example.Account_microservice.security.jwt.black_list.service;
 
 
+import com.example.Account_microservice.security.jwt.black_list.convert.manager_maper.ManagerMapperBlackListToken;
 import com.example.Account_microservice.security.jwt.black_list.dto.BlackListTokenDto;
-import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
 import com.example.Account_microservice.security.jwt.black_list.repository.BlackListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service
@@ -19,11 +17,6 @@ public class BlackListServiceImpl implements BlackListTokenService {
     private final BlackListRepository blackListRepository;
     private final ManagerMapperBlackListToken managerBlackListToken;
 
-    @Override
-    public void save(BlackListToken token) {
-         blackListRepository.save(token);
-         log.info("token: {}, занесён в чёрный списко", token);
-    }
 
     @Override
     public void save(BlackListTokenDto dto) {
@@ -37,13 +30,5 @@ public class BlackListServiceImpl implements BlackListTokenService {
     public Boolean isTokenBlacklisted(String token) {
         return blackListRepository.existsByToken(token);
     }
-
-    @Override
-    public List<BlackListToken> findAll() {
-        return blackListRepository.findAll();
-    }
-
-
-
 
 }

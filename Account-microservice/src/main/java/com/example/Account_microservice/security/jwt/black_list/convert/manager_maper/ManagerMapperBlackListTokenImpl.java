@@ -1,5 +1,6 @@
-package com.example.Account_microservice.security.jwt.black_list.service;
+package com.example.Account_microservice.security.jwt.black_list.convert.manager_maper;
 
+import com.example.Account_microservice.security.jwt.black_list.convert.mapper.MapperBlackListToken;
 import com.example.Account_microservice.security.jwt.black_list.dto.BlackListTokenDto;
 import com.example.Account_microservice.security.jwt.black_list.model.BlackListToken;
 import lombok.RequiredArgsConstructor;
