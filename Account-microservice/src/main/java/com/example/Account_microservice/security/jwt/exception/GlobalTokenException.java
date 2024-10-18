@@ -1,7 +1,7 @@
 package com.example.Account_microservice.security.jwt.exception;
 
 
-import com.example.Account_microservice.exception.Validate;
+import com.example.Account_microservice.user.exception.Validate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

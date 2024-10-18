@@ -1,6 +1,6 @@
 package com.example.Account_microservice.security.jwt.exception;
 
-import com.example.Account_microservice.exception.Validate;
+import com.example.Account_microservice.user.exception.Validate;
 import lombok.Getter;
 
 @Getter

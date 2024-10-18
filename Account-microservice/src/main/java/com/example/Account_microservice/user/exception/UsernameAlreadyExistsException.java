@@ -1,6 +1,5 @@
-package com.example.Account_microservice.user.service.user;
+package com.example.Account_microservice.user.exception;
 
-import com.example.Account_microservice.exception.Validate;
 import lombok.Getter;
 
 @Getter

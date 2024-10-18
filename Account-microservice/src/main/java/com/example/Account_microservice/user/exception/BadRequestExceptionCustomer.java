@@ -1,4 +1,4 @@
-package com.example.Account_microservice.exception;
+package com.example.Account_microservice.user.exception;
 
 
 import java.util.List;

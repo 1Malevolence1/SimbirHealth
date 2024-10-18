@@ -1,10 +1,6 @@
 package com.example.Account_microservice.user.exception;
 
 
-import com.example.Account_microservice.exception.BadRequestExceptionCustomer;
-import com.example.Account_microservice.exception.BadRequestRolesException;
-import com.example.Account_microservice.exception.BadRequestSingInCustomer;
-import com.example.Account_microservice.exception.Validate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;

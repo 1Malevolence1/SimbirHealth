@@ -2,7 +2,8 @@ package com.example.Account_microservice.user.service.user;
 
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.exception.Validate;
+import com.example.Account_microservice.user.exception.UsernameAlreadyExistsException;
+import com.example.Account_microservice.user.exception.Validate;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.repository.UserRepository;
 import jakarta.transaction.Transactional;

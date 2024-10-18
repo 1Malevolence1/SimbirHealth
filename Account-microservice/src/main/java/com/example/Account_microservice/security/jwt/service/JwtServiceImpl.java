@@ -1,13 +1,13 @@
 package com.example.Account_microservice.security.jwt.service;
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.exception.Validate;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthority;
 import com.example.Account_microservice.security.jwt.dto.JwtDecongestingDtoResponse;
 import com.example.Account_microservice.security.jwt.exception.BadDataTokenCustomerException;
 import com.example.Account_microservice.security.jwt.exception.TokenBlackListException;
 import com.example.Account_microservice.security.jwt.exception.ValidateToken;
+import com.example.Account_microservice.user.exception.Validate;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.service.user.UserService;
 import io.jsonwebtoken.Claims;

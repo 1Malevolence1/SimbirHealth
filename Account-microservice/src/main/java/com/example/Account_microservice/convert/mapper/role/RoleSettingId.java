@@ -2,8 +2,8 @@ package com.example.Account_microservice.convert.mapper.role;
 
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
-import com.example.Account_microservice.exception.BadRequestRolesException;
-import com.example.Account_microservice.exception.Validate;
+import com.example.Account_microservice.user.exception.BadRequestRolesException;
+import com.example.Account_microservice.user.exception.Validate;
 import org.springframework.stereotype.Component;
 
 @Component
