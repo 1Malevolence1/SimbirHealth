@@ -3,8 +3,8 @@ package com.example.Timetable_microservice.appointment.controller;
 
 import com.example.Timetable_microservice.timetable.config.ConstantResponseSuccessfulText;
 import com.example.Timetable_microservice.timetable.exception.Validate;
-import com.example.Timetable_microservice.timetable.service.AuthorizationHeaderExtractor;
 import com.example.Timetable_microservice.timetable.service.authorized_user.AuthorizedUserService;
+import com.example.Timetable_microservice.timetable.service.utils.AuthorizationHeaderExtractor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

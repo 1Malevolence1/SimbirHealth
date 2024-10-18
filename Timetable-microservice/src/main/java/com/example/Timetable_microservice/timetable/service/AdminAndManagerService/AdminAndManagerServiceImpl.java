@@ -3,11 +3,11 @@ package com.example.Timetable_microservice.timetable.service.AdminAndManagerServ
 
 import com.example.Timetable_microservice.appointment.service.AppointmentService;
 import com.example.Timetable_microservice.timetable.config.ConstantResponseExceptionText;
-import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.timetable.RequestTimetableDto;
 import com.example.Timetable_microservice.timetable.exception.BadUpdateTimetable;
 import com.example.Timetable_microservice.timetable.exception.Validate;
-import com.example.Timetable_microservice.timetable.service.TimetablePreparationService;
-import com.example.Timetable_microservice.timetable.service.TimetableService;
+import com.example.Timetable_microservice.timetable.service.timetable.TimetableService;
+import com.example.Timetable_microservice.timetable.service.utils.TimetablePreparationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

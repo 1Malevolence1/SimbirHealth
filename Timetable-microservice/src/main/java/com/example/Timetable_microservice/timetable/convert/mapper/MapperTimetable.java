@@ -1,7 +1,7 @@
 package com.example.Timetable_microservice.timetable.convert.mapper;
 
 
-import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.timetable.RequestTimetableDto;
 import com.example.Timetable_microservice.timetable.model.Timetable;
 import org.mapstruct.Mapper;
 

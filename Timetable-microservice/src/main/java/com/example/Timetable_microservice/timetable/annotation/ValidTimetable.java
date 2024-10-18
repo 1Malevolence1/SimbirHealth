@@ -1,4 +1,4 @@
-package com.example.Timetable_microservice.annotation;
+package com.example.Timetable_microservice.timetable.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

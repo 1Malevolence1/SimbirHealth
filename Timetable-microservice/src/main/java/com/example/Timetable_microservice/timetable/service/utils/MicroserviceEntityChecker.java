@@ -1,6 +1,4 @@
-package com.example.Timetable_microservice.timetable.service;
-
-import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
+package com.example.Timetable_microservice.timetable.service.utils;
 
 public interface MicroserviceEntityChecker {
 

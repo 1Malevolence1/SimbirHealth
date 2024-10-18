@@ -1,8 +1,8 @@
 package com.example.Timetable_microservice.timetable.convert.manager;
 
 import com.example.Timetable_microservice.timetable.convert.mapper.MapperTimetable;
-import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
-import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.timetable.RequestTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.timetable.ResponseTimetableDto;
 import com.example.Timetable_microservice.timetable.model.Timetable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

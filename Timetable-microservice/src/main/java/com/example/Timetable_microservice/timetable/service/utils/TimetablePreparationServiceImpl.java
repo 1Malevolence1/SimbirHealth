@@ -1,10 +1,10 @@
-package com.example.Timetable_microservice.timetable.service;
+package com.example.Timetable_microservice.timetable.service.utils;
 
 
 import com.example.Timetable_microservice.appointment.model.Appointment;
 import com.example.Timetable_microservice.appointment.service.AppointmentServiceFacade;
 import com.example.Timetable_microservice.timetable.convert.manager.ManagerMapperTimetable;
-import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.timetable.RequestTimetableDto;
 import com.example.Timetable_microservice.timetable.model.Timetable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

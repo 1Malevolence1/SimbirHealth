@@ -1,4 +1,4 @@
-package com.example.Timetable_microservice.timetable.service;
+package com.example.Timetable_microservice.timetable.service.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;

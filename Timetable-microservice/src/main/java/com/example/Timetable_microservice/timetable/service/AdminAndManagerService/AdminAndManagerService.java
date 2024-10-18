@@ -1,6 +1,6 @@
 package com.example.Timetable_microservice.timetable.service.AdminAndManagerService;
 
-import com.example.Timetable_microservice.timetable.dto.RequestTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.timetable.RequestTimetableDto;
 
 public interface AdminAndManagerService {
 

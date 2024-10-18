@@ -1,7 +1,7 @@
 package com.example.Timetable_microservice.timetable.service.authorized_user;
 
 import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAppointmentsDto;
-import com.example.Timetable_microservice.timetable.dto.ResponseTimetableDto;
+import com.example.Timetable_microservice.timetable.dto.timetable.ResponseTimetableDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

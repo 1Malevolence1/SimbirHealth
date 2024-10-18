@@ -1,7 +1,7 @@
-package com.example.Timetable_microservice.timetable.service;
+package com.example.Timetable_microservice.timetable.service.utils;
 
-import com.example.Timetable_microservice.timetable.dto.UserIdDto;
-import com.example.Timetable_microservice.timetable.dto.UserRoleDto;
+import com.example.Timetable_microservice.timetable.dto.user.UserIdDto;
+import com.example.Timetable_microservice.timetable.dto.user.UserRoleDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

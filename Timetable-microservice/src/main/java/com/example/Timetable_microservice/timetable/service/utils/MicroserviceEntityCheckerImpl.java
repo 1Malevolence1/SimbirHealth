@@ -1,10 +1,11 @@
-package com.example.Timetable_microservice.timetable.service;
+package com.example.Timetable_microservice.timetable.service.utils;
 
 
 import com.example.Timetable_microservice.timetable.dto.hopsital.ResponseCheckHospitalDto;
 import com.example.Timetable_microservice.timetable.exception.UnauthorizedException;
 import com.example.Timetable_microservice.timetable.exception.Validate;
 import com.example.Timetable_microservice.timetable.service.hospitalChcker.HospitalCheckerService;
+import com.example.Timetable_microservice.timetable.service.timetable.TimetableService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

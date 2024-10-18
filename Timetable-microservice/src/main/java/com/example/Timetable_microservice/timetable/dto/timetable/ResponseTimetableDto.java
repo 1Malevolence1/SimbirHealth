@@ -1,4 +1,4 @@
-package com.example.Timetable_microservice.timetable.dto;
+package com.example.Timetable_microservice.timetable.dto.timetable;
 
 import java.time.LocalDateTime;
 
