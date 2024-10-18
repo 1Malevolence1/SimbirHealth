@@ -1,4 +1,4 @@
-package com.example.Account_microservice.security.jwt;
+package com.example.Account_microservice.security.jwt.filter;
 
 import com.example.Account_microservice.security.CustomerUserDetailsService;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;

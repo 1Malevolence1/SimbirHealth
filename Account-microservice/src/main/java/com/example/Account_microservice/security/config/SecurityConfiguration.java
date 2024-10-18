@@ -2,7 +2,7 @@ package com.example.Account_microservice.security.config;
 
 
 import com.example.Account_microservice.security.CustomerUserDetailsService;
-import com.example.Account_microservice.security.jwt.JwtAuthenticationFilter;
+import com.example.Account_microservice.security.jwt.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
