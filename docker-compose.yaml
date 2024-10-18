@@ -12,6 +12,41 @@ services:
       POSTGRES_DB: mydb
 
 
+  elasticsearch:
+    image: elasticsearch:8.15.3
+    restart: "no"
+    ports:
+      - "9200:9200"
+    environment:
+      xpack.security.enabled: "false"
+      bootstrap.memory_lock: "true"
+      discovery.type: "single-node"
+    healthcheck:
+      test: curl -u --fail -s http://localhost:9200 || exit 1
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+
+
+
+  logstash:
+    image: logstash:7.9.1
+    ports:
+      - "5044:5044"
+    volumes:
+      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf # Путь к конфигурационному файлу Logstash
+      - ./conf/postgresql-42.6.0.jar:/usr/share/logstash/postgresql-42.6.0.jar  # Путь к JAR-файлу драйвера
+    depends_on:
+      - elasticsearch
+
+
+
   account-microservice:
     restart: always
     build:
@@ -27,6 +62,8 @@ services:
       - "8081:8081"
     depends_on:
       - database
+
+
 
   hospital-microservice:
     restart: always
