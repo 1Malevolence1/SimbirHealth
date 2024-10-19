@@ -23,22 +23,22 @@ public class HistoryDocument {
     @Id
     private Long id;
 
-    @Field(type = FieldType.Date, name = "date", format = DateFormat.date)
+    @Field(type = FieldType.Date, format = DateFormat.date)
     private LocalDateTime date;
 
-    @Field(type = FieldType.Long, name = "pacient_id")
+    @Field(type = FieldType.Long )
     private Long pacientId;
 
-    @Field(type = FieldType.Long, name = "hospital_id")
+    @Field(type = FieldType.Long)
     private Long hospitalId;
 
-    @Field(type = FieldType.Long, name = "doctor_id")
+    @Field(type = FieldType.Long)
     private Long doctorId;
 
-    @Field(type = FieldType.Text, name = "data")
+    @Field(type = FieldType.Text)
     private String data;
 
-    @Field(type = FieldType.Text, name = "room")
+    @Field(type = FieldType.Text)
     private String room;
 
 

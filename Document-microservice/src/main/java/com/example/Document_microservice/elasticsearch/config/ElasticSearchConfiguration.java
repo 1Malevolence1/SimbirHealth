@@ -8,15 +8,19 @@ import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+
+
 @Configuration
-public class ElasticSearchConfiguration
-{
+@EnableElasticsearchRepositories(basePackages = "com.example.Document_microservice.elasticsearch.repository")
+public class ElasticSearchConfiguration {
     @Bean
     public RestClient getRestClient() {
         RestClient restClient = RestClient.builder(
-                new HttpHost("localhost", 9200)).build();
+                new HttpHost("elasticsearch", 9200)).build(); // Используйте имя сервиса
         return restClient;
     }
+
 
     @Bean
     public ElasticsearchTransport getElasticsearchTransport() {
@@ -26,7 +30,7 @@ public class ElasticSearchConfiguration
 
 
     @Bean
-    public ElasticsearchClient getElasticsearchClient(){
+    public ElasticsearchClient getElasticsearchClient() {
         ElasticsearchClient client = new ElasticsearchClient(getElasticsearchTransport());
         return client;
     }

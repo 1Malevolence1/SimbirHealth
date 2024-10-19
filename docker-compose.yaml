@@ -12,15 +12,18 @@ services:
       POSTGRES_DB: mydb
 
 
+
   elasticsearch:
     image: elasticsearch:8.15.3
     restart: "no"
     ports:
       - "9200:9200"
     environment:
-      xpack.security.enabled: "false"
-      bootstrap.memory_lock: "true"
-      discovery.type: "single-node"
+      - discovery.type=single-node
+      - network.host=0.0.0.0
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+
     healthcheck:
       test: curl -u --fail -s http://localhost:9200 || exit 1
       interval: 10s
@@ -40,8 +43,8 @@ services:
     ports:
       - "5044:5044"
     volumes:
-      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf # Путь к конфигурационному файлу Logstash
-      - ./conf/postgresql-42.6.0.jar:/usr/share/logstash/postgresql-42.6.0.jar  # Путь к JAR-файлу драйвера
+      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./conf/postgresql-42.7.4.jar:/usr/share/logstash/postgresql-42.7.4.jar
     depends_on:
       - elasticsearch
 
