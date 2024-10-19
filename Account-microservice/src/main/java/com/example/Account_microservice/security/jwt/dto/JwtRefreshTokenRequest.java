@@ -1,6 +1,6 @@
 package com.example.Account_microservice.security.jwt.dto;
 
-public record JwtRefreshTokeRequest(
+public record JwtRefreshTokenRequest(
         String refreshToken
 ) {
 }

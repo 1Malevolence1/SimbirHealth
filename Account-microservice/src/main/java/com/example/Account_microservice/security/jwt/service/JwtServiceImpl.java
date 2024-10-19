@@ -2,6 +2,7 @@ package com.example.Account_microservice.security.jwt.service;
 
 import com.example.Account_microservice.config.ConstantResponseExceptionText;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
+import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthority;
 import com.example.Account_microservice.security.jwt.dto.JwtDecongestingDtoResponse;
 import com.example.Account_microservice.security.jwt.exception.BadDataTokenCustomerException;
@@ -103,6 +104,17 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
+    @Override
+    public String generateRefreshToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        if (userDetails instanceof User customerUserDetails) {
+            claims.put("jti", String.valueOf(customerUserDetails.getId()));
+            claims.put("username", customerUserDetails.getUsername());
+            claims.put("role", customerUserDetails.getAuthorities());
+        }
+
+        return createTokenJwt(claims, userDetails, 1000 * 60 * 60 * 24 * 7); // 7 дней
+    }
 
     @Override
     public String generateToken(UserDetails userDetails) {
@@ -112,30 +124,19 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
             claims.put("username", customerUserDetails.getUsername());
             claims.put("role", customerUserDetails.getAuthorities());
         }
-        return createTokenJwt(claims, userDetails);
+
+        return createTokenJwt(claims, userDetails, 1000 * 60 * 15); // 15 минут
     }
 
-    @Override
-    public String generateRefreshToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        if (userDetails instanceof User customerUserDetails) {
-            claims.put("jti", String.valueOf(customerUserDetails.getId()));
-            claims.put("username", customerUserDetails.getUsername());
-            claims.put("role", customerUserDetails.getAuthorities());
-        }
-        return createTokenJwt(claims, userDetails);
-
+    private String createTokenJwt(Map<String, Object> extraClaims, UserDetails userDetails, long expirationTime) {
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
-
-    private String createTokenJwt(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts.builder().
-                setClaims(extraClaims).
-                setSubject(userDetails.getUsername()).
-                setIssuedAt(new Date(System.currentTimeMillis())).
-                setExpiration(new Date(System.currentTimeMillis() + 10000 * 60 * 24)).
-                signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
-    }
-
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
@@ -184,6 +185,13 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
                 extractUserName(token),
                 extractOneRole(token)
         );
+    }
+
+    @Override
+    public JwtAuthenticationResponse generatePairJwtToken(UserDetails user) {
+        String accessToken = generateToken(user);
+        String newRefreshToken = generateRefreshToken(user);
+        return new JwtAuthenticationResponse(accessToken, newRefreshToken);
     }
 
     private Key getSigningKey() {

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 
 @Service
@@ -53,12 +52,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException(ConstantResponseExceptionText.NOT_FOUND_USER_BY_ID.formatted(id)));
     }
-
-    @Override
-    public Optional<User> findUserByIdReturnOptional(Long id) {
-        return userRepository.findById(id);
-    }
-
 
     @Override
     @Transactional
@@ -102,11 +95,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUsersFromOffset(Integer form) {
         return userRepository.getUsersFromOffset(form);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
     }
 
     @Override

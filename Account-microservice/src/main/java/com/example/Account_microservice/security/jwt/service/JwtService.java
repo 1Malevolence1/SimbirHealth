@@ -1,5 +1,6 @@
 package com.example.Account_microservice.security.jwt.service;
 
+import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
 import com.example.Account_microservice.security.jwt.dto.JwtDecongestingDtoResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,4 +17,6 @@ public interface JwtService {
     void isTokenActive(String token);
 
     JwtDecongestingDtoResponse tokenDecoding(String token);
+
+    JwtAuthenticationResponse generatePairJwtToken(UserDetails userDetails);
 }

@@ -6,9 +6,9 @@ import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto
 
 public interface AuthenticationService {
 
-     JwtAuthenticationResponse signUp(RequestSingInGuestUserDto singUpDto);
+    void signUp(RequestSingInGuestUserDto singUpDto);
 
     JwtAuthenticationResponse signIn(RequestSingInUserAccountDto singInDto);
 
-    JwtAuthenticationResponse refreshToken(String token);
+    JwtAuthenticationResponse refreshToken(String oldRefreshToken);
 }

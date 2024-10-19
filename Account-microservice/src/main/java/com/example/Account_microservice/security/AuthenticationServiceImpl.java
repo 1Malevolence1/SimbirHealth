@@ -38,11 +38,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     @Override
-    public JwtAuthenticationResponse signUp(RequestSingInGuestUserDto singUpDto) {
-
-        User user = guestUserService.addAccount(singUpDto);
-        String jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+    public void signUp(RequestSingInGuestUserDto singUpDto) {
+        guestUserService.addAccount(singUpDto);
     }
 
 
@@ -60,24 +57,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             );
         }
 
-
         UserDetails user = userDetailsService.loadUserByUsername(singInDto.username());
-        String jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+        return jwtService.generatePairJwtToken(user);
     }
 
     @Override
-    public JwtAuthenticationResponse refreshToken(String oldToken) {
-        jwtService.isTokenActive(oldToken);
+    public JwtAuthenticationResponse refreshToken(String oldRefreshToken) {
+        jwtService.isTokenActive(oldRefreshToken);
         blackListTokenService.save(
                 new BlackListTokenDto(
-                        oldToken,
-                        jwtExtractService.extractExpirationGetLocalDataTime((oldToken)
+                        oldRefreshToken,
+                        jwtExtractService.extractExpirationGetLocalDataTime((oldRefreshToken)
                         )));
-        Long userId = jwtExtractService.extractUserId(oldToken);
+        Long userId = jwtExtractService.extractUserId(oldRefreshToken);
         User user = userService.findUserById(userId);
-        String refreshToken = jwtService.generateRefreshToken(user);
-        return new JwtAuthenticationResponse(refreshToken);
+        return jwtService.generatePairJwtToken(user);
     }
 
 

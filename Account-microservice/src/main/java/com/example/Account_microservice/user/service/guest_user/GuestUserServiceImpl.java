@@ -18,7 +18,6 @@ import java.util.Set;
 public class GuestUserServiceImpl implements GuestUserService {
 
     private final UserService userService;
-    private final RoelService roelService;
     private final ManagerMapperAccount managerMapperAccount;
 ;
 

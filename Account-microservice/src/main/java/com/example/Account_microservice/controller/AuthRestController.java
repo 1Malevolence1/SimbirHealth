@@ -7,7 +7,7 @@ import com.example.Account_microservice.security.AuthenticationService;
 import com.example.Account_microservice.security.jwt.black_list.dto.BlackListTokenDto;
 import com.example.Account_microservice.security.jwt.black_list.service.BlackListTokenService;
 import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationResponse;
-import com.example.Account_microservice.security.jwt.dto.JwtRefreshTokeRequest;
+import com.example.Account_microservice.security.jwt.dto.JwtRefreshTokenRequest;
 import com.example.Account_microservice.security.jwt.exception.ValidateToken;
 import com.example.Account_microservice.security.jwt.service.JwtExtractService;
 import com.example.Account_microservice.security.jwt.service.JwtService;
@@ -65,7 +65,7 @@ public class AuthRestController {
             } else throw new BindException(bindingResult);
         } else {
 
-            guestUserService.addAccount(singUpGuestUserDto);
+            authenticationService.signUp(singUpGuestUserDto);
             log.info("аккаунт зарегестрирован");
             return ResponseEntity.ok().body(ConstantResponseSuccessfulText.REGISTER_NEW_USER);
         }
@@ -127,8 +127,8 @@ public class AuthRestController {
                     content =
                     @Content(schema = @Schema(oneOf = {ValidateToken.class, Validate.class}))),
             @ApiResponse(responseCode = "200", description = "вернёт новый токен")})
-    public ResponseEntity<?> refreshToken(@RequestBody JwtRefreshTokeRequest jwtRefreshTokeRequest) {
-        return ResponseEntity.ok(authenticationService.refreshToken(jwtRefreshTokeRequest.refreshToken()));
+    public ResponseEntity<JwtAuthenticationResponse> refreshToken(@RequestBody JwtRefreshTokenRequest jwtRefreshTokenRequest) {
+        return ResponseEntity.ok(authenticationService.refreshToken(jwtRefreshTokenRequest.refreshToken()));
     }
 }
 
