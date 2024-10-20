@@ -17,7 +17,7 @@ public class RestClientConfiguration {
     private final DiscoveryClient discoveryClient;
 
     @Bean
-    public RestClient restClientForHospital(){
+    public RestClient restClientMicroserviceHospital(){
         List<ServiceInstance> serviceInstances = discoveryClient.getInstances("Hospital-microservice");
         if (serviceInstances.isEmpty()){
             throw new IllegalStateException("No instances of Hospital-microservice found");
@@ -26,7 +26,7 @@ public class RestClientConfiguration {
     }
 
     @Bean
-    public RestClient restClientForUser(){
+    public RestClient restClientMicroserviceAccount(){
         List<ServiceInstance> serviceInstances = discoveryClient.getInstances("Account-microservice");
         if (serviceInstances.isEmpty()){
             throw new IllegalStateException("No instances of Account-microservice found");
