@@ -7,6 +7,8 @@ spring:
             cluster-nodes: localhost:9200
 
 
+
+
     datasource:
         url: jdbc:postgresql://localhost:5433/mydb
         username: postgres
@@ -26,4 +28,10 @@ spring:
 server:
     port: 8084
 
+
+eureka:
+    client:
+        service-url:
+            defaultZone:
+                http://eureka-server:8761/eureka/
 
