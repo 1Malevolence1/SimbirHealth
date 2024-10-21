@@ -9,4 +9,5 @@ public interface ManagerMapperRole {
     Role toModel(String role);
 
     Set<Role> toSetModel(Set<String> roles);
+
 }

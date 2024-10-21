@@ -2,7 +2,7 @@ package com.example.Account_microservice.user.service.admin;
 
 import com.example.Account_microservice.user.dto.admin.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.admin.RequestAdminUpdateAccount;
-import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
+import com.example.Account_microservice.user.dto.admin.ResponseUserAccountDtoForAdmin;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface AdminService {
 
     void deleteById(Long id);
 
-    List<ResponseUserAccountDto> getAll(Integer from, Integer count);
+    List<ResponseUserAccountDtoForAdmin> getAll(Integer from, Integer count);
 }

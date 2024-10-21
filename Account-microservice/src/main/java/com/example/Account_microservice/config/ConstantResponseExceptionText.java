@@ -13,4 +13,5 @@ public final class ConstantResponseExceptionText {
     public static final String NOT_FOUND_ROLE_EXCEPTION = "%s - данной роли нет в базе данных";
     public static final String BAD_TOKEN = "Токен не прошёл проверку";
     public static final String USERNAME_ALREADY_EXISTS = "данный username уже занят";
+    public static final String SIGNATURE_TOKEN = "Неккореткны токен";
 }

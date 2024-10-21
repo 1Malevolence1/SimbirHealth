@@ -7,6 +7,7 @@ import com.example.Account_microservice.user.dto.RequestUpdateUserAccountDto;
 import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
 import com.example.Account_microservice.user.dto.admin.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.admin.RequestAdminUpdateAccount;
+import com.example.Account_microservice.user.dto.admin.ResponseUserAccountDtoForAdmin;
 import com.example.Account_microservice.user.exception.Validate;
 import com.example.Account_microservice.user.service.ManagerAuthorizationRequest;
 import com.example.Account_microservice.user.service.admin.AdminService;
@@ -86,7 +87,7 @@ public class AccountRestController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Получение списка всех аккаунтов",description = "Только администраторы")
     @GetMapping()
-    public ResponseEntity<List<ResponseUserAccountDto>> getAllUser(
+    public ResponseEntity<List<ResponseUserAccountDtoForAdmin>> getAllUser(
                                              @RequestParam(name = "from", required = false) Integer from,
                                              @RequestParam(name = "count", required = false) Integer count){
         if(from == null) from = 0;

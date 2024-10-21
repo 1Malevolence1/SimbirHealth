@@ -1,9 +1,9 @@
 package com.example.Account_microservice.user.service.admin;
 
 import com.example.Account_microservice.user.convert.manager_mapper.ManagerMapperAccount;
-import com.example.Account_microservice.user.dto.ResponseUserAccountDto;
 import com.example.Account_microservice.user.dto.admin.RequestAdminSaveAccount;
 import com.example.Account_microservice.user.dto.admin.RequestAdminUpdateAccount;
+import com.example.Account_microservice.user.dto.admin.ResponseUserAccountDtoForAdmin;
 import com.example.Account_microservice.user.model.User;
 import com.example.Account_microservice.user.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +45,9 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public List<ResponseUserAccountDto> getAll(Integer from, Integer count) {
-        if(count == null) return managerMapperAccount.toDtoListAccount(userService.getUsersFromOffset(from));
-        return managerMapperAccount.toDtoListAccount(userService.getUsersFromOffsetWithLimit(from, count));
+    public List<ResponseUserAccountDtoForAdmin> getAll(Integer from, Integer count) {
+        if(count == null) return managerMapperAccount.toDtoListAccountForAdmin(userService.getUsersFromOffset(from));
+        return managerMapperAccount.toDtoListAccountForAdmin(userService.getUsersFromOffsetWithLimit(from, count));
 
     }
 }

@@ -24,4 +24,6 @@ public class ManagerMapperRoleImpl implements ManagerMapperRole {
     public Set<Role> toSetModel(Set<String> roles) {
         return mapperListRole.toModel(roles);
     }
+
+
 }

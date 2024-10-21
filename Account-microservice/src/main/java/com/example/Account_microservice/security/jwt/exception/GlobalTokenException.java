@@ -16,7 +16,12 @@ public class GlobalTokenException {
     }
 
     @ExceptionHandler(BadDataTokenCustomerException.class)
-    public ResponseEntity<Validate> handlerTBadDataTokenCustomerException(BadDataTokenCustomerException exception){
+    public ResponseEntity<Validate> handlerBadDataTokenCustomerException(BadDataTokenCustomerException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getValidate());
+    }
+
+    @ExceptionHandler(CustomerSignatureException.class)
+    public ResponseEntity<Validate> handlerCustomerSignatureException(CustomerSignatureException exception){
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getValidate());
     }
 }

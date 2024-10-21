@@ -6,6 +6,7 @@ import com.example.Account_microservice.security.jwt.dto.JwtAuthenticationRespon
 import com.example.Account_microservice.security.jwt.dto.JwtAuthority;
 import com.example.Account_microservice.security.jwt.dto.JwtDecongestingDtoResponse;
 import com.example.Account_microservice.security.jwt.exception.BadDataTokenCustomerException;
+import com.example.Account_microservice.security.jwt.exception.CustomerSignatureException;
 import com.example.Account_microservice.security.jwt.exception.TokenBlackListException;
 import com.example.Account_microservice.security.jwt.exception.ValidateToken;
 import com.example.Account_microservice.user.exception.Validate;
@@ -151,8 +152,14 @@ public class JwtServiceImpl implements JwtService, JwtExtractService {
 
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
-                .getBody();
+        Claims claims;
+        try {
+            claims = Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
+                    .getBody();
+        } catch (SecurityException e) {
+            throw new CustomerSignatureException(new Validate(ConstantResponseExceptionText.SIGNATURE_TOKEN));
+        }
+        return claims;
     }
 
 

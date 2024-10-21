@@ -15,7 +15,6 @@ import com.example.Account_microservice.user.dto.RequestSingInUserAccountDto;
 import com.example.Account_microservice.user.dto.guest.RequestSingInGuestUserDto;
 import com.example.Account_microservice.user.exception.Validate;
 import com.example.Account_microservice.user.service.ManagerAuthorizationRequest;
-import com.example.Account_microservice.user.service.guest_user.GuestUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -42,7 +41,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthRestController {
 
     private final AuthenticationService authenticationService;
-    private final GuestUserService guestUserService;
     private final JwtService jwtService;
     private final JwtExtractService extractService;
     private final BlackListTokenService blackListService;
