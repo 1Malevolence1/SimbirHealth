@@ -1,4 +1,4 @@
-package com.example.Document_microservice.elasticsearch.config;
+package com.example.Document_microservice.document.elasticsearch.config;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;

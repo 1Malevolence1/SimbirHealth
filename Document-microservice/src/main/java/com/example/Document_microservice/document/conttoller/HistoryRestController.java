@@ -5,6 +5,9 @@ import com.example.Document_microservice.document.config.ConstantResponseSuccess
 import com.example.Document_microservice.document.convert.manager.ManagerMapperHistory;
 import com.example.Document_microservice.document.dto.RequestHistoryDto;
 import com.example.Document_microservice.document.dto.ResponseHistoryDto;
+import com.example.Document_microservice.document.elasticsearch.model.HistoryDocument;
+import com.example.Document_microservice.document.elasticsearch.service.HistoryElasticsearchService;
+import com.example.Document_microservice.document.model.History;
 import com.example.Document_microservice.document.service.HistoryDataValidate;
 import com.example.Document_microservice.document.service.HistoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,8 +23,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/History")
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class HistoryRestController {
     private final HistoryService historyService;
     private final ManagerMapperHistory mapperHistory;
     private final HistoryDataValidate historyDataValidate;
+    private final HistoryElasticsearchService historyElasticsearchService;
 
 
 
@@ -50,11 +52,10 @@ public class HistoryRestController {
         } else {
 
             historyDataValidate.validate(request.getHeader("Authorization"), dto);
-            historyService.save(
-                    mapperHistory.toModel(
-                            dto
-                    )
-            );
+
+            History history =  historyService.save(mapperHistory.toModel(dto));
+            historyElasticsearchService.add(mapperHistory.toModelHistoryInModelHistoryDocument(history));
+
             return ResponseEntity.ok().body(ConstantResponseSuccessfulText.CREATE_HISTORY_OK);
         }
     }
@@ -65,7 +66,7 @@ public class HistoryRestController {
     @Operation(summary = "Получение подробной информации о посещении и назначениях", description = "Только врачи и аккаунт, которому принадлежит история")
     public ResponseEntity<ResponseHistoryDto> getHistoryById(@PathVariable(name = "id") Long historyId,
                                                              HttpServletRequest request) {
-        ResponseHistoryDto dto = mapperHistory.toDto(historyService.getHistoryById(historyId));
+        ResponseHistoryDto dto = mapperHistory.toDtoFromHistoryDocument(historyElasticsearchService.findHistoryById(historyId));
         Long pacientId = dto.pacientId();
 
         historyDataValidate.verification(request.getHeader("Authorization"), pacientId);
@@ -79,14 +80,14 @@ public class HistoryRestController {
     @GetMapping("Account/{id:\\d+}")
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Получение истории посещений и назначений аккаунта", description = "Только врачи и аккаунт, которому принадлежит история. Возвращает записи где {pacientId}={id}.")
-    public ResponseEntity<List<ResponseHistoryDto>> getAllHistoryUserByIdUser(@PathVariable(name = "id") Long pacientId,
+    public ResponseEntity<Iterable<ResponseHistoryDto>> getAllHistoryUserByIdUser(@PathVariable(name = "id") Long pacientId,
                                                                               HttpServletRequest request) {
 
         historyDataValidate.verification(request.getHeader("Authorization"), pacientId);
 
         return ResponseEntity.ok().body(
-                mapperHistory.toDto(
-                        historyService.getAllHistoryByPacientId(pacientId)
+                mapperHistory.toDtoFromHistoryDocument(
+                        historyElasticsearchService.getAllHistoryByPacientId(pacientId)
                 )
         );
     }
@@ -102,13 +103,12 @@ public class HistoryRestController {
 
 
         historyDataValidate.validate(request.getHeader("Authorization"), dto);
-        historyService.update(
-                mapperHistory.toModel(
-                        dto,
-                        historyId
-                )
 
-        );
+        History history = mapperHistory.toModel(dto, historyId);
+        HistoryDocument historyDocument = mapperHistory.toModelHistoryInModelHistoryDocument(history);
+
+        historyService.update(history);
+        historyElasticsearchService.update(historyDocument);
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_HISTORY_OK);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.Document_microservice.elasticsearch.model;
+package com.example.Document_microservice.document.elasticsearch.model;
 
 
 import com.example.Document_microservice.document.model.History;
@@ -18,12 +18,13 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Document(indexName = "history")
+@ToString
 public class HistoryDocument {
 
     @Id
     private Long id;
 
-    @Field(type = FieldType.Date, format = DateFormat.date)
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_fraction)
     private LocalDateTime date;
 
     @Field(type = FieldType.Long )
