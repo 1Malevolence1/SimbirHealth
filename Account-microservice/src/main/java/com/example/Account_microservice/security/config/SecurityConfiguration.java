@@ -31,18 +31,16 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-     return  http.csrf(AbstractHttpConfigurer::disable).
-                authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/Authentication/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/Authentication/**", "/v3/api-docs/**", "/swagger-ui/**", "/eureka/**").permitAll()
                         .anyRequest().authenticated()
                 )
-
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 
 
 

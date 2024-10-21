@@ -1,83 +1,166 @@
-services:
 
+services:
   database:
     image: postgres
-    restart: always
+    restart: unless-stopped
     ports:
       - "5433:5432"
-
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: mydb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+
+  eureka-server:
+    restart: unless-stopped
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+
+  elasticsearch:
+    image: elasticsearch:8.15.3
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - network.host=0.0.0.0
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+    healthcheck:
+      test: curl --fail -s http://localhost:9200 || exit 1
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+
+  logstash:
+    image: logstash:7.9.1
+    restart: unless-stopped
+    ports:
+      - "5044:5044"
+    volumes:
+      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./conf/postgresql-42.7.4.jar:/usr/share/logstash/postgresql-42.7.4.jar
+    depends_on:
+      - elasticsearch
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
 
 
   account-microservice:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./Account-microservice
       dockerfile: Dockerfile
-
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/mydb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123
-
     ports:
       - "8081:8081"
     depends_on:
       - database
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
 
   hospital-microservice:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./Hospital-microservice
       dockerfile: Dockerfile
-
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/mydb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123
-
     ports:
       - "8082:8082"
     depends_on:
       - database
       - account-microservice
+      - eureka-server
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
 
 
   timetable-microservice:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./Timetable-microservice
       dockerfile: Dockerfile
-
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/mydb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123
-
     ports:
       - "8083:8083"
     depends_on:
       - database
       - account-microservice
       - hospital-microservice
+      - eureka-server
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
 
   document-microservice:
-    restart: always
-    build:
-      context: ./Document-microservice
-      dockerfile: Dockerfile
-
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/mydb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 123
-
-    ports:
+    restart : unless-stopped
+    build :
+      context : ./Document-microservice
+      dockerfile : Dockerfile
+    environment :
+      SPRING_DATASOURCE_URL : jdbc:postgresql://database:5432/mydb
+      SPRING_DATASOURCE_USERNAME : postgres
+      SPRING_DATASOURCE_PASSWORD : 123
+    ports :
       - "8084:8084"
-    depends_on:
+    depends_on :
       - database
       - account-microservice
       - hospital-microservice
+      - eureka-server
+    deploy :
+      resources :
+        limits :
+          cpus : '0.5'
+          memory : 512M
+
+
+
+
