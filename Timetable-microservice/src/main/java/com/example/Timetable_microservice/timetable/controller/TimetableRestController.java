@@ -273,7 +273,7 @@ public class TimetableRestController {
             @ApiResponse(responseCode = "404", description = "Елси не будет надено расписание", content = @Content(schema = @Schema(implementation = Validate.class)))
     })
     public ResponseEntity<String> makeAppointment(@PathVariable(name = "timetableId") Long timetableId,
-                                                  @RequestParam("time") LocalDateTime time,
+                                                  @PathVariable("time") LocalDateTime time,
                                                   HttpServletRequest request) {
         microserviceEntityChecker.checkEntityTimetable(timetableId);
 

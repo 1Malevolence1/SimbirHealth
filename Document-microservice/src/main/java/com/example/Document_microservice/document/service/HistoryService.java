@@ -6,4 +6,5 @@ public interface HistoryService {
 
     History save(History history);
     void update(History history);
+    History findById(Long id);
 }

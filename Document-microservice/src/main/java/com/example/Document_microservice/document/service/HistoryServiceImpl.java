@@ -39,4 +39,9 @@ public class HistoryServiceImpl implements HistoryService {
                 }
         );
     }
+
+    @Override
+    public History findById(Long id) {
+        return historyRepository.findById(id).orElseThrow(() -> new NoSuchElementException(ConstantResponseExceptionText.NOT_FOUND_HISTORY_BY_ID.formatted(id)));
+    }
 }

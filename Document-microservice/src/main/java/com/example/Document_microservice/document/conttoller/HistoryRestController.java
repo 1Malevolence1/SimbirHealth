@@ -105,9 +105,11 @@ public class HistoryRestController {
         historyDataValidate.validate(request.getHeader("Authorization"), dto);
 
         History history = mapperHistory.toModel(dto, historyId);
-        HistoryDocument historyDocument = mapperHistory.toModelHistoryInModelHistoryDocument(history);
-
         historyService.update(history);
+        History updateHistory = historyService.findById(historyId);
+
+        HistoryDocument historyDocument = mapperHistory.toModelHistoryInModelHistoryDocument(updateHistory);
+
         historyElasticsearchService.update(historyDocument);
         return ResponseEntity.ok().body(ConstantResponseSuccessfulText.UPDATE_HISTORY_OK);
     }
