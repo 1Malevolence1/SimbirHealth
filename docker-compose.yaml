@@ -1,3 +1,4 @@
+version: '3.8'
 
 services:
   database:
@@ -15,7 +16,6 @@ services:
           cpus: '0.5'
           memory: 512M
 
-
   eureka-server:
     restart: unless-stopped
     build:
@@ -28,7 +28,6 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
-
 
   elasticsearch:
     image: elasticsearch:8.15.3
@@ -56,7 +55,6 @@ services:
           cpus: '1'
           memory: 1G
 
-
   logstash:
     image: logstash:7.9.1
     restart: unless-stopped
@@ -72,7 +70,6 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
-
 
   account-microservice:
     restart: unless-stopped
@@ -92,7 +89,6 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
-
 
   hospital-microservice:
     restart: unless-stopped
@@ -114,7 +110,6 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
-
 
   timetable-microservice:
     restart: unless-stopped
@@ -138,7 +133,6 @@ services:
           cpus: '0.5'
           memory: 512M
 
-
   document-microservice:
     restart : unless-stopped
     build :
@@ -161,6 +155,12 @@ services:
           cpus : '0.5'
           memory : 512M
 
-
-
-
+  kibana:
+    image: kibana:8.15.3
+    restart: unless-stopped
+    ports:
+      - "5601:5601"
+    environment:
+       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    depends_on:
+        - elasticsearch

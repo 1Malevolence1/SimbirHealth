@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Timetable-microservice"
+                title = "History-microservice"
         )
 )
 @SecurityScheme(
