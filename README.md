@@ -21,3 +21,13 @@
 
 1) Ссылка на Swagger для ElasticSearch URL: http://localhost:9200
 2) Ссылка на Swagger для Kibana URL: http://localhost:5601
+
+
+# Начальные аккаунты
+
+| №  | Логин  | Пароль | Роль   |
+|----|--------|--------|--------|
+| 1  | admin  | admin  | Admin  |
+| 2  | manager| manager| Manager|
+| 3  | doctor | doctor | Doctor |
+| 4  | user   | user   | User   |

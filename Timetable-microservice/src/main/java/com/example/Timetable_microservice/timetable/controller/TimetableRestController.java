@@ -249,7 +249,7 @@ public class TimetableRestController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("{timetableId:\\d+}/Appointments")
+    @GetMapping("/{timetableId:\\d+}/Appointments")
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Получение свободных талонов на приём.", description = "Только авторизованные пользователи")
     @ApiResponses(value = {
@@ -265,7 +265,7 @@ public class TimetableRestController {
 
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("{timetableId:\\d+}/Appointments")
+    @PostMapping("/{timetableId:\\d+}/Appointments")
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Записаться на приём.", description = "Только авторизованные пользователи")
     @ApiResponses(value = {
@@ -273,7 +273,7 @@ public class TimetableRestController {
             @ApiResponse(responseCode = "404", description = "Елси не будет надено расписание", content = @Content(schema = @Schema(implementation = Validate.class)))
     })
     public ResponseEntity<String> makeAppointment(@PathVariable(name = "timetableId") Long timetableId,
-                                                  @PathVariable("time") LocalDateTime time,
+                                                  @RequestParam(name = "time") LocalDateTime time,
                                                   HttpServletRequest request) {
         microserviceEntityChecker.checkEntityTimetable(timetableId);
 

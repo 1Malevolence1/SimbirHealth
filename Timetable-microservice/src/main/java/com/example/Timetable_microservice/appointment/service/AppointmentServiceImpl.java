@@ -31,13 +31,18 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public Long getUserIdInAppointmentTime(Long timetabled, LocalDateTime date) {
+        return appointmentRepository.userIdInData(timetabled, date);
+    }
+
+    @Override
     public Long getCountUserSignedUpForAppointment(Long timetableId) {
         return appointmentRepository.retrieveCountUserIdFromAppointment(timetableId);
     }
 
     @Override
-    public Long getUserIdFromAppointment(Long userId) {
-        return appointmentRepository.retrieveUserIdFromAppointment(userId);
+    public Long getUserIdFromAppointment(Long appointmentId) {
+        return appointmentRepository.retrieveUserIdFromAppointment(appointmentId);
     }
 
     @Override

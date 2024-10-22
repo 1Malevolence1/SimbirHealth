@@ -14,4 +14,10 @@ public class GlobalExcitonAppoints {
     public ResponseEntity<Validate> handlerRecordLockedByAnotherUserExceptionCustomer(RecordLockedByAnotherUserExceptionCustomer exception){
         return ResponseEntity.badRequest().body(exception.getError());
     }
+
+    @ExceptionHandler(RecordUserExceptionCustomer.class)
+    public ResponseEntity<Validate> handlerRecordUserExceptionCustomer(RecordUserExceptionCustomer exception){
+        return ResponseEntity.badRequest().body(exception.getValidate());
+    }
 }
+

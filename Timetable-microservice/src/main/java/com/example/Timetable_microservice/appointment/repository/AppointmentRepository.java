@@ -39,7 +39,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     Long retrieveCountUserIdFromAppointment(@Param("appointmentId") Long id);
 
 
+    @Query(value = "SELECT a.user_id FROM appointment AS a JOIN timetable AS t USING(timetable_id) WHERE a.recording = :date AND t.timetable_id = :timetable_id", nativeQuery = true)
+    Long userIdInData(@Param("timetable_id") Long timetable_id, @Param("date") LocalDateTime data);
+
+
     @Modifying
     @Query(value = "DELETE FROM appointment WHERE appointment.timetable_id = :timetableId", nativeQuery = true)
     void deleteAllByIdTimetable(@Param("timetableId") Long timetableId);
+
+
+
 }

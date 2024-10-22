@@ -10,6 +10,7 @@ public interface AppointmentService {
 
     List<Appointment> fetchAvailableSlots(Long id);
     boolean findUserIdFromAppointment(Long userId);
+    Long getUserIdInAppointmentTime(Long timetabled, LocalDateTime date);
     Long getCountUserSignedUpForAppointment(Long timetableId);
     Long getUserIdFromAppointment(Long userId);
     void updateActiveOnTrue(LocalDateTime time, Long timetableId, Long userId);

@@ -4,6 +4,7 @@ package com.example.Timetable_microservice.appointment.service;
 import com.example.Timetable_microservice.appointment.convert.manager.ManagerMapperAppointment;
 import com.example.Timetable_microservice.appointment.dto.appointment.ResponseAppointmentsDto;
 import com.example.Timetable_microservice.appointment.exception.RecordLockedByAnotherUserExceptionCustomer;
+import com.example.Timetable_microservice.appointment.exception.RecordUserExceptionCustomer;
 import com.example.Timetable_microservice.appointment.model.Appointment;
 import com.example.Timetable_microservice.timetable.config.ConstantResponseExceptionText;
 import com.example.Timetable_microservice.timetable.exception.Validate;
@@ -46,6 +47,8 @@ public class AppointmentServiceFacadeImpl implements AppointmentServiceFacade {
     @Override
     public void makeAppointment(LocalDateTime time, Long timetableId,  Long userId) {
         log.info("{}, {}, {}", time, timetableId, userId);
+        Long recordingUserId = appointmentService.getUserIdInAppointmentTime(timetableId, time);
+        if(recordingUserId != null) throw new RecordUserExceptionCustomer(new Validate((ConstantResponseExceptionText.USER_ANOTHER_REGISTERED_BY_APPOINTMENT)));
         appointmentService.updateActiveOnTrue(time, timetableId, userId);
     }
 
