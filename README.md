@@ -20,7 +20,7 @@
 # Дополнительное задание   
 
 1) Ссылка для ElasticSearch URL: http://localhost:9200
-2) Ссылк  для Kibana URL: http://localhost:5601
+2) Ссылка  для Kibana URL: http://localhost:5601
 
 
 # Начальные аккаунты
